@@ -1,0 +1,32 @@
+//======================================================================
+//	2Dƒ|ƒŠƒSƒ“ƒwƒbƒ_[scene2D.h]
+//
+//======================================================================
+#ifndef _SCENE2D_H_
+#define _SCENE2D_H_
+
+static const DWORD FVF_VERTEX_2D = (D3DFVF_XYZRHW | D3DFVF_DIFFUSE | D3DFVF_TEX1);
+
+typedef struct
+{
+	D3DXVECTOR4 pos;
+	D3DCOLOR	color;
+	D3DXVECTOR2 texcoord;
+}VERTEX_2D;
+
+class CScene2D :public CScene
+{
+public:
+	CScene2D();
+	~CScene2D();
+
+	void Init(float texW, float texH);
+	void Uninit();
+	void Update();
+	void Draw();
+private:
+	LPDIRECT3DTEXTURE9 m_Texture;
+	D3DXVECTOR2 m_texSize;
+};
+
+#endif //!_SCENE2D_H_

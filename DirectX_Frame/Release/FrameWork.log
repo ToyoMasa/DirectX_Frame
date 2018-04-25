@@ -1,0 +1,15 @@
+﻿  camera.cpp
+  class.cpp
+  light.cpp
+  main.cpp
+  scene.cpp
+  scene2D.cpp
+  scene3D.cpp
+  sceneModel.cpp
+sceneModel.cpp(101): warning C4018: '<': signed と unsigned の数値を比較しようとしました。
+sceneModel.cpp(182): warning C4018: '<': signed と unsigned の数値を比較しようとしました。
+  コード生成しています。
+  All 133 functions were compiled because no usable IPDB/IOBJ from previous compilation was found.
+  コード生成が終了しました。
+  FrameWork.vcxproj -> D:\Old ファイル\school\school\3年\GM31\FrameWork\Release\FrameWork.exe
+  FrameWork.vcxproj -> D:\Old ファイル\school\school\3年\GM31\FrameWork\Release\FrameWork.pdb (Full PDB)

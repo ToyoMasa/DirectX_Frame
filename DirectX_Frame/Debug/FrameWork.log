@@ -1,0 +1,13 @@
+﻿  sceneModel.cpp
+d:\old ファイル\school\school\3年\gm31\directx_frame\scenemodel.cpp(101): warning C4018: '<': signed と unsigned の数値を比較しようとしました。
+d:\old ファイル\school\school\3年\gm31\directx_frame\scenemodel.cpp(182): warning C4018: '<': signed と unsigned の数値を比較しようとしました。
+  scene3D.cpp
+  scene2D.cpp
+  scene.cpp
+  main.cpp
+  light.cpp
+  class.cpp
+  camera.cpp
+  コードを生成中...
+  FrameWork.vcxproj -> D:\Old ファイル\school\school\3年\GM31\DirectX_Frame\Debug\FrameWork.exe
+  FrameWork.vcxproj -> D:\Old ファイル\school\school\3年\GM31\DirectX_Frame\Debug\FrameWork.pdb (Full PDB)

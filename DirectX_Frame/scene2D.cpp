@@ -1,0 +1,107 @@
+//======================================================================
+//	2Dモデルの描画
+//
+//======================================================================
+#include "common.h"
+#include "main.h"
+#include "scene2D.h"
+
+//======================================================================
+//	コンストラクタ
+//======================================================================
+CScene2D::CScene2D()
+{
+	m_Pos = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
+	m_Texture = NULL;
+}
+
+//======================================================================
+//	デストラクタ
+//======================================================================
+CScene2D::~CScene2D()
+{
+}
+
+//======================================================================
+//	初期処理関数
+//======================================================================
+void CScene2D::Init(float texW, float texH)
+{
+	LPDIRECT3DDEVICE9 pDevice = GetD3DDevice();
+	if (pDevice == NULL)
+	{
+		return;
+	}
+
+	HRESULT hr;
+
+	hr = D3DXCreateTextureFromFile(pDevice, "data/textures/yajirusi.png", &m_Texture);
+
+	if (FAILED(hr))
+	{
+		MessageBox(NULL, "テクスチャの読み込みに失敗しました", "エラー", MB_OK);
+		return;
+	}
+
+	m_texSize = D3DXVECTOR2(texW, texH);
+}
+
+//======================================================================
+//	終了処理関数
+//======================================================================
+void CScene2D::Uninit()
+{
+	// テクスチャの解放
+	if (m_Texture != NULL)
+	{
+		m_Texture->Release();
+		m_Texture = NULL;
+	}
+}
+
+//======================================================================
+//	更新関数
+//======================================================================
+void CScene2D::Update()
+{
+}
+
+//======================================================================
+//	描画関数
+//======================================================================
+void CScene2D::Draw()
+{
+	LPDIRECT3DDEVICE9 pDevice = GetD3DDevice();
+	if (pDevice == NULL)
+	{
+		return;
+	}
+
+	VERTEX_2D vertex[4];
+	vertex[0].pos = D3DXVECTOR4(m_Pos.x - m_texSize.x / 2 - 0.5f, m_Pos.y - m_texSize.y / 2, 0, 1);
+	vertex[1].pos = D3DXVECTOR4(m_Pos.x + m_texSize.x / 2 - 0.5f, m_Pos.y - m_texSize.y / 2, 0, 1);
+	vertex[2].pos = D3DXVECTOR4(m_Pos.x - m_texSize.x / 2 - 0.5f, m_Pos.y + m_texSize.y / 2, 0, 1);
+	vertex[3].pos = D3DXVECTOR4(m_Pos.x + m_texSize.x / 2 - 0.5f, m_Pos.y + m_texSize.y / 2, 0, 1);
+
+	vertex[0].texcoord = D3DXVECTOR2(0.0f, 0.0f);
+	vertex[1].texcoord = D3DXVECTOR2(1.0f, 0.0f);
+	vertex[2].texcoord = D3DXVECTOR2(0.0f, 1.0f);
+	vertex[3].texcoord = D3DXVECTOR2(1.0f, 1.0f);
+
+	vertex[0].color =
+		vertex[1].color =
+		vertex[2].color =
+		vertex[3].color = 0xffffffff;
+
+	pDevice->SetTexture(0, m_Texture);
+	pDevice->SetFVF(FVF_VERTEX_2D);
+
+	// αテスト(3つセット)
+	pDevice->SetRenderState(D3DRS_ALPHATESTENABLE, TRUE);			// αテストのON
+	pDevice->SetRenderState(D3DRS_ALPHAREF, 128);					// 第2引数は0～255の好きな値
+	pDevice->SetRenderState(D3DRS_ALPHAFUNC, D3DCMP_GREATEREQUAL);	// 第2引数は不等号(GREATERは大なり)、上の値より大きければ合格
+
+	pDevice->DrawPrimitiveUP(D3DPT_TRIANGLESTRIP, 2, &vertex[0], sizeof(VERTEX_2D));
+
+	pDevice->SetRenderState(D3DRS_ALPHATESTENABLE, FALSE);			// αテストのOFF
+}
