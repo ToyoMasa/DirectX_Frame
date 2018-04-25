@@ -8,6 +8,6 @@
 #define SCREEN_WIDTH (1280)						//画面サイズ（横）
 #define SCREEN_HEIGHT (720)						//画面サイズ（縦）
 
-LPDIRECT3DDEVICE9 GetD3DDevice(void);		//デバイスの取得
+#include "renderer.h"
 
 #endif //!_MAIN_H_

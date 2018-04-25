@@ -6,6 +6,8 @@
 #include "main.h"
 #include "scene3D.h"
 
+static const DWORD FVF_VERTEX_3D = (D3DFVF_XYZ | D3DFVF_DIFFUSE | D3DFVF_TEX1 | D3DFVF_NORMAL);
+
 VERTEX_3D v[] = {
 	//		位置座標							法線ベクトル						色							UV座標
 	//上の面														    
@@ -45,7 +47,7 @@ CScene3D::~CScene3D()
 //======================================================================
 void CScene3D::Init(const std::string& texName)
 {
-	LPDIRECT3DDEVICE9 pDevice = GetD3DDevice();
+	LPDIRECT3DDEVICE9 pDevice = CRenderer::GetDevice();
 	if (pDevice == NULL)
 	{
 		return;
@@ -148,7 +150,7 @@ void CScene3D::Update()
 //======================================================================
 void CScene3D::Draw()
 {
-	LPDIRECT3DDEVICE9 pDevice = GetD3DDevice();
+	LPDIRECT3DDEVICE9 pDevice = CRenderer::GetDevice();
 	if (pDevice == NULL)
 	{
 		return;

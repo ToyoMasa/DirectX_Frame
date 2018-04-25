@@ -45,7 +45,7 @@ void CCamera::Uninit()
 
 void CCamera::Update()
 {
-	LPDIRECT3DDEVICE9 pDevice = GetD3DDevice();
+	LPDIRECT3DDEVICE9 pDevice = CRenderer::GetDevice();
 	D3DXVECTOR3 oldPos = m_Pos;
 	D3DXVECTOR3 oldAt = m_At;
 

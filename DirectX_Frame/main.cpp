@@ -5,6 +5,7 @@
 #include <Windows.h>
 #include "common.h"
 #include "main.h"
+#include "renderer.h"
 #include "camera.h"
 #include "light.h"
 #include "scene2D.h"
@@ -20,8 +21,6 @@
 //======================================================================
 //	グローバル変数
 //======================================================================
-LPDIRECT3D9			g_pD3D = NULL;				//Direct3Dインターフェース
-LPDIRECT3DDEVICE9	g_pD3DDevice = NULL;		//Direct3Dデバイス
 CScene2D *scene2D;
 CScene3D *scene3D;
 CSceneModel *model;
@@ -173,79 +172,10 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 
 bool Init(HINSTANCE hInstance, HWND hWnd, BOOL bWindow)
 {
-	D3DDISPLAYMODE d3ddm;
-
-	//Direct3Dインターフェースの取得
-	g_pD3D = Direct3DCreate9(D3D_SDK_VERSION);
-	if (g_pD3D == NULL)
+	if (!CRenderer::Init(hWnd, bWindow))
 	{
 		return false;
 	}
-
-	//現在のディスプレイモードを取得
-	if (FAILED(g_pD3D->GetAdapterDisplayMode(D3DADAPTER_DEFAULT, &d3ddm)))
-	{
-		return false;
-	}
-
-	//デバイスのプレゼンテーションパラメータの設定
-	D3DPRESENT_PARAMETERS d3dpp;
-
-	ZeroMemory(&d3dpp, sizeof(d3dpp));
-	d3dpp.BackBufferWidth = SCREEN_WIDTH;
-	d3dpp.BackBufferHeight = SCREEN_HEIGHT;
-	d3dpp.BackBufferFormat = d3ddm.Format;
-	d3dpp.BackBufferCount = 1;
-	d3dpp.SwapEffect = D3DSWAPEFFECT_DISCARD;
-	d3dpp.EnableAutoDepthStencil = TRUE;
-	d3dpp.AutoDepthStencilFormat = D3DFMT_D24S8;
-	d3dpp.Windowed = bWindow;
-	d3dpp.FullScreen_RefreshRateInHz = D3DPRESENT_RATE_DEFAULT;
-	//	d3dpp.PresentationInterval = D3DPRESENT_INTERVAL_DEFAULT;
-	d3dpp.PresentationInterval = D3DPRESENT_INTERVAL_IMMEDIATE;
-
-	//[デバイス作成制御]<描画>と<頂点処理>をハードウェアで行う
-	if (FAILED(g_pD3D->CreateDevice(
-		D3DADAPTER_DEFAULT,						//ディスプレイアダプタ
-		D3DDEVTYPE_HAL,							//デバイスタイプ
-		hWnd,									//フォーカスするウィンドウへのハンドル
-		D3DCREATE_HARDWARE_VERTEXPROCESSING,	//デバイス作成制御の組み合わせ
-		&d3dpp,									//デバイスのプレゼンテーションへのポインタ
-		&g_pD3DDevice)))						//デバイスインタフェースへのポインタ　※最重要
-	{
-		//上記の設定が失敗したら
-		MessageBox(hWnd, "Direct3Dデバイスの作成に失敗しました", "エラー", MB_OK);
-		return false;
-	}
-
-	//レンダ―ステートパラメータの設定
-	//SRC…今から描くもの。つまりポリゴンにテクスチャを貼ったもの。
-	//DEST…すでに描画されている画面のこと。
-	//SRC_RGB * SRC_α + DEST_RGB * (1 - SRC_α)
-	g_pD3DDevice->SetRenderState(D3DRS_ALPHABLENDENABLE, TRUE);
-	g_pD3DDevice->SetRenderState(D3DRS_SRCBLEND, D3DBLEND_SRCALPHA);
-	g_pD3DDevice->SetRenderState(D3DRS_DESTBLEND, D3DBLEND_INVSRCALPHA);
-	g_pD3DDevice->SetRenderState(D3DRS_DIFFUSEMATERIALSOURCE, D3DMCS_MATERIAL);
-	// 照明
-	g_pD3DDevice->SetRenderState(D3DRS_LIGHTING, TRUE);
-
-	//ポリゴンとテクスチャの色の乗算
-	g_pD3DDevice->SetTextureStageState(0, D3DTSS_ALPHAOP, D3DTOP_MODULATE);
-	g_pD3DDevice->SetTextureStageState(0, D3DTSS_ALPHAARG1, D3DTA_TEXTURE);			//左辺値
-	g_pD3DDevice->SetTextureStageState(0, D3DTSS_ALPHAARG2, D3DTA_DIFFUSE);			//右辺値
-
-	//テクスチャのピクセルに関する設定
-	//テクスチャアドレス外を参照した時にどうするか
-	//WRAP = 反復（繰り返し）
-	//CLAMP = 一番最後のピクセルを引き延ばす
-	//MIRROR = 反転（U方向のみ、V方向のみもできる）
-	g_pD3DDevice->SetSamplerState(0, D3DSAMP_ADDRESSU, D3DTADDRESS_WRAP);
-	g_pD3DDevice->SetSamplerState(0, D3DSAMP_ADDRESSV, D3DTADDRESS_WRAP);
-	//D3DTEXF_POINT　＝　周りの点を無理やり持ってくる→ドット絵を強調する時に使う
-	//D3DTEXF_LINEAR　＝　アンチエイリアシングのようになめらかにする(基本こっち)
-	g_pD3DDevice->SetSamplerState(0, D3DSAMP_MINFILTER, D3DTEXF_LINEAR);			//実際のテクスチャサイズより小さい時のフィルタリング
-	g_pD3DDevice->SetSamplerState(0, D3DSAMP_MAGFILTER, D3DTEXF_LINEAR);			//実際のテクスチャサイズより大きい時のフィルタリング
-	g_pD3DDevice->SetSamplerState(0, D3DSAMP_MIPFILTER, D3DTEXF_LINEAR);			//ミップマップ（元の画像の÷２の単位で自動で作られる画像）間を補正する
 
 	scene2D = new CScene2D();
 	scene2D->Init(128, 128);
@@ -283,18 +213,6 @@ void UnInit(void)
 
 	light->Uninit();
 	delete light;
-
-	if (g_pD3DDevice != NULL)
-	{//デバイスの開放
-		g_pD3DDevice->Release();
-		g_pD3DDevice = NULL;
-	}
-
-	if (g_pD3D != NULL)
-	{//Direct3Dオブジェクトの開放
-		g_pD3D->Release();
-		g_pD3D = NULL;
-	}
 }
 
 void Update(void)
@@ -310,11 +228,12 @@ void Update(void)
 
 void Draw(void)
 {
-	//クリア処理
-	g_pD3DDevice->Clear(0, NULL, (D3DCLEAR_TARGET | D3DCLEAR_ZBUFFER), D3DCOLOR_RGBA(64, 96, 255, 255), 1.0f, 0);
+	HRESULT hr;
+
+	hr = CRenderer::DrawBegin();
 
 	//Direct3Dによる描画の開始
-	if (SUCCEEDED(g_pD3DDevice->BeginScene()))
+	if (SUCCEEDED(hr))
 	{
 		//描画
 		scene2D->Draw();
@@ -323,15 +242,6 @@ void Draw(void)
 
 		model->Draw();
 
-		//Direct3Dによる描画の終了
-		g_pD3DDevice->EndScene();
+		CRenderer::DrawEnd();
 	}
-
-	//バックバッファとフロントバッファの入れ替え
-	g_pD3DDevice->Present(NULL, NULL, NULL, NULL);	//第三引数はhWndでも可
-}
-
-LPDIRECT3DDEVICE9 GetD3DDevice(void)
-{
-	return g_pD3DDevice;
 }

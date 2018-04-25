@@ -27,7 +27,7 @@ CScene2D::~CScene2D()
 //======================================================================
 void CScene2D::Init(float texW, float texH)
 {
-	LPDIRECT3DDEVICE9 pDevice = GetD3DDevice();
+	LPDIRECT3DDEVICE9 pDevice = CRenderer::GetDevice();
 	if (pDevice == NULL)
 	{
 		return;
@@ -71,7 +71,7 @@ void CScene2D::Update()
 //======================================================================
 void CScene2D::Draw()
 {
-	LPDIRECT3DDEVICE9 pDevice = GetD3DDevice();
+	LPDIRECT3DDEVICE9 pDevice = CRenderer::GetDevice();
 	if (pDevice == NULL)
 	{
 		return;

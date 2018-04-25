@@ -4,8 +4,9 @@
 //======================================================================
 #include "common.h"
 #include "main.h"
-#include "scene3D.h"
 #include "sceneModel.h"
+
+static const DWORD FVF_VERTEX_3D = (D3DFVF_XYZ | D3DFVF_DIFFUSE | D3DFVF_TEX1 | D3DFVF_NORMAL);
 
 //======================================================================
 //	コンストラクタ
@@ -37,7 +38,7 @@ CSceneModel::~CSceneModel()
 //======================================================================
 void CSceneModel::Init(const std::string& modelName)
 {
-	LPDIRECT3DDEVICE9 pDevice = GetD3DDevice();
+	LPDIRECT3DDEVICE9 pDevice = CRenderer::GetDevice();
 	if (pDevice == NULL)
 	{
 		return;
@@ -164,7 +165,7 @@ void CSceneModel::Update()
 //======================================================================
 void CSceneModel::Draw()
 {
-	LPDIRECT3DDEVICE9 pDevice = GetD3DDevice();
+	LPDIRECT3DDEVICE9 pDevice = CRenderer::GetDevice();
 	if (pDevice == NULL)
 	{
 		return;

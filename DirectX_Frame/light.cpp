@@ -31,7 +31,7 @@ void LightUninit(void)
 
 void LightUpdate(void)
 {
-	LPDIRECT3DDEVICE9 pDevice = GetD3DDevice();
+	LPDIRECT3DDEVICE9 pDevice = CRenderer::GetDevice();
 	D3DLIGHT9 light;
 
 	ZeroMemory(&light, sizeof(light));
@@ -76,7 +76,7 @@ CLight::~CLight()
 
 void CLight::Init(int id)
 {
-	LPDIRECT3DDEVICE9 pDevice = GetD3DDevice();
+	LPDIRECT3DDEVICE9 pDevice = CRenderer::GetDevice();
 
 	m_LightID = id;
 
