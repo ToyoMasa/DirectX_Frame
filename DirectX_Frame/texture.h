@@ -24,13 +24,18 @@ static const std::string TEXTURE_SOURCE[] =
 };
 
 // テクスチャがロードされているか検索するためのマップ
-static const std::map<std::string, bool> MAP_ROADING_TEXTURES;
+static std::map<int, std::string> MAP_TEXTURES;
+static std::map<int, bool> MAP_LOADING_TEXTURES;
 
 class CTexture
 {
 public:
 	CTexture();
 	~CTexture();
+
+	static void Init();
+	void Load();
+	void Release();
 
 private:
 	LPDIRECT3DTEXTURE9 m_Texture;
@@ -39,6 +44,6 @@ private:
 	static int sm_NumTextures;
 };
 
-static const CTexture *TEXTURES[TEX_ID_MAX];
+static const CTexture TEXTURES[TEX_ID_MAX];
 
 #endif // !_TEXTURE_H_
