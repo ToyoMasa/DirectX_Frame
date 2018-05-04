@@ -10,5 +10,6 @@
 #include <math.h>
 #include "class.h"
 #include "scene.h"
+#include "ImGui_.h"
 
 #endif//!_COMMON_H_

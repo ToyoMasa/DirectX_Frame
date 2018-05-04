@@ -177,6 +177,13 @@ bool Init(HINSTANCE hInstance, HWND hWnd, BOOL bWindow)
 		return false;
 	}
 
+	// imguiの初期化と設定
+#if defined(_DEBUG) || defined(DEBUG)
+	CImGui::Init(hWnd, CRenderer::GetDevice());
+#endif
+
+	ImGui::StyleColorsClassic();
+
 	scene2D = new CScene2D();
 	scene2D->Init(128, 128);
 
@@ -213,6 +220,11 @@ void UnInit(void)
 
 	light->Uninit();
 	delete light;
+
+	// imguiの終了処理
+#if defined(_DEBUG) || defined(DEBUG)
+	CImGui::Uninit();
+#endif
 }
 
 void Update(void)
@@ -241,6 +253,12 @@ void Draw(void)
 		scene3D->Draw();
 
 		model->Draw();
+
+// デバッグ用imguiウィンドウの描画
+#if defined(_DEBUG) || defined(DEBUG)
+		CImGui::BeginDraw();
+		CImGui::EndDraw();
+#endif
 
 		CRenderer::DrawEnd();
 	}
