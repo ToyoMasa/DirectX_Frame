@@ -5,6 +5,7 @@
 #include "common.h"
 #include "main.h"
 #include "scene2D.h"
+#include "texture.h"
 
 //======================================================================
 //	コンストラクタ
@@ -13,6 +14,7 @@ CScene2D::CScene2D()
 {
 	m_Pos = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 	m_Texture = NULL;
+	m_TexId = 0;
 }
 
 //======================================================================
@@ -25,7 +27,7 @@ CScene2D::~CScene2D()
 //======================================================================
 //	初期処理関数
 //======================================================================
-void CScene2D::Init(float texW, float texH)
+void CScene2D::Init(int texId, float texW, float texH)
 {
 	LPDIRECT3DDEVICE9 pDevice = CRenderer::GetDevice();
 	if (pDevice == NULL)
@@ -33,17 +35,10 @@ void CScene2D::Init(float texW, float texH)
 		return;
 	}
 
-	HRESULT hr;
+	m_TexId = texId;
+	CTexture::Load(m_TexId);
 
-	hr = D3DXCreateTextureFromFile(pDevice, "data/textures/yajirusi.png", &m_Texture);
-
-	if (FAILED(hr))
-	{
-		MessageBox(NULL, "テクスチャの読み込みに失敗しました", "エラー", MB_OK);
-		return;
-	}
-
-	m_texSize = D3DXVECTOR2(texW, texH);
+	m_TexSize = D3DXVECTOR2(texW, texH);
 }
 
 //======================================================================
@@ -52,11 +47,7 @@ void CScene2D::Init(float texW, float texH)
 void CScene2D::Uninit()
 {
 	// テクスチャの解放
-	if (m_Texture != NULL)
-	{
-		m_Texture->Release();
-		m_Texture = NULL;
-	}
+	CTexture::Release(m_TexId);
 }
 
 //======================================================================
@@ -78,10 +69,10 @@ void CScene2D::Draw()
 	}
 
 	VERTEX_2D vertex[4];
-	vertex[0].pos = D3DXVECTOR4(m_Pos.x - m_texSize.x / 2 - 0.5f, m_Pos.y - m_texSize.y / 2, 0, 1);
-	vertex[1].pos = D3DXVECTOR4(m_Pos.x + m_texSize.x / 2 - 0.5f, m_Pos.y - m_texSize.y / 2, 0, 1);
-	vertex[2].pos = D3DXVECTOR4(m_Pos.x - m_texSize.x / 2 - 0.5f, m_Pos.y + m_texSize.y / 2, 0, 1);
-	vertex[3].pos = D3DXVECTOR4(m_Pos.x + m_texSize.x / 2 - 0.5f, m_Pos.y + m_texSize.y / 2, 0, 1);
+	vertex[0].pos = D3DXVECTOR4(m_Pos.x - m_TexSize.x / 2 - 0.5f, m_Pos.y - m_TexSize.y / 2, 0, 1);
+	vertex[1].pos = D3DXVECTOR4(m_Pos.x + m_TexSize.x / 2 - 0.5f, m_Pos.y - m_TexSize.y / 2, 0, 1);
+	vertex[2].pos = D3DXVECTOR4(m_Pos.x - m_TexSize.x / 2 - 0.5f, m_Pos.y + m_TexSize.y / 2, 0, 1);
+	vertex[3].pos = D3DXVECTOR4(m_Pos.x + m_TexSize.x / 2 - 0.5f, m_Pos.y + m_TexSize.y / 2, 0, 1);
 
 	vertex[0].texcoord = D3DXVECTOR2(0.0f, 0.0f);
 	vertex[1].texcoord = D3DXVECTOR2(1.0f, 0.0f);
@@ -93,7 +84,7 @@ void CScene2D::Draw()
 		vertex[2].color =
 		vertex[3].color = 0xffffffff;
 
-	pDevice->SetTexture(0, m_Texture);
+	pDevice->SetTexture(0, CTexture::GetTexture(m_TexId));
 	pDevice->SetFVF(FVF_VERTEX_2D);
 
 	// αテスト(3つセット)

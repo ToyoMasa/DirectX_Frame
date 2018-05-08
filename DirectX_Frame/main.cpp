@@ -5,6 +5,7 @@
 #include <Windows.h>
 #include "common.h"
 #include "main.h"
+#include "texture.h"
 #include "renderer.h"
 #include "camera.h"
 #include "light.h"
@@ -182,10 +183,13 @@ bool Init(HINSTANCE hInstance, HWND hWnd, BOOL bWindow)
 	CImGui::Init(hWnd, CRenderer::GetDevice());
 #endif
 
+	// テクスチャの初期化
+	CTexture::Init();
+
 	ImGui::StyleColorsClassic();
 
 	scene2D = new CScene2D();
-	scene2D->Init(128, 128);
+	scene2D->Init(TEX_ID_CURSOR, 128, 128);
 
 	scene3D = new CScene3D();
 	scene3D->Init("data/textures/field001.jpg");
@@ -220,6 +224,9 @@ void UnInit(void)
 
 	light->Uninit();
 	delete light;
+
+	// 全てのテクスチャの解放
+	CTexture::ReleaseAll();
 
 	// imguiの終了処理
 #if defined(_DEBUG) || defined(DEBUG)

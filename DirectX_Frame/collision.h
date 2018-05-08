@@ -27,32 +27,18 @@ public:
 	D3DXVECTOR3 end;	// 終点
 };
 
-// カプセル
-class Capsule
-{
-public:
-	Line line;	// 中心線
-	float rad;	// 半径
-
-	// コンストラクタ
-	Capsule()
-	{
-		line.start = D3DXVECTOR3(0, 0, 0);
-		line.end = D3DXVECTOR3(0, 1, 0);
-		rad = 1.0f;
-	}
-};
-
 // OBB
 class OBB
 {
+private:
+	D3DXVECTOR3 m_Pos;					// 位置
+	D3DXVECTOR3 m_NormaDirect[3];		// 方向ベクトル
+	float m_fLength[3];					// 各軸方向の長さ
+
 public:
-	D3DXVECTOR3 m_Pos;              // 位置
-	D3DXVECTOR3 m_NormaDirect[3];   // 方向ベクトル
-	float m_fLength[3];             // 各軸方向の長さ
-	D3DXVECTOR3 GetDirect(int elem);   // 指定軸番号の方向ベクトルを取得
-	float GetLen(int elem);          // 指定軸方向の長さを取得
-	D3DXVECTOR3 GetPos();             // 位置を取得
+	D3DXVECTOR3 GetDirect(int elem);	// 指定軸番号の方向ベクトルを取得
+	float GetLen(int elem);				// 指定軸方向の長さを取得
+	D3DXVECTOR3 GetPos();				// 位置を取得
 
 	OBB()
 	{

@@ -24,26 +24,39 @@ static const std::string TEXTURE_SOURCE[] =
 };
 
 // テクスチャがロードされているか検索するためのマップ
-static std::map<int, std::string> MAP_TEXTURES;
-static std::map<int, bool> MAP_LOADING_TEXTURES;
+static std::map<int, std::string> MAP_TEXTURES;				// テクスチャのファイルパス管理
+static std::map<std::string, bool> MAP_LOADING_TEXTURES;	// すでに同じテクスチャが読み込まれていないか
+static std::map<int, int> MAP_TEXTURE_USE_NUM;				// このテクスチャを使っている数
 
 class CTexture
 {
 public:
-	CTexture();
+	CTexture()
+	{
+		m_Texture = NULL;
+		m_Height = 0;
+		m_Width = 0;
+	}
 	~CTexture();
 
 	static void Init();
-	void Load();
-	void Release();
+	static void Load(int id);
+	static void Release(int id);
+	static void LoadAll();
+	static void ReleaseAll();
+	static LPDIRECT3DTEXTURE9 GetTexture(int id);
+
+	LPDIRECT3DTEXTURE9 GetTexture() { return m_Texture; }
+	void LoadTexture(int id);
+	void ReleaseTexture();
 
 private:
 	LPDIRECT3DTEXTURE9 m_Texture;
 	float m_Width;
 	float m_Height;
-	static int sm_NumTextures;
+	//static int sm_NumTextures;
 };
 
-static const CTexture TEXTURES[TEX_ID_MAX];
+static CTexture TEXTURES[TEX_ID_MAX];
 
 #endif // !_TEXTURE_H_

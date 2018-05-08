@@ -20,13 +20,14 @@ public:
 	CScene2D();
 	~CScene2D();
 
-	void Init(float texW, float texH);
+	void Init(int texid, float texW, float texH);
 	void Uninit();
 	void Update();
 	void Draw();
 private:
 	LPDIRECT3DTEXTURE9 m_Texture;
-	D3DXVECTOR2 m_texSize;
+	D3DXVECTOR2 m_TexSize;
+	int m_TexId;
 };
 
 #endif //!_SCENE2D_H_
