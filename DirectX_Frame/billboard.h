@@ -42,20 +42,20 @@ public:
 	CBillBoard();
 	~CBillBoard();
 
-	void Init();
-	void Uninit();
-	void Update();
-	void Draw();
-	void DrawStand();
+	static void Init();
+	static void Uninit();
+	static void Update();
+	static void Draw();
+	static void DrawStand();
 
 private:
-	LPDIRECT3DTEXTURE9		m_Texture;
-	D3DMATERIAL9			m_Mat;					// モデル1部分につき1個
-	LPDIRECT3DVERTEXBUFFER9 m_VertexBuffer;			//頂点バッファ
-	LPDIRECT3DINDEXBUFFER9  m_IndexBuffer;			//インデックスバッファ
-	D3DXMATRIX				m_World;				//ワールド変換行列
-	D3DXMATRIX				m_Move;					//座標変換行列
-	D3DXMATRIX				m_Scale;				//拡大縮小行列
+	static int						m_TexId;				// テクスチャ番号
+	static D3DMATERIAL9				m_Mat;					// モデル1部分につき1個
+	static LPDIRECT3DVERTEXBUFFER9	m_VertexBuffer;			// 頂点バッファ
+	static LPDIRECT3DINDEXBUFFER9	m_IndexBuffer;			// インデックスバッファ
+	static D3DXMATRIX				m_World;				// ワールド変換行列
+	static D3DXMATRIX				m_Move;					// 座標変換行列
+	static D3DXMATRIX				m_Scale;				// 拡大縮小行列
 };
 
 

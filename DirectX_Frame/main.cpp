@@ -5,6 +5,7 @@
 #include <Windows.h>
 #include "common.h"
 #include "main.h"
+#include "manager.h"
 #include "texture.h"
 #include "renderer.h"
 #include "camera.h"
@@ -33,10 +34,10 @@ CLight *light;
 //======================================================================
 LRESULT CALLBACK WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam);	//ウィンドウプロシージャ
 
-bool Init(HINSTANCE hInstance, HWND hWnd, BOOL bWindow);
-void UnInit(void);
-void Update(void);
-void Draw(void);
+//bool Init(HINSTANCE hInstance, HWND hWnd, BOOL bWindow);
+//void UnInit(void);
+//void Update(void);
+//void Draw(void);
 
 //======================================================================
 //	main関数
@@ -93,7 +94,7 @@ int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLi
 	UpdateWindow(hWnd);							//更新
 
 
-	if (!Init(hInstance, hWnd, TRUE))
+	if (!CManager::Init(hInstance, hWnd, TRUE))
 	{
 		MessageBox(hWnd, "初期化に失敗しました。", "エラー", MB_OK);
 	}
@@ -121,16 +122,16 @@ int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLi
 			if ((dwCurrentTime - dwExecLastTime) * 60 >= 1000)
 			{
 				//ゲーム処理
-				Update();
+				CManager::Update();
 
-				Draw();
+				CManager::Draw();
 
 				dwExecLastTime = dwCurrentTime;
 			}
 		}
 	} while (msg.message != WM_QUIT);
 
-	UnInit();
+	CManager::Uninit();
 
 	timeEndPeriod(1);							//分解能を戻す
 
@@ -169,104 +170,4 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 	}
 
 	return DefWindowProc(hWnd, uMsg, wParam, lParam);	//これをしないと正常に終了しないかもしれない。逆に基本的な動きをさせたくない時には呼ばない
-}
-
-bool Init(HINSTANCE hInstance, HWND hWnd, BOOL bWindow)
-{
-	if (!CRenderer::Init(hWnd, bWindow))
-	{
-		return false;
-	}
-
-	// imguiの初期化と設定
-#if defined(_DEBUG) || defined(DEBUG)
-	CImGui::Init(hWnd, CRenderer::GetDevice());
-#endif
-
-	// テクスチャの初期化
-	CTexture::Init();
-
-	ImGui::StyleColorsClassic();
-
-	scene2D = new CScene2D();
-	scene2D->Init(TEX_ID_CURSOR, 128, 128);
-
-	scene3D = new CScene3D();
-	scene3D->Init("data/textures/field001.jpg");
-
-	model = new CSceneModel();
-	model->Init("data/models/player_ufo.x");
-
-	model->Move(D3DXVECTOR3(0.0f, 1.0f, 0.0f));
-
-	camera = new CCamera();
-	camera->Init(D3DXVECTOR3(0.0f, 3.0f, -3.0f), D3DXVECTOR3(0, 0, 0));
-
-	light = new CLight();
-	light->Init(0);
-
-	return true;
-}
-
-void UnInit(void)
-{
-	scene2D->Uninit();
-	delete scene2D;
-
-	scene3D->Uninit();
-	delete scene3D;
-
-	model->Uninit();
-	delete model;
-
-	camera->Uninit();
-	delete camera;
-
-	light->Uninit();
-	delete light;
-
-	// 全てのテクスチャの解放
-	CTexture::ReleaseAll();
-
-	// imguiの終了処理
-#if defined(_DEBUG) || defined(DEBUG)
-	CImGui::Uninit();
-#endif
-}
-
-void Update(void)
-{
-	scene2D->Set(D3DXVECTOR3(100.0f, 100.0f, 0.0f));
-
-	scene3D->Update();
-
-	model->Update();
-
-	camera->Update();
-}
-
-void Draw(void)
-{
-	HRESULT hr;
-
-	hr = CRenderer::DrawBegin();
-
-	//Direct3Dによる描画の開始
-	if (SUCCEEDED(hr))
-	{
-		//描画
-		scene2D->Draw();
-
-		scene3D->Draw();
-
-		model->Draw();
-
-// デバッグ用imguiウィンドウの描画
-#if defined(_DEBUG) || defined(DEBUG)
-		CImGui::BeginDraw();
-		CImGui::EndDraw();
-#endif
-
-		CRenderer::DrawEnd();
-	}
 }

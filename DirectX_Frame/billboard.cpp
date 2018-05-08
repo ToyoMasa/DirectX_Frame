@@ -6,9 +6,24 @@
 #include "main.h"
 #include "billboard.h"
 #include "camera.h"
-//
-//static const DWORD FVF_VERTEX_3D = (D3DFVF_XYZ | D3DFVF_DIFFUSE | D3DFVF_TEX1 | D3DFVF_NORMAL);
-//
+#include "scene3D.h"
+
+static const DWORD FVF_VERTEX_3D = (D3DFVF_XYZ | D3DFVF_DIFFUSE | D3DFVF_TEX1 | D3DFVF_NORMAL);
+
+//======================================================================
+//	ÉOÉçÅ[ÉoÉãïœêî
+//======================================================================
+CScene3D *billboard;
+
+void CBillBoard::Init()
+{
+	LPDIRECT3DDEVICE9 pDevice = CRenderer::GetDevice();
+	if (pDevice == NULL)
+	{
+		return;
+	}
+
+}
 //typedef struct
 //{
 //	D3DXVECTOR3 pos;
