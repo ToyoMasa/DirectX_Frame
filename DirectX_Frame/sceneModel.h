@@ -21,6 +21,8 @@ public:
 	void Move(D3DXVECTOR3 pos);
 	void Rotate(D3DXVECTOR3 rot);
 	void Scale(D3DXVECTOR3 scale);
+	static CSceneModel* Create(const std::string& modelName);
+
 private:
 	D3DXMATRIX			m_World;		// ワールド変換行列
 	D3DXMATRIX			m_Move;			// 平行移動行列

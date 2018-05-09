@@ -5,6 +5,7 @@
 #include "common.h"
 #include "main.h"
 #include "scene3D.h"
+#include "texture.h"
 
 static const DWORD FVF_VERTEX_3D = (D3DFVF_XYZ | D3DFVF_DIFFUSE | D3DFVF_TEX1 | D3DFVF_NORMAL);
 
@@ -30,7 +31,6 @@ WORD index[] =
 CScene3D::CScene3D()
 {
 	m_Pos = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
-	m_Texture = NULL;
 	m_VertexBuffer = NULL;
 	m_IndexBuffer = NULL;
 }
@@ -45,7 +45,7 @@ CScene3D::~CScene3D()
 //======================================================================
 //	初期処理関数
 //======================================================================
-void CScene3D::Init(const std::string& texName)
+void CScene3D::Init(int texId)
 {
 	LPDIRECT3DDEVICE9 pDevice = CRenderer::GetDevice();
 	if (pDevice == NULL)
@@ -53,15 +53,10 @@ void CScene3D::Init(const std::string& texName)
 		return;
 	}
 
+	m_TexId = texId;
+	CTexture::Load(m_TexId);
+
 	HRESULT hr;
-
-	hr = D3DXCreateTextureFromFile(pDevice, texName.c_str(), &m_Texture);
-
-	if (FAILED(hr))
-	{
-		MessageBox(NULL, "テクスチャの読み込みに失敗しました", "エラー", MB_OK);
-		return;
-	}
 
 	// 頂点バッファ							↓大きい分には問題ない
 	hr = pDevice->CreateVertexBuffer(sizeof(VERTEX_3D) * 4, D3DUSAGE_WRITEONLY, FVF_VERTEX_3D, D3DPOOL_MANAGED, &m_VertexBuffer, NULL);
@@ -117,11 +112,7 @@ void CScene3D::Init(const std::string& texName)
 void CScene3D::Uninit()
 {
 	// テクスチャの解放
-	if (m_Texture != NULL)
-	{
-		m_Texture->Release();
-		m_Texture = NULL;
-	}
+	CTexture::Release(m_TexId);
 
 	//頂点バッファの解放
 	if (m_VertexBuffer != NULL)
@@ -171,7 +162,15 @@ void CScene3D::Draw()
 
 	pDevice->SetTransform(D3DTS_WORLD, &m_World);
 
-	pDevice->SetTexture(0, m_Texture);
+	pDevice->SetTexture(0, CTexture::GetTexture(m_TexId));
 
 	pDevice->DrawIndexedPrimitive(D3DPT_TRIANGLELIST, 0, 0, 24, 0, 12);
+}
+
+CScene3D* CScene3D::Create(int texId)
+{
+	CScene3D* scene3D = new CScene3D();
+	scene3D->Init(texId);
+
+	return scene3D;
 }

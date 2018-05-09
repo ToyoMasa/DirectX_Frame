@@ -21,12 +21,13 @@ public:
 	CScene3D();
 	~CScene3D();
 
-	void Init(const std::string& texName);
+	void Init(int texId);
 	void Uninit();
 	void Update();
 	void Draw();
+	static CScene3D* Create(int texId);
+
 private:
-	LPDIRECT3DTEXTURE9		m_Texture;		// テクスチャ
 	D3DMATERIAL9			m_Mat;			// マテリアル
 	LPDIRECT3DVERTEXBUFFER9 m_VertexBuffer; // 頂点バッファ
 	LPDIRECT3DINDEXBUFFER9  m_IndexBuffer;  // インデックスバッファ
@@ -34,6 +35,7 @@ private:
 
 	int m_NumVertex;
 	int m_NumPrimitive;
+	int m_TexId;
 };
 
 #endif //!_SCENE3D_H_

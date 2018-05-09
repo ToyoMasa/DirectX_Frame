@@ -13,7 +13,6 @@
 CScene2D::CScene2D()
 {
 	m_Pos = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
-	m_Texture = NULL;
 	m_TexId = 0;
 }
 
@@ -95,4 +94,15 @@ void CScene2D::Draw()
 	pDevice->DrawPrimitiveUP(D3DPT_TRIANGLESTRIP, 2, &vertex[0], sizeof(VERTEX_2D));
 
 	pDevice->SetRenderState(D3DRS_ALPHATESTENABLE, FALSE);			// αテストのOFF
+}
+
+//======================================================================
+//	ファクトリ
+//======================================================================
+CScene2D* CScene2D::Create(int texid, float texW, float texH)
+{
+	CScene2D *scene2D = new CScene2D();
+	scene2D->Init(texid, texW, texH);
+
+	return scene2D;
 }

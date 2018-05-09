@@ -24,8 +24,8 @@ public:
 	void Uninit();
 	void Update();
 	void Draw();
+	static CScene2D* Create(int texid, float texW, float texH);
 private:
-	LPDIRECT3DTEXTURE9 m_Texture;
 	D3DXVECTOR2 m_TexSize;
 	int m_TexId;
 };

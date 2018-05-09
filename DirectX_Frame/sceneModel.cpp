@@ -226,3 +226,11 @@ void CSceneModel::Scale(D3DXVECTOR3 scale)
 
 	m_World = m_Rotate * m_Scale * m_Move;
 }
+
+CSceneModel* CSceneModel::Create(const std::string& modelName)
+{
+	CSceneModel* sceneModel = new CSceneModel();
+	sceneModel->Init(modelName);
+
+	return sceneModel;
+}

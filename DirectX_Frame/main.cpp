@@ -34,11 +34,6 @@ CLight *light;
 //======================================================================
 LRESULT CALLBACK WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam);	//ウィンドウプロシージャ
 
-//bool Init(HINSTANCE hInstance, HWND hWnd, BOOL bWindow);
-//void UnInit(void);
-//void Update(void);
-//void Draw(void);
-
 //======================================================================
 //	main関数
 //======================================================================
@@ -131,6 +126,7 @@ int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLi
 		}
 	} while (msg.message != WM_QUIT);
 
+	// 終了処理
 	CManager::Uninit();
 
 	timeEndPeriod(1);							//分解能を戻す

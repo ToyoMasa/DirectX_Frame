@@ -54,7 +54,6 @@ private:
 	LPDIRECT3DTEXTURE9 m_Texture;
 	float m_Width;
 	float m_Height;
-	//static int sm_NumTextures;
 };
 
 static CTexture TEXTURES[TEX_ID_MAX];
