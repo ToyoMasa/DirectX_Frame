@@ -4,6 +4,11 @@
 //======================================================================
 #include "common.h"
 #include "main.h"
+#include "scene2D.h"
+#include "scene3D.h"
+#include "sceneModel.h"
+#include "camera.h"
+#include "light.h"
 #include "manager.h"
 #include "texture.h"
 
@@ -36,15 +41,13 @@ bool CManager::Init(HINSTANCE hInstance, HWND hWnd, BOOL bWindow)
 
 	m_Scene[1] = CScene3D::Create(TEX_ID_FIELD001);
 
-	m_Model = CSceneModel::Create("data/models/player_ufo.x");
+	m_Model = CSceneModel::Create(MODEL_SOURCE[MODEL_ID_UFO]);
 
 	m_Model->Move(D3DXVECTOR3(0.0f, 1.0f, 0.0f));
 
-	m_Camera = new CCamera();
-	m_Camera->Init(D3DXVECTOR3(0.0f, 3.0f, -3.0f), D3DXVECTOR3(0, 0, 0));
+	m_Camera = CCamera::Create();
 
-	m_Light = new CLight();
-	m_Light->Init(0);
+	m_Light = CLight::Create(0);
 
 	return true;
 }
@@ -53,18 +56,14 @@ void CManager::Uninit()
 {
 	for (int i = 0; i < 2; i++)
 	{
-		m_Scene[i]->Uninit();
-		delete m_Scene[i];
+		m_Scene[i]->Release();
 	}
 
-	m_Model->Uninit();
-	delete m_Model;
+	m_Model->Release();
 
-	m_Camera->Uninit();
-	delete m_Camera;
+	m_Camera->Release();
 
-	m_Light->Uninit();
-	delete m_Light;
+	m_Light->Release();
 
 	// 全てのテクスチャの解放
 	CTexture::ReleaseAll();

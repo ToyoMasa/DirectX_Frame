@@ -115,3 +115,11 @@ void CLight::SetLight()
 {
 
 }
+
+CLight* CLight::Create(int id)
+{
+	CLight* light = new CLight();
+	light->Init(id);
+
+	return light;
+}

@@ -15,7 +15,7 @@ typedef struct
 	D3DXVECTOR2 texcoord;
 } VERTEX_3D;
 
-class CScene3D:public CScene
+class CScene3D : public CScene
 {
 public:
 	CScene3D();

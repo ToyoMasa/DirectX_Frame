@@ -4,9 +4,10 @@
 //======================================================================
 #include "common.h"
 #include "main.h"
-#include "billboard.h"
 #include "camera.h"
 #include "scene3D.h"
+#include "texture.h"
+#include "billboard.h"
 
 static const DWORD FVF_VERTEX_3D = (D3DFVF_XYZ | D3DFVF_DIFFUSE | D3DFVF_TEX1 | D3DFVF_NORMAL);
 
@@ -22,6 +23,8 @@ void CBillBoard::Init()
 	{
 		return;
 	}
+
+	CTexture::Load(TEX_ID_TREE);
 
 }
 //typedef struct

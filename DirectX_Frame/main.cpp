@@ -5,7 +5,6 @@
 #include <Windows.h>
 #include "common.h"
 #include "main.h"
-#include "manager.h"
 #include "texture.h"
 #include "renderer.h"
 #include "camera.h"
@@ -13,6 +12,7 @@
 #include "scene2D.h"
 #include "scene3D.h"
 #include "sceneModel.h"
+#include "manager.h"
 
 //======================================================================
 //	’è‹`

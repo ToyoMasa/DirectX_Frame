@@ -7,7 +7,20 @@
 
 #include <string>
 
-class CSceneModel
+// モデル管理用ID
+typedef enum
+{
+	MODEL_ID_UFO = 0,		// UFO
+	MODEL_ID_MAX,
+} MODEL_ID;
+
+// モデル読み込み用のソース
+static const std::string MODEL_SOURCE[] =
+{
+	"data/models/player_ufo.x",
+};
+
+class CSceneModel : public CGameObject
 {
 public:
 	CSceneModel();

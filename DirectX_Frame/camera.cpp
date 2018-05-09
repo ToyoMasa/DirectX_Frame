@@ -175,3 +175,11 @@ void CCamera::Rotation(float horizontal, float vertical)
 		}
 	}
 }
+
+CCamera* CCamera::Create()
+{
+	CCamera* camera= new CCamera();
+	camera->Init(D3DXVECTOR3(0.0f, 3.0f, -3.0f), D3DXVECTOR3(0, 0, 0));
+
+	return camera;
+}

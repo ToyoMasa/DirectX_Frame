@@ -10,7 +10,7 @@ void LightUninit(void);
 void LightUpdate(void);
 void LightSet(void);
 
-class CLight
+class CLight : public CGameObject
 {
 public:
 	CLight();
@@ -19,6 +19,7 @@ public:
 	void Init(int id);
 	void Uninit();
 	void SetLight();
+	static CLight* Create(int id);
 
 private:
 	D3DLIGHT9 m_Light;
