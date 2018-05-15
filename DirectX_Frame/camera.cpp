@@ -183,3 +183,8 @@ CCamera* CCamera::Create()
 
 	return camera;
 }
+
+D3DXMATRIX CCamera::GetView()
+{
+	return m_View;
+}

@@ -12,6 +12,17 @@
 static const DWORD FVF_VERTEX_3D = (D3DFVF_XYZ | D3DFVF_DIFFUSE | D3DFVF_TEX1 | D3DFVF_NORMAL);
 
 //======================================================================
+//	静的メンバ変数の初期化
+//======================================================================
+int						CBillBoard::m_TexId = 0;			// テクスチャ番号
+D3DMATERIAL9			CBillBoard::m_Mat;					// モデル1部分につき1個
+LPDIRECT3DVERTEXBUFFER9	CBillBoard::m_VertexBuffer = NULL;	// 頂点バッファ
+LPDIRECT3DINDEXBUFFER9	CBillBoard::m_IndexBuffer = NULL;	// インデックスバッファ
+D3DXMATRIX				CBillBoard::m_World;				// ワールド変換行列
+D3DXMATRIX				CBillBoard::m_Move;					// 座標変換行列
+D3DXMATRIX				CBillBoard::m_Scale;				// 拡大縮小行列
+
+//======================================================================
 //	グローバル変数
 //======================================================================
 CScene3D *billboard;
@@ -26,7 +37,187 @@ void CBillBoard::Init()
 
 	CTexture::Load(TEX_ID_TREE);
 
+	HRESULT hr;
+
+	// 頂点バッファ							↓大きい分には問題ない
+	hr = pDevice->CreateVertexBuffer(sizeof(VERTEX_3D) * 4, D3DUSAGE_WRITEONLY, FVF_VERTEX_3D, D3DPOOL_MANAGED, &m_VertexBuffer, NULL);
+	
+	if (FAILED(hr))
+	{
+		MessageBox(NULL, "頂点バッファの読み込みに失敗しました", "エラー", MB_OK);
+		return;
+	}
+	
+	// インデックスバッファ					↓大きい分には問題ない					↓sizeがDWORDなら32
+	hr = pDevice->CreateIndexBuffer(sizeof(WORD) * 4, D3DUSAGE_WRITEONLY, D3DFMT_INDEX16, D3DPOOL_MANAGED, &m_IndexBuffer, NULL);
+	
+	if (FAILED(hr))
+	{
+		MessageBox(NULL, "インデックスバッファの読み込みに失敗しました", "エラー", MB_OK);
+		return;
+	}
+	
+	VERTEX_3D* pV;
+	
+	// 頂点バッファ
+	m_VertexBuffer->Lock(0, 0, (void**)&pV, D3DLOCK_DISCARD);
+	
+	pV[0] = { D3DXVECTOR3(-0.5,  0.5, 0), D3DXVECTOR3(0.0f, 0.0f, -1.0f), D3DCOLOR_RGBA(255, 255, 255, 255), D3DXVECTOR2(0.0f, 0.0f) };
+	pV[1] = { D3DXVECTOR3( 0.5,  0.5, 0), D3DXVECTOR3(0.0f, 0.0f, -1.0f), D3DCOLOR_RGBA(255, 255, 255, 255), D3DXVECTOR2(1.0f, 0.0f) };
+	pV[2] = { D3DXVECTOR3(-0.5, -0.5, 0), D3DXVECTOR3(0.0f, 0.0f, -1.0f), D3DCOLOR_RGBA(255, 255, 255, 255), D3DXVECTOR2(0.0f, 1.0f) };
+	pV[3] = { D3DXVECTOR3( 0.5, -0.5, 0), D3DXVECTOR3(0.0f, 0.0f, -1.0f), D3DCOLOR_RGBA(255, 255, 255, 255), D3DXVECTOR2(1.0f, 1.0f) };
+	
+	m_VertexBuffer->Unlock();
+	
+	// インデックスバッファ
+	LPWORD pIndex;
+	m_IndexBuffer->Lock(0, 0, (void**)&pIndex, D3DLOCK_DISCARD);
+	
+	pIndex[0] = 0;
+	pIndex[1] = 1;
+	pIndex[2] = 2;
+	pIndex[3] = 3;
+	
+	m_IndexBuffer->Unlock();
+	
+	// ワールド座標行列の初期化
+	D3DXMatrixIdentity(&m_World);
+	D3DXMatrixIdentity(&m_Move);
+	D3DXMatrixIdentity(&m_Scale);
 }
+
+void CBillBoard::Uninit()
+{
+	CTexture::Release(TEX_ID_TREE);
+
+	//頂点バッファの解放
+	if (m_VertexBuffer != NULL)
+	{
+		m_VertexBuffer->Release();
+		m_VertexBuffer = NULL;
+	}
+	
+	//インデックスバッファの解放
+	if (m_IndexBuffer != NULL)
+	{
+		m_IndexBuffer->Release();
+		m_IndexBuffer = NULL;
+	}
+}
+
+void CBillBoard::Update()
+{
+
+}
+
+void CBillBoard::Draw(int textureId, D3DXVECTOR3 vPos, float scale, CCamera* camera)
+{
+	LPDIRECT3DDEVICE9 pDevice = CRenderer::GetDevice();
+	if (pDevice == NULL)
+	{
+		return;
+	}
+	
+	// ワールド座標行列をセット
+	D3DXMatrixTranslation(&m_Move, vPos.x, vPos.y, vPos.z);
+	D3DXMatrixScaling(&m_Scale, scale, scale, scale);
+	
+	m_World = m_Scale * m_Move;
+	
+	D3DXMATRIX mtxViewRotInv = camera->GetView();
+	
+	// ビュー行列の逆行列を作成
+	// 平行移動を無効にする
+	mtxViewRotInv._41 = 0.0f;
+	mtxViewRotInv._42 = 0.0f;
+	mtxViewRotInv._43 = 0.0f;
+	
+	D3DXMatrixTranspose(&mtxViewRotInv, &mtxViewRotInv);
+	
+	m_World = mtxViewRotInv * m_World;
+
+	pDevice->SetTexture(0, CTexture::GetTexture(textureId));
+
+	//各種行列の設定(自分のやりたいところでやる)
+	pDevice->SetTransform(D3DTS_WORLD, &m_World);
+	pDevice->DrawIndexedPrimitive(D3DPT_TRIANGLESTRIP, 0, 0, 4, 0, 2);
+}
+
+void CBillBoard::DrawFixedY(int textureId, D3DXVECTOR3 vPos, float scale, CCamera* camera)
+{
+	LPDIRECT3DDEVICE9 pDevice = CRenderer::GetDevice();
+	if (pDevice == NULL)
+	{
+		return;
+	}
+
+	// ワールド座標行列をセット
+	D3DXMatrixTranslation(&m_Move, vPos.x, vPos.y, vPos.z);
+	D3DXMatrixScaling(&m_Scale, scale, scale, scale);
+
+	m_World = m_Scale * m_Move;
+
+	D3DXMATRIX mtxViewRotInv = camera->GetView();
+
+	// ビュー行列の逆行列を作成
+	// 平行移動とY軸以外の回転を無効にする
+	mtxViewRotInv._21 = 0.0f;
+	mtxViewRotInv._32 = 0.0f;
+	mtxViewRotInv._12 = 0.0f;
+	mtxViewRotInv._23 = 0.0f;
+	mtxViewRotInv._41 = 0.0f;
+	mtxViewRotInv._42 = 0.0f;
+	mtxViewRotInv._43 = 0.0f;
+
+	D3DXMatrixTranspose(&mtxViewRotInv, &mtxViewRotInv);
+
+	m_World = mtxViewRotInv * m_World;
+
+	pDevice->SetTexture(0, CTexture::GetTexture(textureId));
+
+	//各種行列の設定(自分のやりたいところでやる)
+	pDevice->SetTransform(D3DTS_WORLD, &m_World);
+	pDevice->DrawIndexedPrimitive(D3DPT_TRIANGLESTRIP, 0, 0, 4, 0, 2);
+}
+
+void CBillBoard::DrawBegin()
+{
+	LPDIRECT3DDEVICE9 pDevice = CRenderer::GetDevice();
+	if (pDevice == NULL)
+	{
+		return;
+	}
+
+	// ライティング使うときに外す
+	pDevice->SetRenderState(D3DRS_LIGHTING, FALSE);
+	
+	// αテスト(3つセット)
+	pDevice->SetRenderState(D3DRS_ALPHATESTENABLE, TRUE);			// αテストのON/OFF
+	pDevice->SetRenderState(D3DRS_ALPHAREF, 128);					// 第2引数は0～255の好きな値
+	pDevice->SetRenderState(D3DRS_ALPHAFUNC, D3DCMP_GREATEREQUAL);	// 第2引数は不等号(GREATERは大なり)、上の値より大きければ合格
+	
+	// FVF(今から使用する頂点情報)の設定
+	pDevice->SetFVF(FVF_VERTEX_3D);
+
+	// 頂点バッファとインデックスバッファの設定
+	pDevice->SetStreamSource(0, m_VertexBuffer, 0, sizeof(VERTEX_3D));
+	pDevice->SetIndices(m_IndexBuffer);
+
+	pDevice->SetFVF(FVF_VERTEX_3D);
+}
+
+void CBillBoard::DrawEnd()
+{
+	LPDIRECT3DDEVICE9 pDevice = CRenderer::GetDevice();
+	if (pDevice == NULL)
+	{
+		return;
+	}
+
+	pDevice->SetRenderState(D3DRS_LIGHTING, TRUE);
+	pDevice->SetRenderState(D3DRS_ALPHATESTENABLE, FALSE);		// αテストのON/OFF
+}
+
 //typedef struct
 //{
 //	D3DXVECTOR3 pos;
@@ -42,99 +233,6 @@ void CBillBoard::Init()
 //static D3DXMATRIX g_mtxWorld;			//ワールド変換行列
 //static D3DXMATRIX g_mtxMove;			//座標変換行列
 //static D3DXMATRIX g_mtxScale;			//拡大縮小行列
-//
-//bool BillBoardInit(void)			// ビルボードの初期化
-//{
-//	LPDIRECT3DDEVICE9 pDevice = CRenderer::GetDevice();
-//	if (pDevice == NULL)
-//	{
-//		return false;
-//	}
-//	HRESULT hr;
-//
-//	for (int i = 0; i < BB_TEXTURE_MAX; i++)
-//	{
-//		hr = D3DXCreateTextureFromFile(pDevice, g_aBBTextureFileName[i].FileName, &g_pTextures[i]);
-//
-//		if (FAILED(hr))
-//		{
-//			MessageBox(NULL, "テクスチャの読み込みに失敗しました", "エラー", MB_OK);
-//			return false;
-//		}
-//	}
-//
-//	// 頂点バッファ							↓大きい分には問題ない
-//	hr = pDevice->CreateVertexBuffer(sizeof(VERTEX3D) * 4, D3DUSAGE_WRITEONLY, FVF_VERTEX_3D, D3DPOOL_MANAGED, &g_pVertexBuffer, NULL);
-//
-//	if (FAILED(hr))
-//	{
-//		MessageBox(NULL, "頂点バッファの読み込みに失敗しました", "エラー", MB_OK);
-//		return false;
-//	}
-//
-//	// インデックスバッファ					↓大きい分には問題ない					↓sizeがDWORDなら32
-//	hr = pDevice->CreateIndexBuffer(sizeof(WORD) * 4, D3DUSAGE_WRITEONLY, D3DFMT_INDEX16, D3DPOOL_MANAGED, &g_pIndexBuffer, NULL);
-//
-//	if (FAILED(hr))
-//	{
-//		MessageBox(NULL, "インデックスバッファの読み込みに失敗しました", "エラー", MB_OK);
-//		return false;
-//	}
-//
-//	VERTEX3D* pV;
-//
-//	// 頂点バッファ
-//	g_pVertexBuffer->Lock(0, 0, (void**)&pV, D3DLOCK_DISCARD);
-//
-//	pV[0] = { D3DXVECTOR3(-0.5,  0.5, 0), D3DXVECTOR3(0.0f, 0.0f, -1.0f), D3DCOLOR_RGBA(255, 255, 255, 255), D3DXVECTOR2(0.0f, 0.0f) };
-//	pV[1] = { D3DXVECTOR3(0.5,  0.5, 0), D3DXVECTOR3(0.0f, 0.0f, -1.0f), D3DCOLOR_RGBA(255, 255, 255, 255), D3DXVECTOR2(1.0f, 0.0f) };
-//	pV[2] = { D3DXVECTOR3(-0.5, -0.5, 0), D3DXVECTOR3(0.0f, 0.0f, -1.0f), D3DCOLOR_RGBA(255, 255, 255, 255), D3DXVECTOR2(0.0f, 1.0f) };
-//	pV[3] = { D3DXVECTOR3(0.5, -0.5, 0), D3DXVECTOR3(0.0f, 0.0f, -1.0f), D3DCOLOR_RGBA(255, 255, 255, 255), D3DXVECTOR2(1.0f, 1.0f) };
-//
-//	g_pVertexBuffer->Unlock();
-//
-//	// インデックスバッファ
-//	LPWORD pIndex;
-//	g_pIndexBuffer->Lock(0, 0, (void**)&pIndex, D3DLOCK_DISCARD);
-//
-//	pIndex[0] = 0;
-//	pIndex[1] = 1;
-//	pIndex[2] = 2;
-//	pIndex[3] = 3;
-//
-//	g_pIndexBuffer->Unlock();
-//
-//	// ワールド座標行列の初期化
-//	D3DXMatrixIdentity(&g_mtxWorld);
-//	D3DXMatrixIdentity(&g_mtxMove);
-//	return true;
-//}
-//
-//void BillBoardUninit(void)			// ビルボードの終了処理
-//{
-//	for (int i = 0; i < BB_TEXTURE_MAX; i++)
-//	{
-//		if (g_pTextures[i] != NULL)
-//		{//テクスチャの開放
-//			g_pTextures[i]->Release();
-//			g_pTextures[i] = NULL;
-//		}
-//	}
-//
-//	//頂点バッファの解放
-//	if (g_pVertexBuffer != NULL)
-//	{
-//		g_pVertexBuffer->Release();
-//		g_pVertexBuffer = NULL;
-//	}
-//
-//	//インデックスバッファの解放
-//	if (g_pIndexBuffer != NULL)
-//	{
-//		g_pIndexBuffer->Release();
-//		g_pIndexBuffer = NULL;
-//	}
-//}
 //
 //void BillBoardUpdate(void)			// ビルボードの更新
 //{
@@ -182,45 +280,6 @@ void CBillBoard::Init()
 //	pDevice->DrawIndexedPrimitive(D3DPT_TRIANGLESTRIP, 0, 0, 4, 0, 2);
 //
 //}
-//
-//void BillBoardDrawCircle(D3DXVECTOR3 vPos, float scale)
-//{
-//	LPDIRECT3DDEVICE9 pDevice = CRenderer::GetDevice();
-//	if (pDevice == NULL)
-//	{
-//		return;
-//	}
-//
-//	// ワールド座標行列をセット
-//	D3DXMatrixTranslation(&g_mtxMove, vPos.x, vPos.y, vPos.z);
-//	D3DXMatrixScaling(&g_mtxScale, scale, scale, scale);
-//
-//	g_mtxWorld = g_mtxScale * g_mtxMove;
-//
-//	D3DXMATRIX mtxViewRotInv = GetView();
-//
-//	// ビュー行列の逆行列を作成
-//	// 平行移動とY軸以外の回転を無効にする
-//	mtxViewRotInv._41 = 0.0f;
-//	mtxViewRotInv._42 = 0.0f;
-//	mtxViewRotInv._43 = 0.0f;
-//
-//	D3DXMatrixTranspose(&mtxViewRotInv, &mtxViewRotInv);
-//
-//	g_mtxWorld = mtxViewRotInv * g_mtxWorld;
-//
-//	// FVF(今から使用する頂点情報)の設定
-//	pDevice->SetFVF(FVF_VERTEX_3D);
-//
-//	// 頂点バッファとインデックスバッファの設定
-//	pDevice->SetStreamSource(0, g_pVertexBuffer, 0, sizeof(VERTEX3D));
-//	pDevice->SetIndices(g_pIndexBuffer);
-//
-//	//各種行列の設定(自分のやりたいところでやる)
-//	pDevice->SetTransform(D3DTS_WORLD, &g_mtxWorld);
-//	pDevice->DrawIndexedPrimitive(D3DPT_TRIANGLESTRIP, 0, 0, 4, 0, 2);
-//}
-//
 //void BillBoardDrawStand(int texNum, D3DXVECTOR3 vPos, float scale)
 //{
 //	LPDIRECT3DDEVICE9 pDevice = CRenderer::GetDevice();
@@ -609,18 +668,3 @@ void CBillBoard::Init()
 //		m_IndexBuffer = NULL;
 //	}
 //}
-
-void CBillBoard::Update()
-{
-
-}
-
-void CBillBoard::Draw()
-{
-
-}
-
-void CBillBoard::DrawStand()
-{
-
-}

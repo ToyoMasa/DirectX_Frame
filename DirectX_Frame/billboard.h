@@ -39,14 +39,13 @@ void BillBoardDrawStand(int texNum, float posX, float posY, float posZ, float sc
 class CBillBoard
 {
 public:
-	CBillBoard();
-	~CBillBoard();
-
 	static void Init();
 	static void Uninit();
 	static void Update();
-	static void Draw();
-	static void DrawStand();
+	static void Draw(int textureId, D3DXVECTOR3 vPos, float scale, CCamera* camera);
+	static void DrawFixedY(int textureId, D3DXVECTOR3 vPos, float scale, CCamera* camera);
+	static void DrawBegin();
+	static void DrawEnd();
 
 private:
 	static int						m_TexId;				// テクスチャ番号

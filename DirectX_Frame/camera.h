@@ -25,6 +25,7 @@ public:
 	void SetFov(float fov);
 	void Move(float horizontal, float vertical);
 	void Rotation(float horizontal, float vertical);
+	D3DXMATRIX GetView();
 	static CCamera* Create();
 
 private:

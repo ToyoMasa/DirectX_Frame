@@ -11,6 +11,7 @@
 #include "light.h"
 #include "manager.h"
 #include "texture.h"
+#include "billboard.h"
 
 //======================================================================
 //	静的メンバ変数の初期化
@@ -49,6 +50,8 @@ bool CManager::Init(HINSTANCE hInstance, HWND hWnd, BOOL bWindow)
 
 	m_Light = CLight::Create(0);
 
+	CBillBoard::Init();
+
 	return true;
 }
 
@@ -64,6 +67,8 @@ void CManager::Uninit()
 	m_Camera->Release();
 
 	m_Light->Release();
+
+	CBillBoard::Uninit();
 
 	// 全てのテクスチャの解放
 	CTexture::ReleaseAll();
@@ -87,6 +92,8 @@ void CManager::Update()
 	m_Model->Update();
 
 	m_Camera->Update();
+
+	CBillBoard::Update();
 }
 
 void CManager::Draw()
@@ -103,6 +110,11 @@ void CManager::Draw()
 		{
 			m_Scene[i]->Draw();
 		}
+
+		CBillBoard::DrawBegin();
+		CBillBoard::DrawFixedY(TEX_ID_TREE, D3DXVECTOR3(1.0f, 1.0f, 0.0f), 1.0f, m_Camera);
+		CBillBoard::Draw(TEX_ID_TREE, D3DXVECTOR3(-1.0f, 1.0f, 0.0f), 1.0f, m_Camera);
+		CBillBoard::DrawEnd();
 
 		m_Model->Draw();
 
