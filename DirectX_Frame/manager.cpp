@@ -72,6 +72,9 @@ void CManager::Uninit()
 #if defined(_DEBUG) || defined(DEBUG)
 	CImGui::Uninit();
 #endif
+
+	// レンダラークラスの終了処理
+	CRenderer::Uninit();
 }
 
 void CManager::Update()

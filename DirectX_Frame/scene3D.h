@@ -36,6 +36,9 @@ private:
 	int m_NumVertex;
 	int m_NumPrimitive;
 	int m_TexId;
+
+	VERTEX_3D* m_Vertex;
+	WORD* m_Index;
 };
 
 #endif //!_SCENE3D_H_

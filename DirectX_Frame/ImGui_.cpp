@@ -1,6 +1,7 @@
 //#include "Main_.h"
 #include "ImGui_.h"
 
+bool show_another_window;
 
 void CImGui::Init(HWND hwnd,LPDIRECT3DDEVICE9 device)
 {
@@ -12,6 +13,8 @@ void CImGui::Init(HWND hwnd,LPDIRECT3DDEVICE9 device)
 
 	// Setup style
 	ImGui::StyleColorsDark();
+
+	show_another_window = false;
 }
 void CImGui::Uninit()
 {
@@ -54,8 +57,10 @@ void CImGui::BeginDraw()
 {
 	ImGui_ImplDX9_NewFrame();
 
+	// サイズ指定
+	ImGui::SetNextWindowSize(ImVec2(400, 100), ImGuiSetCond_Once);
 	
-	ImGui::Begin("Debug Window");
+	ImGui::Begin("Debug Window", &show_another_window);
 	ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
 	ImGui::End();
 	

@@ -23,11 +23,7 @@
 //======================================================================
 //	グローバル変数
 //======================================================================
-CScene2D *scene2D;
-CScene3D *scene3D;
-CSceneModel *model;
-CCamera *camera;
-CLight *light;
+extern LRESULT ImGui_ImplWin32_WndProcHandler(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
 
 //======================================================================
 //	プロトタイプ宣言
@@ -137,6 +133,11 @@ int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLi
 LRESULT CALLBACK WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
 	int nID;
+
+	if (ImGui_ImplWin32_WndProcHandler(hWnd, uMsg, wParam, lParam))
+	{
+		return true;
+	}
 
 	switch (uMsg)
 	{
