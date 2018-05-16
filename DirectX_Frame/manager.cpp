@@ -16,11 +16,8 @@
 //======================================================================
 //	静的メンバ変数の初期化
 //======================================================================
-CSceneModel *CManager::m_Model;
 CCamera		*CManager::m_Camera;
 CLight		*CManager::m_Light;
-CScene		*CManager::m_Scene[2] = { NULL };
-
 bool CManager::Init(HINSTANCE hInstance, HWND hWnd, BOOL bWindow)
 {
 	if (!CRenderer::Init(hWnd, bWindow))
@@ -37,14 +34,13 @@ bool CManager::Init(HINSTANCE hInstance, HWND hWnd, BOOL bWindow)
 	// テクスチャの初期化
 	CTexture::Init();
 
-	m_Scene[0] = CScene2D::Create(TEX_ID_CURSOR, 128, 128);
-	m_Scene[0]->Set(D3DXVECTOR3(100.0f, 100.0f, 0.0f));
+	CScene2D::Create(TEX_ID_CURSOR, 128, 128);
+	CScene::m_Scene[0]->Set(D3DXVECTOR3(100.0f, 100.0f, 0.0f));
+	CScene3D::Create(TEX_ID_FIELD001);
 
-	m_Scene[1] = CScene3D::Create(TEX_ID_FIELD001);
+	CSceneModel::Create(MODEL_SOURCE[MODEL_ID_UFO]);
 
-	m_Model = CSceneModel::Create(MODEL_SOURCE[MODEL_ID_UFO]);
-
-	m_Model->Move(D3DXVECTOR3(0.0f, 1.0f, 0.0f));
+//	m_Model->Move(D3DXVECTOR3(0.0f, 1.0f, 0.0f));
 
 	m_Camera = CCamera::Create();
 
@@ -57,12 +53,7 @@ bool CManager::Init(HINSTANCE hInstance, HWND hWnd, BOOL bWindow)
 
 void CManager::Uninit()
 {
-	for (int i = 0; i < 2; i++)
-	{
-		m_Scene[i]->Release();
-	}
-
-	m_Model->Release();
+	CScene::ReleaseAll();
 
 	m_Camera->Release();
 
@@ -84,12 +75,9 @@ void CManager::Uninit()
 
 void CManager::Update()
 {
-	for (int i = 0; i < 2; i++)
-	{
-		m_Scene[i]->Update();
-	}
+	CScene::UpdateAll();
 
-	m_Model->Update();
+//	m_Model->Update();
 
 	m_Camera->Update();
 
@@ -106,17 +94,12 @@ void CManager::Draw()
 	if (SUCCEEDED(hr))
 	{
 		//描画
-		for (int i = 0; i < 2; i++)
-		{
-			m_Scene[i]->Draw();
-		}
+		CScene::DrawAll();
 
 		CBillBoard::DrawBegin();
 		CBillBoard::DrawFixedY(TEX_ID_TREE, D3DXVECTOR3(1.0f, 1.0f, 0.0f), 1.0f, m_Camera);
 		CBillBoard::Draw(TEX_ID_TREE, D3DXVECTOR3(-1.0f, 1.0f, 0.0f), 1.0f, m_Camera);
 		CBillBoard::DrawEnd();
-
-		m_Model->Draw();
 
 		// デバッグ用imguiウィンドウの描画
 #if defined(_DEBUG) || defined(DEBUG)

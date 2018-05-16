@@ -9,7 +9,7 @@
 //======================================================================
 //	球と球の当たり判定
 //======================================================================
-bool isCollisionSphere(Sphere sphere1, Sphere sphere2)
+bool isCollisionSphere(Sphere &sphere1, Sphere &sphere2)
 {
 	return
 		(sphere2.pos.x - sphere1.pos.x) * (sphere2.pos.x - sphere1.pos.x) + 
@@ -21,7 +21,7 @@ bool isCollisionSphere(Sphere sphere1, Sphere sphere2)
 //======================================================================
 //	OBBと点の距離を測定
 //======================================================================
-float LenOBBToPoint(OBB &obb, D3DXVECTOR3 point)
+float LenOBBToPoint(OBB &obb, D3DXVECTOR3 &point)
 {
 	D3DXVECTOR3 Vec(0, 0, 0);   // 最終的に長さを求めるベクトル
 
@@ -46,7 +46,7 @@ float LenOBBToPoint(OBB &obb, D3DXVECTOR3 point)
 //======================================================================
 //	OBBと球の当たり判定
 //======================================================================
-bool isCollisionOBBtoSphere(OBB obb, Sphere sphere)
+bool isCollisionOBBtoSphere(OBB &obb, Sphere &sphere)
 {
 	return LenOBBToPoint(obb, sphere.pos) <= sphere.rad;
 }
@@ -217,7 +217,7 @@ D3DXVECTOR3 OBB::GetPos()
 //======================================================================
 //	球と平面の当たり判定(対象の球, 平面上の点，平面の法線ベクトル)
 //======================================================================
-bool isCollisionSpheretoPlane(Sphere sphere, D3DXVECTOR3 v, D3DXVECTOR3 n)
+bool isCollisionSpheretoPlane(Sphere &sphere, D3DXVECTOR3 &v, D3DXVECTOR3 &n)
 {
 	return distancePointToPlane(n, sphere.pos, v) <= sphere.rad;
 }
@@ -225,7 +225,7 @@ bool isCollisionSpheretoPlane(Sphere sphere, D3DXVECTOR3 v, D3DXVECTOR3 n)
 //======================================================================
 //	線分と平面の当たり判定(線分の始点，線分の終点, 平面の法線ベクトル)
 //======================================================================
-bool isCollisionLinetoPlane(D3DXVECTOR3 v1, D3DXVECTOR3 v2, D3DXVECTOR3 n)
+bool isCollisionLinetoPlane(D3DXVECTOR3 &v1, D3DXVECTOR3 &v2, D3DXVECTOR3 &n)
 {
 	return D3DXVec3Dot(&v1, &n) * D3DXVec3Dot(&v2, &n) <= 0;
 }
@@ -233,7 +233,7 @@ bool isCollisionLinetoPlane(D3DXVECTOR3 v1, D3DXVECTOR3 v2, D3DXVECTOR3 n)
 //======================================================================
 //	点と平面の距離を取得(平面の法線ベクトル, 点の座標, 平面上の点の座標)
 //======================================================================
-float distancePointToPlane(D3DXVECTOR3 vn, D3DXVECTOR3 p1, D3DXVECTOR3 p2)
+float distancePointToPlane(D3DXVECTOR3 &vn, D3DXVECTOR3 &p1, D3DXVECTOR3 &p2)
 {
 	D3DXVECTOR3 v = p2 - p1;
 	return fabs(D3DXVec3Dot(&vn, &v));

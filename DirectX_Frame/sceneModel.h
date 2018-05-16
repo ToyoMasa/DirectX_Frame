@@ -20,7 +20,7 @@ static const std::string MODEL_SOURCE[] =
 	"data/models/player_ufo.x",
 };
 
-class CSceneModel : public CGameObject
+class CSceneModel : public CScene
 {
 public:
 	CSceneModel();

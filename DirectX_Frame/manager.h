@@ -17,10 +17,8 @@ public:
 	static void Draw();
 
 private:
-	static CSceneModel	*m_Model;
 	static CCamera		*m_Camera;
 	static CLight		*m_Light;
-	static CScene		*m_Scene[2];
 };
 
 #endif // !_MANAGER_H_

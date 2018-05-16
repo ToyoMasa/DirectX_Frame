@@ -39,6 +39,8 @@ void BillBoardDrawStand(int texNum, float posX, float posY, float posZ, float sc
 class CBillBoard
 {
 public:
+	CBillBoard() {}
+	~CBillBoard() {}
 	static void Init();
 	static void Uninit();
 	static void Update();

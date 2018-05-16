@@ -65,22 +65,22 @@ bool isCollisionCircle2D(float x0, float y0, float r0, float x1, float y1, float
 //　第三引数　2つ目の線の始点
 //　第四引数　2つ目の線の終点	
 //************************************************************************
-bool isCollisionLine2D(D3DXVECTOR3 r1, D3DXVECTOR3 r2, D3DXVECTOR3 p1, D3DXVECTOR3 p2);
+bool isCollisionLine2D(D3DXVECTOR3 &r1, D3DXVECTOR3 &r2, D3DXVECTOR3 &p1, D3DXVECTOR3 &p2);
 
 //************************************************************************
 //	球と球の当たり判定
 //************************************************************************
-bool isCollisionSphere(Sphere sphere1, Sphere sphere2);
+bool isCollisionSphere(Sphere &sphere1, Sphere &sphere2);
 
 //************************************************************************
 //	OBBと点の当たり判定
 //************************************************************************
-float LenOBBToPoint(OBB &obb, D3DXVECTOR3 point);
+float LenOBBToPoint(OBB &obb, D3DXVECTOR3 &point);
 
 //************************************************************************
 //	OBBと球の当たり判定
 //************************************************************************
-bool isCollisionOBBtoSphere(OBB obb, Sphere sphere);
+bool isCollisionOBBtoSphere(OBB &obb, Sphere &sphere);
 
 //************************************************************************
 //	OBBとOBBの当たり判定
@@ -90,16 +90,16 @@ bool isCollisionOBBs(OBB &obb1, OBB &obb2);
 //************************************************************************
 //	球と平面の当たり判定
 //************************************************************************
-bool isCollisionSpheretoPlane(Sphere sphere, D3DXVECTOR3 v, D3DXVECTOR3 n);
+bool isCollisionSpheretoPlane(Sphere &sphere, D3DXVECTOR3 &v, D3DXVECTOR3 &n);
 
 //************************************************************************
 //	線と平面の当たり判定
 //************************************************************************
-bool isCollisionLinetoPlane(D3DXVECTOR3 v1, D3DXVECTOR3 v2, D3DXVECTOR3 n);
+bool isCollisionLinetoPlane(D3DXVECTOR3 &v1, D3DXVECTOR3 &v2, D3DXVECTOR3 &n);
 
 //************************************************************************
 //	点と平面の距離を測定
 //************************************************************************
-float distancePointToPlane(D3DXVECTOR3 vn, D3DXVECTOR3 p1, D3DXVECTOR3 p2);
+float distancePointToPlane(D3DXVECTOR3 &vn, D3DXVECTOR3 &p1, D3DXVECTOR3 &p2);
 
 #endif // !_COLLISION_H_
