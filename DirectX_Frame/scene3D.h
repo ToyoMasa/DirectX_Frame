@@ -18,8 +18,23 @@ typedef struct
 class CScene3D : public CScene
 {
 public:
-	CScene3D();
-	~CScene3D();
+	//======================================================================
+	//	コンストラクタ
+	//======================================================================
+	CScene3D::CScene3D(int priority) : CScene(priority)
+	{
+		m_Pos = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
+		m_VertexBuffer = NULL;
+		m_IndexBuffer = NULL;
+	}
+
+	//======================================================================
+	//	デストラクタ
+	//======================================================================
+	CScene3D::~CScene3D()
+	{
+	}
+
 
 	void Init(int texId);
 	void Uninit();

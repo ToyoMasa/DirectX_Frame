@@ -3,15 +3,15 @@
 //======================================================================
 //	Ã“Iƒƒ“ƒo•Ï”‚Ì‰Šú‰»
 //======================================================================
-CScene *CScene::m_Scene[10] = { NULL };
+CScene *CScene::m_Scene[PRIORITY_MAX][OBJECT_MAX] = { NULL };
 
-CScene::CScene()
+CScene::CScene(int priority)
 {
-	for (int i = 0; i < 10; i++)
+	for (int i = 0; i < OBJECT_MAX; i++)
 	{
-		if (m_Scene[i] == NULL)
+		if (m_Scene[priority][i] == NULL)
 		{
-			m_Scene[i] = this;
+			m_Scene[priority][i] = this;
 			break;
 		}
 	}
@@ -24,47 +24,59 @@ void CScene::Set(D3DXVECTOR3& pos)
 
 void CScene::Release()
 {
-	for (int i = 0; i < 10; i++)
+	for (int j = 0; j < PRIORITY_MAX; j++)
 	{
-		if (m_Scene[i] == this)
+		for (int i = 0; i < OBJECT_MAX; i++)
 		{
-			m_Scene[i] = NULL;
-			Uninit();
-			delete this;
-			break;
+			if (m_Scene[j][i] == this)
+			{
+				m_Scene[j][i] = NULL;
+				Uninit();
+				delete this;
+				break;
+			}
 		}
 	}
 }
 
 void CScene::UpdateAll()
 {
-	for (int i = 0; i < 10; i++)
+	for (int j = 0; j < PRIORITY_MAX; j++)
 	{
-		if (m_Scene[i] != NULL)
+		for (int i = 0; i < OBJECT_MAX; i++)
 		{
-			m_Scene[i]->Update();
+			if (m_Scene[j][i] != NULL)
+			{
+				m_Scene[j][i]->Update();
+			}
 		}
 	}
 }
 
 void CScene::DrawAll()
 {
-	for (int i = 0; i < 10; i++)
+	for (int j = 0; j < PRIORITY_MAX; j++)
 	{
-		if (m_Scene[i] != NULL)
+		for (int i = 0; i < OBJECT_MAX; i++)
 		{
-			m_Scene[i]->Draw();
+			if (m_Scene[j][i] != NULL)
+			{
+				m_Scene[j][i]->Draw();
+			}
 		}
 	}
 }
 
 void CScene::ReleaseAll()
 {
-	for (int i = 0; i < 10; i++)
+	for (int j = 0; j < PRIORITY_MAX; j++)
 	{
-		if (m_Scene[i] != NULL)
+		for (int i = 0; i < OBJECT_MAX; i++)
 		{
-			m_Scene[i]->Release();
+			if (m_Scene[j][i] != NULL)
+			{
+				m_Scene[j][i]->Release();
+			}
 		}
 	}
 }

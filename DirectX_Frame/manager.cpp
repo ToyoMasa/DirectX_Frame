@@ -18,6 +18,7 @@
 //======================================================================
 CCamera		*CManager::m_Camera;
 CLight		*CManager::m_Light;
+
 bool CManager::Init(HINSTANCE hInstance, HWND hWnd, BOOL bWindow)
 {
 	if (!CRenderer::Init(hWnd, bWindow))
@@ -35,12 +36,12 @@ bool CManager::Init(HINSTANCE hInstance, HWND hWnd, BOOL bWindow)
 	CTexture::Init();
 
 	CScene2D::Create(TEX_ID_CURSOR, 128, 128);
-	CScene::m_Scene[0]->Set(D3DXVECTOR3(100.0f, 100.0f, 0.0f));
+	CScene::GetScene(2, 0)->Set(D3DXVECTOR3(100.0f, 100.0f, 0.0f));
 	CScene3D::Create(TEX_ID_FIELD001);
 
 	CSceneModel::Create(MODEL_SOURCE[MODEL_ID_UFO]);
 
-//	m_Model->Move(D3DXVECTOR3(0.0f, 1.0f, 0.0f));
+	CScene::GetScene(0, 0)->Move(D3DXVECTOR3(0.0f, 1.0f, 0.0f));
 
 	m_Camera = CCamera::Create();
 

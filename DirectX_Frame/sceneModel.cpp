@@ -9,31 +9,6 @@
 static const DWORD FVF_VERTEX_3D = (D3DFVF_XYZ | D3DFVF_DIFFUSE | D3DFVF_TEX1 | D3DFVF_NORMAL);
 
 //======================================================================
-//	コンストラクタ
-//======================================================================
-CSceneModel::CSceneModel()
-{
-	D3DXMatrixIdentity(&m_World);
-	D3DXMatrixIdentity(&m_Move);
-	D3DXMatrixIdentity(&m_Rotate);
-	D3DXMatrixIdentity(&m_RotX);
-	D3DXMatrixIdentity(&m_RotY);
-	D3DXMatrixIdentity(&m_RotZ);
-	D3DXMatrixIdentity(&m_Scale);
-	m_MaterialNum = 0;
-	m_TextureNum = 0;
-	m_Texture = NULL;
-	m_Material = NULL;
-}
-
-//======================================================================
-//	デストラクタ
-//======================================================================
-CSceneModel::~CSceneModel()
-{
-}
-
-//======================================================================
 //	初期処理関数
 //======================================================================
 void CSceneModel::Init(const std::string& modelName)
@@ -229,7 +204,7 @@ void CSceneModel::Scale(D3DXVECTOR3 scale)
 
 CSceneModel* CSceneModel::Create(const std::string& modelName)
 {
-	CSceneModel* sceneModel = new CSceneModel();
+	CSceneModel* sceneModel = new CSceneModel(0);
 	sceneModel->Init(modelName);
 
 	return sceneModel;

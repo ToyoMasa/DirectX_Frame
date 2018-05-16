@@ -23,8 +23,30 @@ static const std::string MODEL_SOURCE[] =
 class CSceneModel : public CScene
 {
 public:
-	CSceneModel();
-	~CSceneModel();
+	//======================================================================
+	//	コンストラクタ
+	//======================================================================
+	CSceneModel::CSceneModel(int priority) : CScene(priority)
+	{
+		D3DXMatrixIdentity(&m_World);
+		D3DXMatrixIdentity(&m_Move);
+		D3DXMatrixIdentity(&m_Rotate);
+		D3DXMatrixIdentity(&m_RotX);
+		D3DXMatrixIdentity(&m_RotY);
+		D3DXMatrixIdentity(&m_RotZ);
+		D3DXMatrixIdentity(&m_Scale);
+		m_MaterialNum = 0;
+		m_TextureNum = 0;
+		m_Texture = NULL;
+		m_Material = NULL;
+	}
+
+	//======================================================================
+	//	デストラクタ
+	//======================================================================
+	CSceneModel::~CSceneModel()
+	{
+	}
 
 	void Init(const std::string& modelName);
 	void Uninit();
