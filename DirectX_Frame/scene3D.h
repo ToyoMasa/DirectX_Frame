@@ -35,7 +35,6 @@ public:
 	{
 	}
 
-
 	void Init(int texId);
 	void Uninit();
 	void Update();

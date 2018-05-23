@@ -4,10 +4,21 @@
 static const int OBJECT_MAX = 100;
 static const int PRIORITY_MAX = 3;
 
+enum SCENE_TYPE
+{
+	SCENE_TYPE_NONE,
+	SCENE_TYPE_2D,
+	SCENE_TYPE_3D,
+	SCENE_TYPE_PLAYER,
+	SCENE_TYPE_ENEMY,
+	SCENE_TYPE_BULLET,
+};
+
 class CScene
 {
 protected:
 	D3DXVECTOR3 m_Pos;
+	SCENE_TYPE m_Type;
 public:
 	CScene(int priority);
 	virtual ~CScene() {}
@@ -25,6 +36,7 @@ public:
 	static void DrawAll();
 	static void ReleaseAll();
 	static CScene* GetScene(int priority, int id) { return m_Scene[priority][id]; }
+	SCENE_TYPE GetType() { return m_Type; }
 private:
 	static CScene *m_Scene[PRIORITY_MAX][OBJECT_MAX];
 };

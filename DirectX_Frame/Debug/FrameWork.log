@@ -1,22 +1,22 @@
-﻿  manager.cpp
+﻿  bullet.cpp
   コードを生成中...
   コンパイル中...
+  texture.cpp
   sceneModel.cpp
 d:\old ファイル\school\school\3年\gm31\frameworkrepo\trunk\directx_frame\scenemodel.cpp(77): warning C4018: '<': signed と unsigned の数値を比較しようとしました。
 d:\old ファイル\school\school\3年\gm31\frameworkrepo\trunk\directx_frame\scenemodel.cpp(158): warning C4018: '<': signed と unsigned の数値を比較しようとしました。
   scene3D.cpp
   scene2D.cpp
   scene.cpp
-  main.cpp
-  billboard.cpp
-  コードを生成中...
-  スキップ中... (関連する変更は検出されませんでした)
-  texture.cpp
   renderer.cpp
+  manager.cpp
+  main.cpp
   light.cpp
   controller.cpp
   collision.cpp
   class.cpp
   camera.cpp
+  billboard.cpp
+  コードを生成中...
   FrameWork.vcxproj -> D:\Old ファイル\school\school\3年\GM31\FrameWorkRepo\trunk\DirectX_Frame\Debug\FrameWork.exe
   FrameWork.vcxproj -> D:\Old ファイル\school\school\3年\GM31\FrameWorkRepo\trunk\DirectX_Frame\Debug\FrameWork.pdb (Full PDB)

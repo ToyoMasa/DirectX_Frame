@@ -14,18 +14,17 @@ static const DWORD FVF_VERTEX_3D = (D3DFVF_XYZ | D3DFVF_DIFFUSE | D3DFVF_TEX1 | 
 //======================================================================
 //	静的メンバ変数の初期化
 //======================================================================
-int						CBillBoard::m_TexId = 0;			// テクスチャ番号
 D3DMATERIAL9			CBillBoard::m_Mat;					// モデル1部分につき1個
 LPDIRECT3DVERTEXBUFFER9	CBillBoard::m_VertexBuffer = NULL;	// 頂点バッファ
 LPDIRECT3DINDEXBUFFER9	CBillBoard::m_IndexBuffer = NULL;	// インデックスバッファ
 D3DXMATRIX				CBillBoard::m_World;				// ワールド変換行列
 D3DXMATRIX				CBillBoard::m_Move;					// 座標変換行列
 D3DXMATRIX				CBillBoard::m_Scale;				// 拡大縮小行列
+CBillBoard*				CBillBoard::m_BillBoards[100] = { NULL };
 
 //======================================================================
 //	グローバル変数
 //======================================================================
-CScene3D *billboard;
 
 void CBillBoard::Init()
 {
@@ -89,6 +88,7 @@ void CBillBoard::Init()
 void CBillBoard::Uninit()
 {
 	CTexture::Release(TEX_ID_TREE);
+	CBillBoard::ReleaseAll();
 
 	//頂点バッファの解放
 	if (m_VertexBuffer != NULL)
@@ -137,6 +137,39 @@ void CBillBoard::Draw(int textureId, D3DXVECTOR3 vPos, float scale, CCamera* cam
 	m_World = mtxViewRotInv * m_World;
 
 	pDevice->SetTexture(0, CTexture::GetTexture(textureId));
+
+	//各種行列の設定(自分のやりたいところでやる)
+	pDevice->SetTransform(D3DTS_WORLD, &m_World);
+	pDevice->DrawIndexedPrimitive(D3DPT_TRIANGLESTRIP, 0, 0, 4, 0, 2);
+}
+
+void CBillBoard::DrawOne(CCamera* camera)
+{
+	LPDIRECT3DDEVICE9 pDevice = CRenderer::GetDevice();
+	if (pDevice == NULL)
+	{
+		return;
+	}
+
+	// ワールド座標行列をセット
+	D3DXMatrixTranslation(&m_Move, m_Pos.x, m_Pos.y, m_Pos.z);
+	D3DXMatrixScaling(&m_Scale, m_ScaleX, m_ScaleY, m_ScaleZ);
+
+	m_World = m_Scale * m_Move;
+
+	D3DXMATRIX mtxViewRotInv = camera->GetView();
+
+	// ビュー行列の逆行列を作成
+	// 平行移動を無効にする
+	mtxViewRotInv._41 = 0.0f;
+	mtxViewRotInv._42 = 0.0f;
+	mtxViewRotInv._43 = 0.0f;
+
+	D3DXMatrixTranspose(&mtxViewRotInv, &mtxViewRotInv);
+
+	m_World = mtxViewRotInv * m_World;
+
+	pDevice->SetTexture(0, CTexture::GetTexture(m_TexId));
 
 	//各種行列の設定(自分のやりたいところでやる)
 	pDevice->SetTransform(D3DTS_WORLD, &m_World);
@@ -216,6 +249,70 @@ void CBillBoard::DrawEnd()
 
 	pDevice->SetRenderState(D3DRS_LIGHTING, TRUE);
 	pDevice->SetRenderState(D3DRS_ALPHATESTENABLE, FALSE);		// αテストのON/OFF
+}
+
+void CBillBoard::DrawAll(CCamera* camera)
+{
+	CBillBoard::DrawBegin();
+
+	for (int i = 0; i < 100; i++)
+	{
+		if (CBillBoard::m_BillBoards[i] != NULL)
+		{
+			CBillBoard::m_BillBoards[i]->DrawOne(camera);
+		}
+	}
+	CBillBoard::DrawEnd();
+}
+
+void CBillBoard::Set(int id, int texId, D3DXVECTOR3 pos, float scale)
+{
+	CBillBoard::m_BillBoards[id]->m_TexId = texId;
+	CBillBoard::m_BillBoards[id]->m_Pos = pos;
+	CBillBoard::m_BillBoards[id]->m_ScaleX = scale;
+	CBillBoard::m_BillBoards[id]->m_ScaleY = scale;
+	CBillBoard::m_BillBoards[id]->m_ScaleZ = scale;
+}
+
+void CBillBoard::Set(int texId, D3DXVECTOR3 pos, float scale)
+{
+	m_TexId = texId;
+	m_Pos = pos;
+	m_ScaleX = scale;
+	m_ScaleY = scale;
+	m_ScaleZ = scale;
+}
+
+void CBillBoard::Release()
+{
+	for (int i = 0; i < 100; i++)
+	{
+		if (m_BillBoards[i] == this)
+		{
+			m_BillBoards[i] = NULL;
+			delete this;
+			break;
+		}
+	}
+}
+
+void CBillBoard::ReleaseAll()
+{
+	for (int i = 0; i < 100; i++)
+	{
+		if (m_BillBoards[i] != NULL)
+		{
+			m_BillBoards[i]->Release();
+		}
+	}
+}
+
+int CBillBoard::Create(int texId)
+{
+	CBillBoard* billboard = new CBillBoard();
+	m_BillBoards[billboard->m_Id]->Set(texId, D3DXVECTOR3(0.0f, 0.0f, 0.0f), 1.0f);
+
+	return billboard->m_Id;
 }
 
 //typedef struct

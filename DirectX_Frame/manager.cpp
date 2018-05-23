@@ -19,6 +19,8 @@
 CCamera		*CManager::m_Camera;
 CLight		*CManager::m_Light;
 
+int tree1, tree2;
+
 bool CManager::Init(HINSTANCE hInstance, HWND hWnd, BOOL bWindow)
 {
 	if (!CRenderer::Init(hWnd, bWindow))
@@ -36,11 +38,10 @@ bool CManager::Init(HINSTANCE hInstance, HWND hWnd, BOOL bWindow)
 	CTexture::Init();
 
 	CScene2D::Create(TEX_ID_CURSOR, 128, 128);
-	CScene::GetScene(2, 0)->Set(D3DXVECTOR3(100.0f, 100.0f, 0.0f));
 	CScene3D::Create(TEX_ID_FIELD001);
-
 	CSceneModel::Create(MODEL_SOURCE[MODEL_ID_UFO]);
 
+	CScene::GetScene(2, 0)->Set(D3DXVECTOR3(100.0f, 100.0f, 0.0f));
 	CScene::GetScene(0, 0)->Move(D3DXVECTOR3(0.0f, 1.0f, 0.0f));
 
 	m_Camera = CCamera::Create();
@@ -48,6 +49,11 @@ bool CManager::Init(HINSTANCE hInstance, HWND hWnd, BOOL bWindow)
 	m_Light = CLight::Create(0);
 
 	CBillBoard::Init();
+	tree1 = CBillBoard::Create(TEX_ID_TREE);
+	tree2 = CBillBoard::Create(TEX_ID_TREE);
+
+	CBillBoard::Set(tree1, TEX_ID_TREE, D3DXVECTOR3(1.0f, 1.0f, 0.0f), 1.0f);
+	CBillBoard::Set(tree2, TEX_ID_TREE, D3DXVECTOR3(-1.0f, 1.0f, 0.0f), 1.0f);
 
 	return true;
 }
@@ -78,8 +84,6 @@ void CManager::Update()
 {
 	CScene::UpdateAll();
 
-//	m_Model->Update();
-
 	m_Camera->Update();
 
 	CBillBoard::Update();
@@ -97,10 +101,7 @@ void CManager::Draw()
 		//描画
 		CScene::DrawAll();
 
-		CBillBoard::DrawBegin();
-		CBillBoard::DrawFixedY(TEX_ID_TREE, D3DXVECTOR3(1.0f, 1.0f, 0.0f), 1.0f, m_Camera);
-		CBillBoard::Draw(TEX_ID_TREE, D3DXVECTOR3(-1.0f, 1.0f, 0.0f), 1.0f, m_Camera);
-		CBillBoard::DrawEnd();
+		CBillBoard::DrawAll(m_Camera);
 
 		// デバッグ用imguiウィンドウの描画
 #if defined(_DEBUG) || defined(DEBUG)

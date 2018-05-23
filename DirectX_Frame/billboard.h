@@ -39,24 +39,50 @@
 class CBillBoard
 {
 public:
-	CBillBoard() {}
+	CBillBoard() 
+	{
+		for (int i = 0; i < 100; i++)
+		{
+			if (m_BillBoards[i] == NULL)
+			{
+				this->SetId(i);
+				m_BillBoards[i] = this;
+
+				break;
+			}
+		}
+	}
 	~CBillBoard() {}
 	static void Init();
 	static void Uninit();
 	static void Update();
 	static void Draw(int textureId, D3DXVECTOR3 vPos, float scale, CCamera* camera);
+	void DrawOne(CCamera* camera);
 	static void DrawFixedY(int textureId, D3DXVECTOR3 vPos, float scale, CCamera* camera);
 	static void DrawBegin();
 	static void DrawEnd();
+	static void DrawAll(CCamera* camera);
+	static void Set(int id, int texId, D3DXVECTOR3 pos, float scale);
+	void Set(int texId, D3DXVECTOR3 pos, float scale);
+	void SetId(int Id) { m_Id = Id; }
+	void Release();
+	static void ReleaseAll();
+	static int Create(int texId);
 
 private:
-	static int						m_TexId;				// テクスチャ番号
+	int								m_Id;					// 管理番号
+	int								m_TexId;				// テクスチャ番号
+	D3DXVECTOR3						m_Pos;					// 場所
+	float							m_ScaleX;				// サイズ
+	float							m_ScaleY;				// サイズ
+	float							m_ScaleZ;				// サイズ
 	static D3DMATERIAL9				m_Mat;					// モデル1部分につき1個
 	static LPDIRECT3DVERTEXBUFFER9	m_VertexBuffer;			// 頂点バッファ
 	static LPDIRECT3DINDEXBUFFER9	m_IndexBuffer;			// インデックスバッファ
 	static D3DXMATRIX				m_World;				// ワールド変換行列
 	static D3DXMATRIX				m_Move;					// 座標変換行列
 	static D3DXMATRIX				m_Scale;				// 拡大縮小行列
+	static CBillBoard*				m_BillBoards[100];		// ビルボード
 };
 
 
