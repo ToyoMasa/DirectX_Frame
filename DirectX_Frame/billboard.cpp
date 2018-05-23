@@ -169,7 +169,7 @@ void CBillBoard::DrawOne(CCamera* camera)
 
 	m_World = mtxViewRotInv * m_World;
 
-	pDevice->SetTexture(0, CTexture::GetTexture(m_TexId));
+	pDevice->SetTexture(0, CTexture::GetTexture(m_TextureId));
 
 	//ŠeŽís—ñ‚ÌÝ’è(Ž©•ª‚Ì‚â‚è‚½‚¢‚Æ‚±‚ë‚Å‚â‚é)
 	pDevice->SetTransform(D3DTS_WORLD, &m_World);
@@ -267,7 +267,7 @@ void CBillBoard::DrawAll(CCamera* camera)
 
 void CBillBoard::Set(int id, int texId, D3DXVECTOR3 pos, float scale)
 {
-	CBillBoard::m_BillBoards[id]->m_TexId = texId;
+	CBillBoard::m_BillBoards[id]->m_TextureId = texId;
 	CBillBoard::m_BillBoards[id]->m_Pos = pos;
 	CBillBoard::m_BillBoards[id]->m_ScaleX = scale;
 	CBillBoard::m_BillBoards[id]->m_ScaleY = scale;
@@ -276,7 +276,7 @@ void CBillBoard::Set(int id, int texId, D3DXVECTOR3 pos, float scale)
 
 void CBillBoard::Set(int texId, D3DXVECTOR3 pos, float scale)
 {
-	m_TexId = texId;
+	m_TextureId = texId;
 	m_Pos = pos;
 	m_ScaleX = scale;
 	m_ScaleY = scale;

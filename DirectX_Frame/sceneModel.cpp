@@ -204,7 +204,7 @@ void CSceneModel::Scale(D3DXVECTOR3 scale)
 
 CSceneModel* CSceneModel::Create(const std::string& modelName)
 {
-	CSceneModel* sceneModel = new CSceneModel(0);
+	CSceneModel* sceneModel = new CSceneModel(1);
 	sceneModel->Init(modelName);
 
 	return sceneModel;

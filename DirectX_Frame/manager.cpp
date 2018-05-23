@@ -12,6 +12,7 @@
 #include "manager.h"
 #include "texture.h"
 #include "billboard.h"
+#include "field.h"
 
 //======================================================================
 //	静的メンバ変数の初期化
@@ -37,12 +38,14 @@ bool CManager::Init(HINSTANCE hInstance, HWND hWnd, BOOL bWindow)
 	// テクスチャの初期化
 	CTexture::Init();
 
+	// フィールド
+	CField::Create(TEX_ID_FIELD001, 1.0f, 4, 4);
+
 	CScene2D::Create(TEX_ID_CURSOR, 128, 128);
-	CScene3D::Create(TEX_ID_FIELD001);
 	CSceneModel::Create(MODEL_SOURCE[MODEL_ID_UFO]);
 
 	CScene::GetScene(2, 0)->Set(D3DXVECTOR3(100.0f, 100.0f, 0.0f));
-	CScene::GetScene(0, 0)->Move(D3DXVECTOR3(0.0f, 1.0f, 0.0f));
+	CScene::GetScene(1, 0)->Move(D3DXVECTOR3(0.0f, 1.0f, 0.0f));
 
 	m_Camera = CCamera::Create();
 

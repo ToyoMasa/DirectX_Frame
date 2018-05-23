@@ -9,26 +9,10 @@
 
 static const DWORD FVF_VERTEX_3D = (D3DFVF_XYZ | D3DFVF_DIFFUSE | D3DFVF_TEX1 | D3DFVF_NORMAL);
 
-VERTEX_3D v[] = {
-	//		位置座標							法線ベクトル						色							UV座標
-	//上の面														    
-	{ D3DXVECTOR3(-2.0f,  0.0f,  2.0f), D3DXVECTOR3(0.0f,  1.0f, 0.0f), D3DCOLOR_RGBA(255, 255, 255, 255), D3DXVECTOR2(0.0f, 0.0f) },
-	{ D3DXVECTOR3( 2.0f,  0.0f,  2.0f), D3DXVECTOR3(0.0f,  1.0f, 0.0f), D3DCOLOR_RGBA(255, 255, 255, 255), D3DXVECTOR2(1.0f, 0.0f) },
-	{ D3DXVECTOR3(-2.0f,  0.0f, -2.0f), D3DXVECTOR3(0.0f,  1.0f, 0.0f), D3DCOLOR_RGBA(255, 255, 255, 255), D3DXVECTOR2(0.0f, 1.0f) },
-	{ D3DXVECTOR3( 2.0f,  0.0f, -2.0f), D3DXVECTOR3(0.0f,  1.0f, 0.0f), D3DCOLOR_RGBA(255, 255, 255, 255), D3DXVECTOR2(1.0f, 1.0f) },
-};
-
-WORD index[] =
-{
-	//前の面
-	0, 1, 2,
-	1, 3, 2,
-};
-
 //======================================================================
 //	初期処理関数
 //======================================================================
-void CScene3D::Init(int texId)
+void CScene3D::Init(int texId, float meshSize, int sizeX, int sizeY, int numPrimitive, int numVertex, int numIndex)
 {
 	LPDIRECT3DDEVICE9 pDevice = CRenderer::GetDevice();
 	if (pDevice == NULL)
@@ -36,13 +20,16 @@ void CScene3D::Init(int texId)
 		return;
 	}
 
+	m_NumPrimitive = numPrimitive;
+	m_NumVertex = numVertex;
+
 	m_TexId = texId;
 	CTexture::Load(m_TexId);
 
 	HRESULT hr;
 
 	// 頂点バッファ							↓大きい分には問題ない
-	hr = pDevice->CreateVertexBuffer(sizeof(VERTEX_3D) * 4, D3DUSAGE_WRITEONLY, FVF_VERTEX_3D, D3DPOOL_MANAGED, &m_VertexBuffer, NULL);
+	hr = pDevice->CreateVertexBuffer(sizeof(VERTEX_3D) * numVertex, D3DUSAGE_WRITEONLY, FVF_VERTEX_3D, D3DPOOL_MANAGED, &m_VertexBuffer, NULL);
 
 	if (FAILED(hr))
 	{
@@ -51,7 +38,7 @@ void CScene3D::Init(int texId)
 	}
 
 	// インデックスバッファ					↓大きい分には問題ない			↓sizeがDWORDなら32
-	hr = pDevice->CreateIndexBuffer(sizeof(WORD) * 6, D3DUSAGE_WRITEONLY, D3DFMT_INDEX16, D3DPOOL_MANAGED, &m_IndexBuffer, NULL);
+	hr = pDevice->CreateIndexBuffer(sizeof(WORD) * numIndex, D3DUSAGE_WRITEONLY, D3DFMT_INDEX16, D3DPOOL_MANAGED, &m_IndexBuffer, NULL);
 
 	if (FAILED(hr))
 	{
@@ -59,19 +46,44 @@ void CScene3D::Init(int texId)
 		return;
 	}
 
-	VERTEX_3D* pV;
+	VERTEX_3D* V;
 
 	// 頂点バッファ
-	m_VertexBuffer->Lock(0, 0, (void**)&pV, D3DLOCK_DISCARD);
+	m_VertexBuffer->Lock(0, 0, (void**)&V, D3DLOCK_DISCARD);
 
-	memcpy(pV, &v[0], sizeof(v));
+	for (int j = 0; j < sizeY + 1; j++)
+	{
+		for (int i = 0; i < sizeX + 1; i++)
+		{
+			V[i + (sizeX + 1) * j] = { D3DXVECTOR3(-(meshSize * sizeX / 2) + (meshSize * i), 0.0f, (meshSize * sizeY / 2) - (meshSize * j)), D3DXVECTOR3(0.0f, 1.0f, 0.0f), D3DCOLOR_RGBA(255, 255, 255, 255), D3DXVECTOR2((float)i ,  (float)j) };
+		}
+	}
 
 	m_VertexBuffer->Unlock();
 
-	LPWORD pIndex;
-	m_IndexBuffer->Lock(0, 0, (void**)&pIndex, D3DLOCK_DISCARD);
+	LPWORD Index;
+	m_IndexBuffer->Lock(0, 0, (void**)&Index, D3DLOCK_DISCARD);
 
-	memcpy(pIndex, &index[0], sizeof(index));
+	int numindex = 0;
+
+	for (int j = 0; j < sizeY; j++)
+	{
+		for (int i = 0; i < sizeX + 1; i++)
+		{
+			Index[numindex] = j * (sizeX + 1) + i + sizeX + 1;
+			numindex++;
+			Index[numindex] = j * (sizeX + 1) + i;
+			numindex++;
+
+			if (i == sizeX && !(j == sizeY - 1))
+			{
+				Index[numindex] = j * (sizeX + 1) + i;
+				numindex++;
+				Index[numindex] = (j + 1) * (sizeX + 1) + sizeX + 1;
+				numindex++;
+			}
+		}
+	}
 
 	m_IndexBuffer->Unlock();
 
@@ -147,13 +159,13 @@ void CScene3D::Draw()
 
 	pDevice->SetTexture(0, CTexture::GetTexture(m_TexId));
 
-	pDevice->DrawIndexedPrimitive(D3DPT_TRIANGLELIST, 0, 0, 24, 0, 12);
+	pDevice->DrawIndexedPrimitive(D3DPT_TRIANGLESTRIP, 0, 0, m_NumVertex, 0, m_NumPrimitive);
 }
 
-CScene3D* CScene3D::Create(int texId)
+CScene3D* CScene3D::Create(int texId, float meshSize, int sizeX, int sizeY, int numPrimitive, int numVertex, int numIndex)
 {
-	CScene3D* scene3D = new CScene3D(1);
-	scene3D->Init(texId);
+	CScene3D* scene3D = new CScene3D(0);
+	scene3D->Init(texId, meshSize, sizeX, sizeY, numPrimitive, numVertex, numIndex);
 
 	return scene3D;
 }

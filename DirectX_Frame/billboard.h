@@ -7,6 +7,8 @@
 
 #include <string>
 
+class CCamera;
+
 //bool BillBoardInit(void);			// ビルボードの初期化
 //void BillBoardUninit(void);			// ビルボードの終了処理
 //void BillBoardUpdate(void);			// ビルボードの更新
@@ -71,7 +73,7 @@ public:
 
 private:
 	int								m_Id;					// 管理番号
-	int								m_TexId;				// テクスチャ番号
+	int								m_TextureId;				// テクスチャ番号
 	D3DXVECTOR3						m_Pos;					// 場所
 	float							m_ScaleX;				// サイズ
 	float							m_ScaleY;				// サイズ

@@ -26,6 +26,7 @@ public:
 		m_Pos = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 		m_VertexBuffer = NULL;
 		m_IndexBuffer = NULL;
+		D3DXMatrixIdentity(&m_World);
 	}
 
 	//======================================================================
@@ -35,11 +36,11 @@ public:
 	{
 	}
 
-	void Init(int texId);
+	void Init(int texId, float meshSize, int sizeX, int sizeY, int numPrimitive, int numVertex, int numIndex);
 	void Uninit();
 	void Update();
 	void Draw();
-	static CScene3D* Create(int texId);
+	static CScene3D* Create(int texId, float meshSize, int sizeX, int sizeY, int numPrimitive, int numVertex, int numIndex);
 
 private:
 	D3DMATERIAL9			m_Mat;			// ƒ}ƒeƒŠƒAƒ‹
