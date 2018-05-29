@@ -37,10 +37,12 @@ public:
 	}
 
 	void Init(int texId, float meshSize, int sizeX, int sizeY, int numPrimitive, int numVertex, int numIndex);
+	void Init(int texId, VERTEX_3D* vertex, WORD* index, int numPrimitive, int numVertex, int numIndex);
 	void Uninit();
 	void Update();
 	void Draw();
 	static CScene3D* Create(int texId, float meshSize, int sizeX, int sizeY, int numPrimitive, int numVertex, int numIndex);
+	static CScene3D* Create(int texId, VERTEX_3D* vertex, WORD* index, int numPrimitive, int numVertex, int numIndex);
 
 private:
 	D3DMATERIAL9			m_Mat;			// ƒ}ƒeƒŠƒAƒ‹

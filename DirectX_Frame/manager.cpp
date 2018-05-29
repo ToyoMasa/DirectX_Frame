@@ -51,7 +51,7 @@ bool CManager::Init(HINSTANCE hInstance, HWND hWnd, BOOL bWindow)
 	CTexture::Init();
 
 	// フィールド
-	CField::Create(TEX_ID_FIELD001, 2.0f, 4, 4);
+	CField::Create(TEX_ID_FIELD001, 2.0f, 20, 20, true);
 
 	CScene2D* test = CScene2D::Create(TEX_ID_CURSOR, 128, 128);
 	test->Set(D3DXVECTOR3(100.0f, 100.0f, 0.0f));
@@ -63,11 +63,12 @@ bool CManager::Init(HINSTANCE hInstance, HWND hWnd, BOOL bWindow)
 	m_Light = CLight::Create(0);
 
 	CBillBoard::Init();
-	tree1 = CBillBoard::Create(TEX_ID_TREE);
-	tree2 = CBillBoard::Create(TEX_ID_TREE);
 
-	CBillBoard::Set(tree1, TEX_ID_TREE, D3DXVECTOR3(1.0f, 1.0f, 0.0f), 1.0f);
-	CBillBoard::Set(tree2, TEX_ID_TREE, D3DXVECTOR3(-1.0f, 1.0f, 0.0f), 1.0f);
+	//tree1 = CBillBoard::Create(TEX_ID_TREE);
+	//tree2 = CBillBoard::Create(TEX_ID_TREE);
+
+	//CBillBoard::Set(tree1, TEX_ID_TREE, D3DXVECTOR3(1.0f, 1.0f, 0.0f), 1.0f);
+	//CBillBoard::Set(tree2, TEX_ID_TREE, D3DXVECTOR3(-1.0f, 1.0f, 0.0f), 1.0f);
 
 	return true;
 }

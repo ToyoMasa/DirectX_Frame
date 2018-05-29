@@ -6,8 +6,6 @@ class CField : public CScene
 public:
 	CField::CField(int priority) : CScene(priority)
 	{
-		m_Vertex = NULL;
-		m_Index = NULL;
 		m_MeshSize = 1.0f;
 		m_SizeX = 1;
 		m_SizeY = 1;
@@ -19,14 +17,14 @@ public:
 	~CField(){}
 
 	void Init(int texId, float meshSize, int sizeX, int sizeY);
+	void Init(int texId, float meshSize, int sizeX, int sizeY, bool isHeight);
 	void Uninit();
 	void Update();
 	void Draw();
 	static CField* Create(int texId, float meshSize, int sizeX, int sizeY);
+	static CField* Create(int texId, float meshSize, int sizeX, int sizeY, bool isHeight);
 
 private:
-	VERTEX_3D *m_Vertex;
-	WORD *m_Index;
 	float m_MeshSize;
 	int m_SizeX;
 	int m_SizeY;
@@ -34,6 +32,7 @@ private:
 	int m_NumPrimitive;
 	int m_NumVertex;
 	int m_NumIndex;
+	float m_FieldHeight[5][5];
 };
 
 #endif // !_FIELD_H_

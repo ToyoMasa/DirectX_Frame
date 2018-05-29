@@ -11,6 +11,7 @@
 typedef enum
 {
 	MODEL_ID_UFO = 0,		// UFO
+	MODEL_ID_XBOT,
 	MODEL_ID_MAX,
 } MODEL_ID;
 
@@ -18,6 +19,7 @@ typedef enum
 static const std::string MODEL_SOURCE[] =
 {
 	"data/models/player_ufo.x",
+	"data/models/xbot.x",
 };
 
 class CSceneModel : public CScene

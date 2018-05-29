@@ -101,6 +101,76 @@ void CScene3D::Init(int texId, float meshSize, int sizeX, int sizeY, int numPrim
 	D3DXMatrixIdentity(&m_World);
 }
 
+void CScene3D::Init(int texId, VERTEX_3D* vertex, WORD* index, int numPrimitive, int numVertex, int numIndex)
+{
+	LPDIRECT3DDEVICE9 pDevice = CRenderer::GetDevice();
+	if (pDevice == NULL)
+	{
+		return;
+	}
+
+	m_NumPrimitive = numPrimitive;
+	m_NumVertex = numVertex;
+
+	m_TexId = texId;
+	CTexture::Load(m_TexId);
+
+	HRESULT hr;
+
+	// 頂点バッファ							↓大きい分には問題ない
+	hr = pDevice->CreateVertexBuffer(sizeof(VERTEX_3D) * numVertex, D3DUSAGE_WRITEONLY, FVF_VERTEX_3D, D3DPOOL_MANAGED, &m_VertexBuffer, NULL);
+
+	if (FAILED(hr))
+	{
+		MessageBox(NULL, "頂点バッファの読み込みに失敗しました", "エラー", MB_OK);
+		return;
+	}
+
+	// インデックスバッファ					↓大きい分には問題ない			↓sizeがDWORDなら32
+	hr = pDevice->CreateIndexBuffer(sizeof(WORD) * numIndex, D3DUSAGE_WRITEONLY, D3DFMT_INDEX16, D3DPOOL_MANAGED, &m_IndexBuffer, NULL);
+
+	if (FAILED(hr))
+	{
+		MessageBox(NULL, "インデックスバッファの読み込みに失敗しました", "エラー", MB_OK);
+		return;
+	}
+
+	VERTEX_3D* V;
+
+	// 頂点バッファ
+	m_VertexBuffer->Lock(0, 0, (void**)&V, D3DLOCK_DISCARD);
+
+	for (int i = 0; i < numVertex; i++)
+	{
+		V[i] = vertex[i];
+	}
+
+	m_VertexBuffer->Unlock();
+
+	LPWORD Index;
+	m_IndexBuffer->Lock(0, 0, (void**)&Index, D3DLOCK_DISCARD);
+
+	for (int i = 0; i < numIndex; i++)
+	{
+		Index[i] = index[i];
+	}
+
+	m_IndexBuffer->Unlock();
+
+	// マテリアルの設定
+	m_Mat.Diffuse.r = 1.0f;
+	m_Mat.Diffuse.g = 1.0f;
+	m_Mat.Diffuse.b = 1.0f;
+	m_Mat.Diffuse.a = 1.0f;
+	// アンビエントカラー（紫）
+	m_Mat.Ambient.r = 0.8f;
+	m_Mat.Ambient.g = 0.7f;
+	m_Mat.Ambient.b = 0.9f;
+	m_Mat.Ambient.a = 1.0f;
+
+	D3DXMatrixIdentity(&m_World);
+}
+
 //======================================================================
 //	終了処理関数
 //======================================================================
@@ -166,6 +236,14 @@ CScene3D* CScene3D::Create(int texId, float meshSize, int sizeX, int sizeY, int 
 {
 	CScene3D* scene3D = new CScene3D(0);
 	scene3D->Init(texId, meshSize, sizeX, sizeY, numPrimitive, numVertex, numIndex);
+
+	return scene3D;
+}
+
+CScene3D* CScene3D::Create(int texId, VERTEX_3D* vertex, WORD* index, int numPrimitive, int numVertex, int numIndex)
+{
+	CScene3D* scene3D = new CScene3D(0);
+	scene3D->Init(texId, vertex, index, numPrimitive, numVertex, numIndex);
 
 	return scene3D;
 }
