@@ -5,6 +5,11 @@
 #ifndef _MANAGER_H_
 #define _MANAGER_H_
 
+class CInputKeyboard;
+class CInputMouse;
+class CCamera;
+class CLight;
+
 class CManager
 {
 public:
@@ -16,7 +21,12 @@ public:
 	static void Update();
 	static void Draw();
 
+	static CInputKeyboard *GetInputKeyboard(void) { return m_InputKeyboard; }
+	static CInputMouse *GetInputMouse(void) { return m_InputMouse; }
+
 private:
+	static CInputKeyboard *m_InputKeyboard;	// キーボードへのポインタ
+	static CInputMouse *m_InputMouse;			// マウスへのポインタ
 	static CCamera		*m_Camera;
 	static CLight		*m_Light;
 };

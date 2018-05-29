@@ -32,6 +32,7 @@ public:
 	virtual void Rotate(D3DXVECTOR3 rot) {}
 	virtual void Scale(D3DXVECTOR3 scale) {}
 	void Set(D3DXVECTOR3& pos);
+	D3DXVECTOR3 GetPos() { return m_Pos; }
 	void Release();
 	static void UpdateAll();
 	static void DrawAll();

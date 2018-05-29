@@ -14,10 +14,13 @@
 #include "billboard.h"
 #include "field.h"
 #include "player.h"
+#include "input.h"
 
 //======================================================================
-//	静的メンバ変数の初期化
+//	静的メンバ変数
 //======================================================================
+CInputKeyboard *CManager::m_InputKeyboard = NULL;		// キーボードへのポインタ
+CInputMouse *CManager::m_InputMouse = NULL;			// マウスへのポインタ
 CCamera		*CManager::m_Camera;
 CLight		*CManager::m_Light;
 
@@ -36,11 +39,19 @@ bool CManager::Init(HINSTANCE hInstance, HWND hWnd, BOOL bWindow)
 	ImGui::StyleColorsClassic();
 #endif
 
+	// キーボード処理初期化
+	m_InputKeyboard = new CInputKeyboard;
+	m_InputKeyboard->Init(hInstance, hWnd);
+
+	// マウス処理初期化
+	m_InputMouse = new CInputMouse;
+	m_InputMouse->Init(hInstance, hWnd);
+
 	// テクスチャの初期化
 	CTexture::Init();
 
 	// フィールド
-	CField::Create(TEX_ID_FIELD001, 1.0f, 4, 4);
+	CField::Create(TEX_ID_FIELD001, 2.0f, 4, 4);
 
 	CScene2D* test = CScene2D::Create(TEX_ID_CURSOR, 128, 128);
 	test->Set(D3DXVECTOR3(100.0f, 100.0f, 0.0f));
@@ -74,6 +85,22 @@ void CManager::Uninit()
 	// 全てのテクスチャの解放
 	CTexture::ReleaseAll();
 
+	// キーボードの開放処理
+	if (m_InputKeyboard)
+	{
+		m_InputKeyboard->Uninit();
+		delete m_InputKeyboard;
+		m_InputKeyboard = NULL;
+	}
+
+	// マウスの開放処理
+	if (m_InputMouse)
+	{
+		m_InputMouse->Uninit();
+		delete m_InputMouse;
+		m_InputMouse = NULL;
+	}
+
 	// imguiの終了処理
 #if defined(_DEBUG) || defined(DEBUG)
 	CImGui::Uninit();
@@ -85,6 +112,18 @@ void CManager::Uninit()
 
 void CManager::Update()
 {
+	// キーボード更新処理
+	if (m_InputKeyboard)
+	{
+		m_InputKeyboard->Update();
+	}
+
+	// マウス更新処理
+	if (m_InputMouse)
+	{
+		m_InputMouse->Update();
+	}
+
 	CScene::UpdateAll();
 
 	m_Camera->Update();
