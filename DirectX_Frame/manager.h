@@ -27,7 +27,6 @@ public:
 private:
 	static CInputKeyboard *m_InputKeyboard;	// キーボードへのポインタ
 	static CInputMouse *m_InputMouse;			// マウスへのポインタ
-	static CCamera		*m_Camera;
 	static CLight		*m_Light;
 };
 

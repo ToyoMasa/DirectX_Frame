@@ -21,10 +21,10 @@
 //======================================================================
 CInputKeyboard *CManager::m_InputKeyboard = NULL;		// キーボードへのポインタ
 CInputMouse *CManager::m_InputMouse = NULL;			// マウスへのポインタ
-CCamera		*CManager::m_Camera;
 CLight		*CManager::m_Light;
 
 int tree1, tree2;
+CPlayer* player;
 
 bool CManager::Init(HINSTANCE hInstance, HWND hWnd, BOOL bWindow)
 {
@@ -56,19 +56,17 @@ bool CManager::Init(HINSTANCE hInstance, HWND hWnd, BOOL bWindow)
 	CScene2D* test = CScene2D::Create(TEX_ID_CURSOR, 128, 128);
 	test->Set(D3DXVECTOR3(100.0f, 100.0f, 0.0f));
 
-	CPlayer::Create(MODEL_ID_UFO, D3DXVECTOR3(0.0f, 1.0f, 0.0f));
-
-	m_Camera = CCamera::Create();
+	player = CPlayer::Create(MODEL_ID_UFO, D3DXVECTOR3(0.0f, 0.5f, 0.0f));
 
 	m_Light = CLight::Create(0);
 
 	CBillBoard::Init();
 
-	//tree1 = CBillBoard::Create(TEX_ID_TREE);
-	//tree2 = CBillBoard::Create(TEX_ID_TREE);
+	tree1 = CBillBoard::Create(TEX_ID_TREE);
+	tree2 = CBillBoard::Create(TEX_ID_TREE);
 
-	//CBillBoard::Set(tree1, TEX_ID_TREE, D3DXVECTOR3(1.0f, 1.0f, 0.0f), 1.0f);
-	//CBillBoard::Set(tree2, TEX_ID_TREE, D3DXVECTOR3(-1.0f, 1.0f, 0.0f), 1.0f);
+	CBillBoard::Set(tree1, TEX_ID_TREE, D3DXVECTOR3(1.0f, 1.0f, 0.0f), 1.0f, 1);
+	CBillBoard::Set(tree2, TEX_ID_TREE, D3DXVECTOR3(-1.0f, 1.0f, 0.0f), 1.0f, 0);
 
 	return true;
 }
@@ -76,8 +74,6 @@ bool CManager::Init(HINSTANCE hInstance, HWND hWnd, BOOL bWindow)
 void CManager::Uninit()
 {
 	CScene::ReleaseAll();
-
-	m_Camera->Release();
 
 	m_Light->Release();
 
@@ -127,8 +123,6 @@ void CManager::Update()
 
 	CScene::UpdateAll();
 
-	m_Camera->Update();
-
 	CBillBoard::Update();
 }
 
@@ -144,7 +138,7 @@ void CManager::Draw()
 		//描画
 		CScene::DrawAll();
 
-		CBillBoard::DrawAll(m_Camera);
+		CBillBoard::DrawAll(player->GetCamera());
 
 		// デバッグ用imguiウィンドウの描画
 #if defined(_DEBUG) || defined(DEBUG)

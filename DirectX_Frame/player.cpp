@@ -19,11 +19,12 @@ void CPlayer::Init(int modelId, D3DXVECTOR3 spawnPos)
 	m_Model = CSceneModel::Create(MODEL_SOURCE[modelId]);
 	m_Pos = spawnPos;
 	m_Model->Move(m_Pos);
+	m_Camera = CCamera::Create();
 }
 
 void CPlayer::Uninit()
 {
-
+	m_Camera->Release();
 }
 
 void CPlayer::Update()
@@ -61,12 +62,16 @@ void CPlayer::Update()
 
 	{
 		D3DXVECTOR3 newPos = GetPos();
-		newPos.x += moveX * 0.01f;
-		newPos.z += moveY * 0.01f;
+		newPos.x += moveX * PLAYER_MOVE_SPEED;
+		newPos.z += moveY * PLAYER_MOVE_SPEED;
 		Set(newPos);
 	}
 
 	m_Model->Move(m_Pos);
+
+	m_Camera->SetAt(m_Pos);
+	m_Camera->SetPos(D3DXVECTOR3(m_Pos.x, m_Pos.y + 1.0f, m_Pos.z - 2.0f));
+	m_Camera->Update();
 }
 
 void CPlayer::Draw()

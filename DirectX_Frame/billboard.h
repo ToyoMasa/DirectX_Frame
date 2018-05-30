@@ -49,6 +49,7 @@ public:
 			{
 				this->SetId(i);
 				m_BillBoards[i] = this;
+				m_BillBoards[i]->m_DrawType = 0;
 
 				break;
 			}
@@ -64,8 +65,8 @@ public:
 	static void DrawBegin();
 	static void DrawEnd();
 	static void DrawAll(CCamera* camera);
-	static void Set(int id, int texId, D3DXVECTOR3 pos, float scale);
-	void Set(int texId, D3DXVECTOR3 pos, float scale);
+	static void Set(int id, int texId, D3DXVECTOR3 pos, float scale, int drawtype);
+	void Set(int texId, D3DXVECTOR3 pos, float scale, int drawtype);
 	void SetId(int Id) { m_Id = Id; }
 	void Release();
 	static void ReleaseAll();
@@ -73,7 +74,8 @@ public:
 
 private:
 	int								m_Id;					// 管理番号
-	int								m_TextureId;				// テクスチャ番号
+	int								m_DrawType;				// ビルボードの描画タイプ
+	int								m_TextureId;			// テクスチャ番号
 	D3DXVECTOR3						m_Pos;					// 場所
 	float							m_ScaleX;				// サイズ
 	float							m_ScaleY;				// サイズ

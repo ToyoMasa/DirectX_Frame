@@ -160,10 +160,27 @@ void CBillBoard::DrawOne(CCamera* camera)
 	D3DXMATRIX mtxViewRotInv = camera->GetView();
 
 	// ビュー行列の逆行列を作成
-	// 平行移動を無効にする
-	mtxViewRotInv._41 = 0.0f;
-	mtxViewRotInv._42 = 0.0f;
-	mtxViewRotInv._43 = 0.0f;
+	// m_DrawTypeで切替
+	switch (m_DrawType)
+	{
+	case 0:
+		mtxViewRotInv._41 = 0.0f;
+		mtxViewRotInv._42 = 0.0f;
+		mtxViewRotInv._43 = 0.0f;
+		break;
+
+	case 1:
+		mtxViewRotInv._21 = 0.0f;
+		mtxViewRotInv._32 = 0.0f;
+		mtxViewRotInv._12 = 0.0f;
+		mtxViewRotInv._23 = 0.0f;
+		mtxViewRotInv._41 = 0.0f;
+		mtxViewRotInv._42 = 0.0f;
+		mtxViewRotInv._43 = 0.0f;
+
+	default:
+		break;
+	}
 
 	D3DXMatrixTranspose(&mtxViewRotInv, &mtxViewRotInv);
 
@@ -265,22 +282,24 @@ void CBillBoard::DrawAll(CCamera* camera)
 	CBillBoard::DrawEnd();
 }
 
-void CBillBoard::Set(int id, int texId, D3DXVECTOR3 pos, float scale)
+void CBillBoard::Set(int id, int texId, D3DXVECTOR3 pos, float scale, int drawtype)
 {
 	CBillBoard::m_BillBoards[id]->m_TextureId = texId;
 	CBillBoard::m_BillBoards[id]->m_Pos = pos;
 	CBillBoard::m_BillBoards[id]->m_ScaleX = scale;
 	CBillBoard::m_BillBoards[id]->m_ScaleY = scale;
 	CBillBoard::m_BillBoards[id]->m_ScaleZ = scale;
+	CBillBoard::m_BillBoards[id]->m_DrawType = drawtype;
 }
 
-void CBillBoard::Set(int texId, D3DXVECTOR3 pos, float scale)
+void CBillBoard::Set(int texId, D3DXVECTOR3 pos, float scale, int drawtype)
 {
 	m_TextureId = texId;
 	m_Pos = pos;
 	m_ScaleX = scale;
 	m_ScaleY = scale;
 	m_ScaleZ = scale;
+	m_DrawType = drawtype;
 }
 
 void CBillBoard::Release()
@@ -310,7 +329,7 @@ void CBillBoard::ReleaseAll()
 int CBillBoard::Create(int texId)
 {
 	CBillBoard* billboard = new CBillBoard();
-	m_BillBoards[billboard->m_Id]->Set(texId, D3DXVECTOR3(0.0f, 0.0f, 0.0f), 1.0f);
+	m_BillBoards[billboard->m_Id]->Set(texId, D3DXVECTOR3(0.0f, 0.0f, 0.0f), 1.0f, 0);
 
 	return billboard->m_Id;
 }
