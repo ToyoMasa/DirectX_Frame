@@ -2,9 +2,10 @@
 #define _PLAYER_H_
 
 class CCamera;
+class CField;
 static const float PLAYER_MOVE_SPEED = 0.03f;
 
-class CPlayer : CScene
+class CPlayer : public CScene
 {
 public:
 	CPlayer::CPlayer(int priority) : CScene(priority)
@@ -23,6 +24,7 @@ public:
 	void Update();
 	void Draw();
 	CCamera* GetCamera() { return m_Camera; }
+	void SetField(CField* field) { m_Field = field; }
 	static CPlayer* Create(int modelId, D3DXVECTOR3 spawnPos);
 
 private:
@@ -31,6 +33,7 @@ private:
 	D3DXVECTOR3 m_Right;
 	D3DXVECTOR3 m_Up;
 	CCamera *m_Camera;
+	CField *m_Field;
 	float m_WalkSpeed;
 };
 

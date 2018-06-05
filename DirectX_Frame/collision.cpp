@@ -273,3 +273,33 @@ bool isCollisionLine2D(D3DXVECTOR3 r1, D3DXVECTOR3 r2, D3DXVECTOR3 p1, D3DXVECTO
 		return false; //ÉNÉçÉXÇµÇ»Ç¢
 	}
 }
+
+bool onPolygon(D3DXVECTOR3 &target, D3DXVECTOR3 &p0, D3DXVECTOR3 &p1, D3DXVECTOR3 &p2)
+{
+	float cross1, cross2, cross3;
+	D3DXVECTOR3 V0P, V1P, V2P, V01, V12, V20;
+
+	V0P = target - p0;
+	V1P = target - p1;
+	V2P = target - p2;
+	V01 = p1 - p0;
+	V12 = p2 - p1;
+	V20 = p0 - p1;
+
+	cross1 = V01.x * V0P.z - V01.z * V0P.x;
+	cross2 = V12.x * V1P.z - V12.z * V1P.x;
+	cross3 = V20.x * V2P.z - V20.z * V2P.x;
+
+	if (cross1 <= 0.0f)
+	{
+		if (cross2 <= 0.0f)
+		{
+			if (cross3 <= 0.0f)
+			{
+				return true;
+			}
+		}
+	}
+
+	return false;
+}

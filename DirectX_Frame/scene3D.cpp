@@ -147,6 +147,12 @@ void CScene3D::Init(int texId, VERTEX_3D* vertex, WORD* index, int numPrimitive,
 
 	m_VertexBuffer->Unlock();
 
+	m_Vertex = new VERTEX_3D[numVertex];
+	for (int i = 0; i < numVertex; i++)
+	{
+		m_Vertex[i] = vertex[i];
+	}
+
 	LPWORD Index;
 	m_IndexBuffer->Lock(0, 0, (void**)&Index, D3DLOCK_DISCARD);
 
@@ -191,6 +197,11 @@ void CScene3D::Uninit()
 	{
 		m_IndexBuffer->Release();
 		m_IndexBuffer = NULL;
+	}
+
+	if (m_Vertex != NULL)
+	{
+		delete m_Vertex;
 	}
 }
 

@@ -102,4 +102,9 @@ bool isCollisionLinetoPlane(D3DXVECTOR3 &v1, D3DXVECTOR3 &v2, D3DXVECTOR3 &n);
 //************************************************************************
 float distancePointToPlane(D3DXVECTOR3 &vn, D3DXVECTOR3 &p1, D3DXVECTOR3 &p2);
 
+//************************************************************************
+//	è’ìÀÉ|ÉäÉSÉìîªíË
+//************************************************************************
+bool onPolygon(D3DXVECTOR3 &target, D3DXVECTOR3 &p1, D3DXVECTOR3 &p2, D3DXVECTOR3 &p3);
+
 #endif // !_COLLISION_H_

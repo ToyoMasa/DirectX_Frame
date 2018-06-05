@@ -13,6 +13,7 @@
 #include "billboard.h"
 #include "player.h"
 #include "input.h"
+#include "field.h"
 
 void CPlayer::Init(int modelId, D3DXVECTOR3 spawnPos)
 {
@@ -42,7 +43,7 @@ void CPlayer::Update()
 	mouseY = (float)inputMouse->GetAxisY();
 	mouseZ = (float)inputMouse->GetAxisZ();
 
-	float moveX = 0.0f, moveY = 0.0f;
+	float moveX = 0.0f, moveZ = 0.0f;
 	if (inputKeyboard->GetKeyPress(DIK_A))
 	{
 		moveX = -1.0f;
@@ -53,17 +54,19 @@ void CPlayer::Update()
 	}
 	if (inputKeyboard->GetKeyPress(DIK_W))
 	{
-		moveY = 1.0f;
+		moveZ = 1.0f;
 	}
 	if (inputKeyboard->GetKeyPress(DIK_S))
 	{
-		moveY = -1.0f;
+		moveZ = -1.0f;
 	}
 
 	{
-		D3DXVECTOR3 newPos = GetPos();
+		D3DXVECTOR3 newPos = m_Pos;
 		newPos.x += moveX * PLAYER_MOVE_SPEED;
-		newPos.z += moveY * PLAYER_MOVE_SPEED;
+		newPos.z += moveZ * PLAYER_MOVE_SPEED;
+		newPos.y = m_Field->GetHeight(newPos);
+		newPos.y += 0.5f;
 		Set(newPos);
 	}
 
@@ -76,7 +79,6 @@ void CPlayer::Update()
 
 void CPlayer::Draw()
 {
-
 }
 
 CPlayer* CPlayer::Create(int modelId, D3DXVECTOR3 spawnPos)

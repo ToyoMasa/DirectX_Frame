@@ -4,6 +4,7 @@
 //======================================================================
 #include "common.h"
 #include "main.h"
+#include "scene.h"
 #include "scene2D.h"
 #include "scene3D.h"
 #include "sceneModel.h"
@@ -51,12 +52,14 @@ bool CManager::Init(HINSTANCE hInstance, HWND hWnd, BOOL bWindow)
 	CTexture::Init();
 
 	// フィールド
-	CField::Create(TEX_ID_FIELD001, 2.0f, 20, 20, true);
+	CField* field = CField::Create(TEX_ID_FIELD001, 2.0f, 20, 20, true);
+
+	// プレイヤー
+	player = CPlayer::Create(MODEL_ID_UFO, D3DXVECTOR3(0.0f, 0.5f, 0.0f));
+	player->SetField(field);
 
 	CScene2D* test = CScene2D::Create(TEX_ID_CURSOR, 128, 128);
 	test->Set(D3DXVECTOR3(100.0f, 100.0f, 0.0f));
-
-	player = CPlayer::Create(MODEL_ID_UFO, D3DXVECTOR3(0.0f, 0.5f, 0.0f));
 
 	m_Light = CLight::Create(0);
 
@@ -143,6 +146,12 @@ void CManager::Draw()
 		// デバッグ用imguiウィンドウの描画
 #if defined(_DEBUG) || defined(DEBUG)
 		CImGui::BeginDraw();
+
+		D3DXVECTOR3 pos = player->GetPos();
+		ImGui::Begin("Debug Window", 0);
+		ImGui::Text("X = %.2f Y = %.2f Z = %.2f", pos.x, pos.y, pos.z);
+		ImGui::End();
+
 		CImGui::EndDraw();
 #endif
 

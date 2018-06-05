@@ -1,6 +1,8 @@
 #ifndef _FIELD_H_
 #define _FIELD_H_
 
+class CScene3D;
+
 class CField : public CScene
 {
 public:
@@ -13,6 +15,7 @@ public:
 		m_NumPrimitive = 0;
 		m_NumVertex = 0;
 		m_NumIndex = 0;
+		m_Scene3D = NULL;
 	}
 	~CField(){}
 
@@ -21,6 +24,8 @@ public:
 	void Uninit();
 	void Update();
 	void Draw();
+	float GetHeight(D3DXVECTOR3& pos);
+	VERTEX_3D* GetVertex() { return m_Scene3D->GetVertex(); }
 	static CField* Create(int texId, float meshSize, int sizeX, int sizeY);
 	static CField* Create(int texId, float meshSize, int sizeX, int sizeY, bool isHeight);
 
@@ -33,6 +38,7 @@ private:
 	int m_NumVertex;
 	int m_NumIndex;
 	float m_FieldHeight[5][5];
+	CScene3D* m_Scene3D;
 };
 
 #endif // !_FIELD_H_
