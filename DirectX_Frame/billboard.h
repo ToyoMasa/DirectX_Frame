@@ -9,6 +9,12 @@
 
 class CCamera;
 
+typedef enum DRAW_TYPE
+{
+	NORMAL = 0,
+	FIXED_Y,
+};
+
 //bool BillBoardInit(void);			// ビルボードの初期化
 //void BillBoardUninit(void);			// ビルボードの終了処理
 //void BillBoardUpdate(void);			// ビルボードの更新

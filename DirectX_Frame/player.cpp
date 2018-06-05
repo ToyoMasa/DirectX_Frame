@@ -66,7 +66,7 @@ void CPlayer::Update()
 		newPos.x += moveX * PLAYER_MOVE_SPEED;
 		newPos.z += moveZ * PLAYER_MOVE_SPEED;
 		newPos.y = m_Field->GetHeight(newPos);
-		newPos.y += 0.5f;
+		newPos.y += 0.5f; // ufo‚Í•‚‚©‚·
 		Set(newPos);
 	}
 

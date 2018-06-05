@@ -68,8 +68,8 @@ bool CManager::Init(HINSTANCE hInstance, HWND hWnd, BOOL bWindow)
 	tree1 = CBillBoard::Create(TEX_ID_TREE);
 	tree2 = CBillBoard::Create(TEX_ID_TREE);
 
-	CBillBoard::Set(tree1, TEX_ID_TREE, D3DXVECTOR3(1.0f, 1.0f, 0.0f), 1.0f, 1);
-	CBillBoard::Set(tree2, TEX_ID_TREE, D3DXVECTOR3(-1.0f, 1.0f, 0.0f), 1.0f, 0);
+	CBillBoard::Set(tree1, TEX_ID_TREE, D3DXVECTOR3(1.0f, 0.0f, 0.0f), 2.0f, 1);
+	CBillBoard::Set(tree2, TEX_ID_TREE, D3DXVECTOR3(-1.0f, 0.0f, 0.0f), 2.0f, 1);
 
 	return true;
 }

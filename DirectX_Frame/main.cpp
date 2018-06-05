@@ -3,6 +3,7 @@
 //
 //======================================================================
 #include <Windows.h>
+#include <crtdbg.h>
 #include "common.h"
 #include "main.h"
 #include "texture.h"
@@ -35,6 +36,11 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam);	//
 //======================================================================
 int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nShowCmd)
 {
+	// CRTメモリリーク検出用
+	_CrtSetDbgFlag(_CrtSetDbgFlag(_CRTDBG_REPORT_FLAG) | _CRTDBG_LEAK_CHECK_DF);
+	// CRTメモリリーク箇所検出
+	//_CrtSetBreakAlloc((int)メモリ番号);
+
 	WNDCLASSEX wcex = {
 		sizeof(WNDCLASSEX),						//自分の構造体のサイズを記入する
 		CS_VREDRAW | CS_HREDRAW,				//詳細はwebで

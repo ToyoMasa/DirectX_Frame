@@ -290,6 +290,11 @@ void CBillBoard::Set(int id, int texId, D3DXVECTOR3 pos, float scale, int drawty
 	CBillBoard::m_BillBoards[id]->m_ScaleY = scale;
 	CBillBoard::m_BillBoards[id]->m_ScaleZ = scale;
 	CBillBoard::m_BillBoards[id]->m_DrawType = drawtype;
+
+	if (drawtype == FIXED_Y)
+	{
+		CBillBoard::m_BillBoards[id]->m_Pos.y += 0.5f * scale;
+	}
 }
 
 void CBillBoard::Set(int texId, D3DXVECTOR3 pos, float scale, int drawtype)
@@ -300,6 +305,11 @@ void CBillBoard::Set(int texId, D3DXVECTOR3 pos, float scale, int drawtype)
 	m_ScaleY = scale;
 	m_ScaleZ = scale;
 	m_DrawType = drawtype;
+
+	if (drawtype == FIXED_Y)
+	{
+		m_Pos.y += 0.5f * scale;
+	}
 }
 
 void CBillBoard::Release()
