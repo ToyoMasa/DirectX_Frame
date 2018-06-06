@@ -14,6 +14,7 @@ typedef enum
 	TEX_ID_FIELD001 = 0,			// フィールド
 	TEX_ID_CURSOR,					// カーソル
 	TEX_ID_TREE,					// ツリー
+	TEX_ID_SKY,						// 空
 	TEX_ID_MAX,
 } TEXTURE_ID;
 
@@ -23,6 +24,7 @@ static const std::string TEXTURE_SOURCE[] =
 	"data/textures/field001.jpg",
 	"data/textures/yajirusi.png",
 	"data/textures/tree.png",
+	"data/textures/sky001.jpg",
 };
 
 // テクスチャがロードされているか検索するためのマップ

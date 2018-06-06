@@ -153,6 +153,12 @@ void CSceneModel::Draw()
 	// FVF(今から使用する頂点情報)の設定
 	pDevice->SetFVF(FVF_VERTEX_3D);
 
+	// ライトを無視するモデルならライトを無効化
+	if (m_isIgnoreLight)
+	{
+		pDevice->SetRenderState(D3DRS_LIGHTING, FALSE);
+	}
+
 	pDevice->SetMaterial(&pMaterials->MatD3D);
 
 	for (int i = 0; i < m_MaterialNum; i++)
@@ -170,6 +176,11 @@ void CSceneModel::Draw()
 		}
 
 		m_Mesh->DrawSubset(i);
+	}
+
+	if (m_isIgnoreLight)
+	{
+		pDevice->SetRenderState(D3DRS_LIGHTING, TRUE);
 	}
 }
 
@@ -206,6 +217,15 @@ CSceneModel* CSceneModel::Create(const std::string& modelName)
 {
 	CSceneModel* sceneModel = new CSceneModel(1);
 	sceneModel->Init(modelName);
+
+	return sceneModel;
+}
+
+CSceneModel* CSceneModel::Create(const std::string& modelName, bool isIgnore)
+{
+	CSceneModel* sceneModel = new CSceneModel(1);
+	sceneModel->Init(modelName);
+	sceneModel->m_isIgnoreLight = isIgnore;
 
 	return sceneModel;
 }

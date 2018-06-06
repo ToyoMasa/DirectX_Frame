@@ -16,6 +16,7 @@
 #include "field.h"
 #include "player.h"
 #include "input.h"
+#include "skybox.h"
 
 //======================================================================
 //	静的メンバ変数
@@ -57,6 +58,9 @@ bool CManager::Init(HINSTANCE hInstance, HWND hWnd, BOOL bWindow)
 	// プレイヤー
 	player = CPlayer::Create(MODEL_ID_UFO, D3DXVECTOR3(0.0f, 0.5f, 0.0f));
 	player->SetField(field);
+
+	// 空
+	CSkyBox::Create(player);
 
 	CScene2D* test = CScene2D::Create(TEX_ID_CURSOR, 128, 128);
 	test->Set(D3DXVECTOR3(100.0f, 100.0f, 0.0f));

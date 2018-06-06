@@ -90,7 +90,7 @@ void CField::Init(int texId, float meshSize, int sizeX, int sizeY, bool isHeight
 			nx.y = vx.x;
 			nx.z = 0.0f;
 
-			vz = V[z * sizeY - 1 + x].pos - V[z * sizeY + x].pos;
+			vz = V[z * sizeY + x - 1].pos - V[z * sizeY + x].pos;
 			nz.x = -vz.y;
 			nz.y = vz.x;
 			nz.z = 0.0f;

@@ -12,6 +12,8 @@ typedef enum
 {
 	MODEL_ID_UFO = 0,		// UFO
 	MODEL_ID_XBOT,
+	MODEL_ID_SKYBOX,
+	MODEL_ID_SKYDOME,
 	MODEL_ID_MAX,
 } MODEL_ID;
 
@@ -19,7 +21,9 @@ typedef enum
 static const std::string MODEL_SOURCE[] =
 {
 	"data/models/player_ufo.x",
-	"data/models/xbot.x",
+	"data/models/xbot2.x",
+	"data/models/skybox.x",
+	"data/models/skydome.x",
 };
 
 class CSceneModel : public CScene
@@ -41,6 +45,7 @@ public:
 		m_TextureNum = 0;
 		m_Texture = NULL;
 		m_Material = NULL;
+		m_isIgnoreLight = false;
 	}
 
 	//======================================================================
@@ -59,6 +64,7 @@ public:
 	void Rotate(D3DXVECTOR3 rot);
 	void Scale(D3DXVECTOR3 scale);
 	static CSceneModel* Create(const std::string& modelName);
+	static CSceneModel* Create(const std::string& modelName, bool isIgnore);
 
 private:
 	D3DXMATRIX			m_World;		// ワールド変換行列
@@ -73,6 +79,7 @@ private:
 	int					m_TextureNum;	// テクスチャ数
 	LPD3DXBUFFER		m_Material;		// マテリアル
 	LPDIRECT3DTEXTURE9 *m_Texture;		// テクスチャ
+	bool				m_isIgnoreLight;// 影を付けるかどうか
 };
 
 #endif //!_SCENEMODEL_H_

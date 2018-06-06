@@ -177,6 +177,7 @@
     <ClInclude Include="scene2D.h" />
     <ClInclude Include="scene3D.h" />
     <ClInclude Include="sceneModel.h" />
+    <ClInclude Include="skybox.h" />
     <ClInclude Include="stb_rect_pack.h" />
     <ClInclude Include="stb_textedit.h" />
     <ClInclude Include="stb_truetype.h" />
@@ -205,6 +206,7 @@
     <ClCompile Include="scene2D.cpp" />
     <ClCompile Include="scene3D.cpp" />
     <ClCompile Include="sceneModel.cpp" />
+    <ClCompile Include="skybox.cpp" />
     <ClCompile Include="texture.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
