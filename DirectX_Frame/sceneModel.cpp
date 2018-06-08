@@ -49,7 +49,7 @@ void CSceneModel::Init(const std::string& modelName)
 	m_Mesh->GetDeclaration(elements);
 
 	// VRAM上にクローンする（コピーする）
-	hr = m_Mesh->CloneMesh(D3DXMESH_MANAGED | D3DXMESH_WRITEONLY, elements, pDevice, &pCloneMesh);
+	hr = m_Mesh->CloneMesh(D3DXMESH_MANAGED | D3DXMESH_WRITEONLY | D3DXMESH_32BIT, elements, pDevice, &pCloneMesh);
 
 	if (FAILED(hr))
 	{

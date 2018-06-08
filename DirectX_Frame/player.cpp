@@ -15,6 +15,8 @@
 #include "input.h"
 #include "field.h"
 
+static const float VALUE_ROTATE_MOUSE = 0.003f;
+
 void CPlayer::Init(int modelId, D3DXVECTOR3 spawnPos)
 {
 	m_Model = CSceneModel::Create(MODEL_SOURCE[modelId]);
@@ -66,14 +68,13 @@ void CPlayer::Update()
 		newPos.x += moveX * PLAYER_MOVE_SPEED;
 		newPos.z += moveZ * PLAYER_MOVE_SPEED;
 		newPos.y = m_Field->GetHeight(newPos);
-		newPos.y += 0.5f; // ufo‚Í•‚‚©‚·
 		Set(newPos);
 	}
 
 	m_Model->Move(m_Pos);
 
-	m_Camera->SetAt(m_Pos);
-	m_Camera->SetPos(D3DXVECTOR3(m_Pos.x, m_Pos.y + 1.0f, m_Pos.z - 2.0f));
+	m_Camera->SetAt(D3DXVECTOR3(m_Pos.x, m_Pos.y + 1.5f, m_Pos.z));
+	m_Camera->SetPos(D3DXVECTOR3(m_Pos.x, m_Pos.y + 2.0f, m_Pos.z - 1.5f));
 	m_Camera->Update();
 }
 

@@ -56,7 +56,7 @@ bool CManager::Init(HINSTANCE hInstance, HWND hWnd, BOOL bWindow)
 	CField* field = CField::Create(TEX_ID_FIELD001, 2.0f, 20, 20, true);
 
 	// ƒvƒŒƒCƒ„[
-	player = CPlayer::Create(MODEL_ID_UFO, D3DXVECTOR3(0.0f, 0.5f, 0.0f));
+	player = CPlayer::Create(MODEL_ID_XBOT, D3DXVECTOR3(0.0f, 0.5f, 0.0f));
 	player->SetField(field);
 
 	// ‹ó

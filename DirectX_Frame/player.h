@@ -15,6 +15,7 @@ public:
 		m_Right = D3DXVECTOR3(1.0f, 0.0f, 0.0f);
 		m_Up = D3DXVECTOR3(0.0f, 1.0f, 0.0f);
 		m_WalkSpeed = 0.02f;
+		m_CameraLength = 2.0f;
 		m_Camera = NULL;
 	}
 	~CPlayer(){}
@@ -35,6 +36,7 @@ private:
 	CCamera *m_Camera;
 	CField *m_Field;
 	float m_WalkSpeed;
+	float m_CameraLength;
 };
 
 #endif // !_PLAYER_H_

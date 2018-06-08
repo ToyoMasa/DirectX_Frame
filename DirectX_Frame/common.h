@@ -12,4 +12,6 @@
 #include "scene.h"
 #include "ImGui_.h"
 
+static const float PI = 3.141592f;	//ƒÎ
+
 #endif//!_COMMON_H_
