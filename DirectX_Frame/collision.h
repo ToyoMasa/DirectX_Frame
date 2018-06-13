@@ -8,7 +8,8 @@
 #define _OX_EPSILON_ 0.000001f // Œë·
 
 // 3¬•ªfloat
-class Float3 {
+class Float3 
+{
 public:
 	float x, y, z;
 
@@ -16,70 +17,86 @@ public:
 	Float3(float x, float y, float z) : x(x), y(y), z(z) {}
 	~Float3() {}
 
-	Float3 operator +(const Float3 &r) const {
+	Float3 operator +(const Float3 &r) const 
+	{
 		return Float3(x + r.x, y + r.y, z + r.z);
 	}
 
-	Float3 operator -(const Float3 &r) const {
+	Float3 operator -(const Float3 &r) const 
+	{
 		return Float3(x - r.x, y - r.y, z - r.z);
 	}
 
-	Float3 operator -() const {
+	Float3 operator -() const 
+	{
 		return Float3(x * -1.0f, y * -1.0f, z * -1.0f);
 	}
 
-	Float3 operator *(const Float3 &r) const {
+	Float3 operator *(const Float3 &r) const 
+	{
 		return Float3(x * r.x, y * r.y, z * r.z);
 	}
 
-	Float3 operator /(const Float3 &r) const {
+	Float3 operator /(const Float3 &r) const
+	{
 		return Float3(x / r.x, y / r.y, z / r.z);
 	}
 
-	Float3 operator *(float r) const {
+	Float3 operator *(float r) const 
+	{
 		return Float3(x * r, y * r, z * r);
 	}
 
-	Float3 operator /(float r) const {
+	Float3 operator /(float r) const
+	{
 		return Float3(x / r, y / r, z / r);
 	}
 
-	friend Float3 operator *(float l, const Float3 &r) {
+	friend Float3 operator *(float l, const Float3 &r)
+	{
 		return Float3(r.x * l, r.y * l, r.z * l);
 	}
 
-	friend Float3 operator /(float l, const Float3 &r) {
+	friend Float3 operator /(float l, const Float3 &r) 
+	{
 		return Float3(r.x / l, r.y / l, r.z / l);
 	}
 
-	float dot(const Float3 &r) const {
+	float dot(const Float3 &r) const 
+	{
 		return x * r.x + y * r.y + z * r.z;
 	}
 
-	Float3 cross(const Float3 &r) const {
+	Float3 cross(const Float3 &r) const
+	{
 		return Float3(y * r.z - z * r.y, z * r.x - x * r.z, x * r.y - y * r.x);
 	}
 
-	float length() const {
+	float length() const
+	{
 		return sqrtf(lengthSq());
 	}
 
-	float lengthSq() const {
+	float lengthSq() const 
+	{
 		return x * x + y * y + z * z;
 	}
 
 	void norm() {
 		const float len = length();
-		if (len > 0.0f) {
+		if (len > 0.0f) 
+		{
 			x /= len;
 			y /= len;
 			z /= len;
 		}
 	}
 
-	Float3 getNorm() const {
+	Float3 getNorm() const 
+	{
 		const float len = length();
-		if (len > 0.0f) {
+		if (len > 0.0f) 
+		{
 			return Float3(x / len, y / len, z / len);
 		}
 		return Float3(0.0f, 0.0f, 0.0f);
@@ -98,7 +115,8 @@ public:
 	Vec3(const Float3 &r) : Float3(r) {}
 	~Vec3() {}
 
-	Vec3& operator =(const Float3 &r) {
+	Vec3& operator =(const Float3 &r) 
+	{
 		x = r.x;
 		y = r.y;
 		z = r.z;
@@ -106,9 +124,11 @@ public:
 	}
 
 	// •W€‰»
-	void norm() {
+	void norm()
+	{
 		const float len = length();
-		if (len > 0.0f) {
+		if (len > 0.0f)
+		{
 			x /= len;
 			y /= len;
 			z /= len;
@@ -116,19 +136,22 @@ public:
 	}
 
 	// ‚’¼ŠÖŒW‚É‚ ‚éH
-	bool isVertical(const Vec3 &r) const {
+	bool isVertical(const Vec3 &r) const 
+	{
 		float d = dot(r);
 		return (-_OX_EPSILON_ < d && d < _OX_EPSILON_);	// Œë·”ÍˆÍ“à‚È‚ç‚’¼‚Æ”»’è
 	}
 
 	// •½sŠÖŒW‚É‚ ‚éH
-	bool isParallel(const Vec3 &r) const {
+	bool isParallel(const Vec3 &r) const
+	{
 		float d = cross(r).lengthSq();
 		return (-_OX_EPSILON_ < d && d < _OX_EPSILON_);	// Œë·”ÍˆÍ“à‚È‚ç•½s‚Æ”»’è
 	}
 
 	// ‰sŠpŠÖŒWH
-	bool isSharpAngle(const Vec3 &r) const {
+	bool isSharpAngle(const Vec3 &r) const 
+	{
 		return (dot(r) >= 0.0f);
 	}
 };
@@ -145,13 +168,14 @@ public:
 
 	// “_ã‚ÌÀ•W‚ğæ“¾
 	//  ƒxƒNƒgƒ‹‚ÉŠ|‚¯Z‚·‚éŒW”
-	Point getPoint(float t) const {
+	Point getPoint(float t) const 
+	{
 		return p + t * v;
 	}
 };
 
 // ü•ª
-struct Segment : public Line 
+class Segment : public Line 
 {
 public:
 	Segment() {}
@@ -159,7 +183,8 @@ public:
 	Segment(const Point &p1, const Point &p2) : Line(p1, (p2 - p1)) {}
 
 	// I“_‚ğæ“¾
-	Float3 getEndPoint() const {
+	Float3 getEndPoint() const 
+	{
 		return p + v;
 	}
 };
@@ -174,6 +199,13 @@ public:
 	Capsule(const Segment &s, float r) : s(s), r(r) {}
 	Capsule(const Point &p1, const Point &p2, float r) : s(p1, p2), r(r) {}
 	~Capsule() {}
+
+	void Set(const Point &p1, const Point &p2, float r)
+	{
+		Segment seg(p1, p2);
+		s = seg;
+		this->r = r;
+	}
 };
 
 // ‹…
@@ -257,7 +289,7 @@ float calcSegmentSegmentDist(const Segment &s1, const Segment &s2, Point &p1, Po
 // c1 : S1(ü•ª1)
 // c2 : S2(ü•ª2)
 // –ß‚è’l: Õ“Ë‚µ‚Ä‚¢‚½‚çtrue
-bool colCapsuleCapsule(const Capsule &c1, const Capsule &c2);
+bool isCollisionCapsule(const Capsule &c1, const Capsule &c2);
 
 //************************************************************************
 //	‰~‚Æ‰~‚Ì“–‚½‚è”»’è

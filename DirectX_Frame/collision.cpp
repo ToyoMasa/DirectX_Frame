@@ -254,7 +254,7 @@ bool isCollisionCircle2D(float x0, float y0, float r0, float x1, float y1, float
 //======================================================================
 //@2D—pü‚Æü‚Ì“–‚½‚è”»’è
 //======================================================================
-bool isCollisionLine2D(D3DXVECTOR3 r1, D3DXVECTOR3 r2, D3DXVECTOR3 p1, D3DXVECTOR3 p2)
+bool isCollisionLine2D(D3DXVECTOR3 &r1, D3DXVECTOR3 &r2, D3DXVECTOR3 &p1, D3DXVECTOR3 &p2)
 {
 	float t1, t2;
 
@@ -487,7 +487,7 @@ float calcSegmentSegmentDist(const Segment &s1, const Segment &s2, Point &p1, Po
 // c1 : S1(ü•ª1)
 // c2 : S2(ü•ª2)
 // –ß‚è’l: Õ“Ë‚µ‚Ä‚¢‚½‚çtrue
-bool colCapsuleCapsule(const Capsule &c1, const Capsule &c2) {
+bool isCollisionCapsule(const Capsule &c1, const Capsule &c2) {
 	Point p1, p2;
 	float t1, t2;
 	float d = calcSegmentSegmentDist(c1.s, c2.s, p1, p2, t1, t2);

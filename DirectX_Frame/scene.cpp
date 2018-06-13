@@ -12,6 +12,7 @@ CScene::CScene(int priority)
 		if (m_Scene[priority][i] == NULL)
 		{
 			m_Scene[priority][i] = this;
+			m_Type = SCENE_TYPE_NONE;
 			break;
 		}
 	}

@@ -11,6 +11,7 @@
 #include "class.h"
 #include "scene.h"
 #include "ImGui_.h"
+#include "collision.h"
 
 static const float PI = 3.141592f;	//ƒÎ
 

@@ -1,3 +1,33 @@
-﻿  collision.cpp
+﻿  player.cpp
+d:\old ファイル\school\school\3年\gm31\frameworkrepo\trunk\directx_frame\billboard.h(16): warning C4091: 'typedef ': 変数が何も宣言されていないときは、'DRAW_TYPE' の左辺を無視します。
+  field.cpp
+d:\old ファイル\school\school\3年\gm31\frameworkrepo\trunk\directx_frame\billboard.h(16): warning C4091: 'typedef ': 変数が何も宣言されていないときは、'DRAW_TYPE' の左辺を無視します。
+  enemy.cpp
+d:\old ファイル\school\school\3年\gm31\frameworkrepo\trunk\directx_frame\billboard.h(16): warning C4091: 'typedef ': 変数が何も宣言されていないときは、'DRAW_TYPE' の左辺を無視します。
+  コードを生成中...
+  コンパイル中...
+  texture.cpp
+  skybox.cpp
+  sceneModel.cpp
+d:\old ファイル\school\school\3年\gm31\frameworkrepo\trunk\directx_frame\scenemodel.cpp(77): warning C4018: '<': signed と unsigned の数値を比較しようとしました。
+d:\old ファイル\school\school\3年\gm31\frameworkrepo\trunk\directx_frame\scenemodel.cpp(164): warning C4018: '<': signed と unsigned の数値を比較しようとしました。
+  scene3D.cpp
+  scene2D.cpp
+  scene.cpp
+  renderer.cpp
+  manager.cpp
+d:\old ファイル\school\school\3年\gm31\frameworkrepo\trunk\directx_frame\billboard.h(16): warning C4091: 'typedef ': 変数が何も宣言されていないときは、'DRAW_TYPE' の左辺を無視します。
+  main.cpp
+  light.cpp
+  input.cpp
+  controller.cpp
+  collision.cpp
+  class.cpp
+  camera.cpp
+  bullet.cpp
+d:\old ファイル\school\school\3年\gm31\frameworkrepo\trunk\directx_frame\billboard.h(16): warning C4091: 'typedef ': 変数が何も宣言されていないときは、'DRAW_TYPE' の左辺を無視します。
+  billboard.cpp
+d:\old ファイル\school\school\3年\gm31\frameworkrepo\trunk\directx_frame\billboard.h(16): warning C4091: 'typedef ': 変数が何も宣言されていないときは、'DRAW_TYPE' の左辺を無視します。
+  コードを生成中...
   FrameWork.vcxproj -> D:\Old ファイル\school\school\3年\GM31\FrameWorkRepo\trunk\DirectX_Frame\Debug\FrameWork.exe
   FrameWork.vcxproj -> D:\Old ファイル\school\school\3年\GM31\FrameWorkRepo\trunk\DirectX_Frame\Debug\FrameWork.pdb (Full PDB)

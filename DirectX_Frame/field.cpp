@@ -222,7 +222,7 @@ float CField::GetHeight(D3DXVECTOR3& pos)
 
 CField* CField::Create(int texId, float meshSize, int sizeX, int sizeY)
 {
-	CField* field = new CField(0);
+	CField* field = new CField(LAYER_BACKGROUND);
 	field->Init(texId, meshSize, sizeX, sizeY);
 	field->m_SizeX = sizeX;
 	field->m_SizeY = sizeY;
@@ -232,7 +232,7 @@ CField* CField::Create(int texId, float meshSize, int sizeX, int sizeY)
 
 CField* CField::Create(int texId, float meshSize, int sizeX, int sizeY, bool isHeight)
 {
-	CField* field = new CField(0);
+	CField* field = new CField(LAYER_BACKGROUND);
 	field->Init(texId, meshSize, sizeX, sizeY, isHeight);
 	field->m_SizeX = sizeX;
 	field->m_SizeY = sizeY;

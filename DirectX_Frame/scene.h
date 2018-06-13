@@ -15,6 +15,13 @@ enum SCENE_TYPE
 	SCENE_TYPE_BILLBOARD,
 };
 
+enum LAYER
+{
+	LAYER_BACKGROUND,
+	LAYER_OBJECT3D,
+	LAYER_OBJECT2D
+};
+
 class CScene
 {
 protected:

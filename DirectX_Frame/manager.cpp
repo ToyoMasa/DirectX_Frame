@@ -15,6 +15,7 @@
 #include "billboard.h"
 #include "field.h"
 #include "player.h"
+#include "enemy.h"
 #include "input.h"
 #include "skybox.h"
 
@@ -26,7 +27,9 @@ CInputMouse *CManager::m_InputMouse = NULL;			// マウスへのポインタ
 CLight		*CManager::m_Light;
 
 int tree1, tree2;
+bool test = false;
 CPlayer* player;
+CEnemy* enemy;
 
 bool CManager::Init(HINSTANCE hInstance, HWND hWnd, BOOL bWindow)
 {
@@ -56,8 +59,12 @@ bool CManager::Init(HINSTANCE hInstance, HWND hWnd, BOOL bWindow)
 	CField* field = CField::Create(TEX_ID_FIELD001, 2.0f, 20, 20, true);
 
 	// プレイヤー
-	player = CPlayer::Create(MODEL_ID_XBOT, D3DXVECTOR3(0.0f, 0.5f, 0.0f));
+	player = CPlayer::Create(MODEL_ID_XBOT, D3DXVECTOR3(0.0f, 0.0f, 0.0f));
 	player->SetField(field);
+
+	// 敵
+	enemy = CEnemy::Create(MODEL_ID_XBOT, D3DXVECTOR3(0.0f, 0.0f, 5.0f));
+	enemy->SetField(field);
 
 	// 空
 	CSkyBox::Create(player);
@@ -154,6 +161,10 @@ void CManager::Draw()
 		D3DXVECTOR3 pos = player->GetPos();
 		ImGui::Begin("Debug Window", 0);
 		ImGui::Text("X = %.2f Y = %.2f Z = %.2f", pos.x, pos.y, pos.z);
+		if (isCollisionCapsule(player->GetCapsule(), enemy->GetCapsule()))
+		{
+			ImGui::Text("Hit");
+		}
 		ImGui::End();
 
 		CImGui::EndDraw();
