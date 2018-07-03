@@ -19,6 +19,11 @@ public:
 	void Draw();
 
 private:
+	static CBillBoard* tree1;
+	static CBillBoard* tree2;
+	static CPlayer* player;
+	static CEnemy* enemy;
+	static CLight *m_Light;
 
 };
 
