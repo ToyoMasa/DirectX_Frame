@@ -10,12 +10,16 @@ CCamera::CCamera()
 {
 	m_Pos   = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 	m_At    = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
+	m_Rot   = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 	m_Front = D3DXVECTOR3(0.0f, 0.0f, 1.0f);
 	m_Up    = D3DXVECTOR3(0.0f, 1.0f, 0.0f);
 	m_Projection;
 	m_View;
 	m_Fov = 90.0f;
 	m_Dot = 0;
+
+	m_ArmLength = 0.0f;
+	m_ArmLength2D = 0.0f;
 
 	// *--右方向ベクトルを求める--*
 	// 上方向ベクトルと前方向ベクトルの外積を求めると2つのベクトルに対して直角のベクトル
@@ -65,11 +69,31 @@ void CCamera::Update()
 void CCamera::SetPos(D3DXVECTOR3 pos)
 {
 	m_Pos = pos;
+
+	D3DXVECTOR3 vec = m_At - m_Pos;
+	m_ArmLength = D3DXVec3Length(&vec);
+
+	D3DXVECTOR3 at = m_At;
+	at.y = 0.0f;
+	D3DXVECTOR3 position = m_Pos;
+	position.y = 0.0f;
+	vec = at - position;
+	m_ArmLength2D = D3DXVec3Length(&vec);
 }
 
 void CCamera::SetAt(D3DXVECTOR3 at)
 {
 	m_At = at;
+
+	D3DXVECTOR3 vec = m_At - m_Pos;
+	m_ArmLength = D3DXVec3Length(&vec);
+
+	D3DXVECTOR3 AT = m_At;
+	AT.y = 0.0f;
+	D3DXVECTOR3 pos = m_Pos;
+	pos.y = 0.0f;
+	vec = AT - pos;
+	m_ArmLength2D = D3DXVec3Length(&vec);
 }
 
 void CCamera::SetFov(float fov)

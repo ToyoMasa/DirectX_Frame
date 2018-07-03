@@ -62,6 +62,7 @@ public:
 	void SetWorld(D3DXMATRIX move);
 	void Move(D3DXVECTOR3 pos);
 	void Rotate(D3DXVECTOR3 rot);
+	void Rotate(D3DXMATRIX rot);
 	void Scale(D3DXVECTOR3 scale);
 	static CSceneModel* Create(const std::string& modelName);
 	static CSceneModel* Create(const std::string& modelName, bool isIgnore);

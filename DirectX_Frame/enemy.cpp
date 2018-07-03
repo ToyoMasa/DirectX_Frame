@@ -24,7 +24,6 @@ void CEnemy::Init(int modelId, D3DXVECTOR3 spawnPos)
 	m_Pos = spawnPos;
 	m_CapsuleCollision.Set(Point(m_Pos.x, m_Pos.y + 0.25f, m_Pos.z), Point(m_Pos.x, m_Pos.y + 1.0f, m_Pos.z), 0.25f);
 	m_Model->Move(m_Pos);
-	m_Type = SCENE_TYPE_ENEMY;
 }
 
 void CEnemy::Uninit()
@@ -39,13 +38,9 @@ void CEnemy::Update()
 	m_CapsuleCollision.Set(Point(m_Pos.x, m_Pos.y + 0.25f, m_Pos.z), Point(m_Pos.x, m_Pos.y + 1.0f, m_Pos.z), 0.25f);
 }
 
-void CEnemy::Draw()
-{
-}
-
 CEnemy* CEnemy::Create(int modelId, D3DXVECTOR3 spawnPos)
 {
-	CEnemy* enemy = new CEnemy(LAYER_OBJECT3D);
+	CEnemy* enemy = new CEnemy();
 	enemy->Init(modelId, spawnPos);
 
 	return enemy;

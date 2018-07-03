@@ -20,19 +20,29 @@ public:
 	void Init(D3DXVECTOR3 pos, D3DXVECTOR3 at);
 	void Uninit();
 	void Update();
+	D3DXVECTOR3 GetPos() { return m_Pos; }
 	void SetPos(D3DXVECTOR3 pos);
+	D3DXVECTOR3 GetAt() { return m_At; }
 	void SetAt(D3DXVECTOR3 at);
+	D3DXVECTOR3 GetRot() { return m_Rot; }
+	void SetRot(D3DXVECTOR3 rot) { m_Rot = rot; }
 	void SetFov(float fov);
+	float GetArmLength() { return m_ArmLength; }
+	void SetArmLength(float value) { m_ArmLength = value; }
+	float GetArmLength2D() { return m_ArmLength2D; }
+	void SetArmLength2D(float value) { m_ArmLength2D = value; }
 	void Move(float horizontal, float vertical);
 	void Rotation(float horizontal, float vertical);
 	D3DXMATRIX GetView();
 	static CCamera* Create();
 
 private:
-	D3DXVECTOR3 m_Pos, m_At;				// カメラ座標, 注視点座標
+	D3DXVECTOR3 m_Pos, m_At, m_Rot;			// カメラ座標, 注視点座標, 回転座標
 	D3DXVECTOR3 m_Front, m_Right, m_Up;		// 単位ベクトル
 	D3DXMATRIX m_Projection;				// プロジェクション変換行列
 	D3DXMATRIX m_View;						// ビュー変換行列
+	float m_ArmLength;						// カメラの位置と注視点間の長さ
+	float m_ArmLength2D;					// カメラの位置と注視点間の長さ(平面）
 	float m_Fov;							// FOV
 	float m_Dot;							// 内積の値
 };

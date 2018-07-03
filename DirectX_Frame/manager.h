@@ -9,6 +9,7 @@ class CInputKeyboard;
 class CInputMouse;
 class CCamera;
 class CLight;
+class CMode;
 
 class CManager
 {
@@ -23,11 +24,13 @@ public:
 
 	static CInputKeyboard *GetInputKeyboard(void) { return m_InputKeyboard; }
 	static CInputMouse *GetInputMouse(void) { return m_InputMouse; }
+	static void SetMode(CMode* mode);
 
 private:
 	static CInputKeyboard *m_InputKeyboard;	// キーボードへのポインタ
 	static CInputMouse *m_InputMouse;			// マウスへのポインタ
 	static CLight		*m_Light;
+	static CMode *m_Mode;
 };
 
 #endif // !_MANAGER_H_

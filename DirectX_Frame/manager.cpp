@@ -18,6 +18,8 @@
 #include "enemy.h"
 #include "input.h"
 #include "skybox.h"
+#include "number.h"
+#include "mode.h"
 
 //======================================================================
 //	静的メンバ変数
@@ -25,8 +27,11 @@
 CInputKeyboard *CManager::m_InputKeyboard = NULL;		// キーボードへのポインタ
 CInputMouse *CManager::m_InputMouse = NULL;			// マウスへのポインタ
 CLight		*CManager::m_Light;
+CMode		*CManager::m_Mode = NULL;
 
-int tree1, tree2;
+CBillBoard* tree1;
+CBillBoard* tree2;
+int testNumber = 0;
 bool test = false;
 CPlayer* player;
 CEnemy* enemy;
@@ -79,14 +84,21 @@ bool CManager::Init(HINSTANCE hInstance, HWND hWnd, BOOL bWindow)
 	tree1 = CBillBoard::Create(TEX_ID_TREE);
 	tree2 = CBillBoard::Create(TEX_ID_TREE);
 
-	CBillBoard::Set(tree1, TEX_ID_TREE, D3DXVECTOR3(1.0f, 0.0f, 0.0f), 2.0f, 1);
-	CBillBoard::Set(tree2, TEX_ID_TREE, D3DXVECTOR3(-1.0f, 0.0f, 0.0f), 2.0f, 1);
+	tree1->Set(TEX_ID_TREE, D3DXVECTOR3(1.0f, 0.0f, 1.0f), 2.0f, 1);
+	tree2->Set(TEX_ID_TREE, D3DXVECTOR3(-1.0f, 0.0f, 0.0f), 2.0f, 1);
+
+	// 数字
+	CNumber::Init();
 
 	return true;
 }
 
 void CManager::Uninit()
 {
+	CCharacter::ReleaseAll();
+
+	CNumber::Uninit();
+
 	CScene::ReleaseAll();
 
 	m_Light->Release();
@@ -135,9 +147,14 @@ void CManager::Update()
 		m_InputMouse->Update();
 	}
 
-	CScene::UpdateAll();
+	if (m_InputKeyboard->GetKeyTrigger(DIK_SPACE))
+	{
+		testNumber++;
+	}
 
-	CBillBoard::Update();
+	CScene::UpdateAll();
+	CBillBoard::UpdateAll();
+	CCharacter::UpdateAll();
 }
 
 void CManager::Draw()
@@ -153,6 +170,8 @@ void CManager::Draw()
 		CScene::DrawAll();
 
 		CBillBoard::DrawAll(player->GetCamera());
+
+		CNumber::Draw(testNumber % 10, 1100.0f, 50.0f);
 
 		// デバッグ用imguiウィンドウの描画
 #if defined(_DEBUG) || defined(DEBUG)
@@ -170,6 +189,26 @@ void CManager::Draw()
 		CImGui::EndDraw();
 #endif
 
+
+
 		CRenderer::DrawEnd();
+	}
+}
+
+void CManager::SetMode(CMode* mode)
+{
+	if (CManager::m_Mode != NULL)
+	{
+		CManager::m_Mode->Uninit();
+
+		delete CManager::m_Mode;
+		CManager::m_Mode = NULL;
+	}
+
+	CManager::m_Mode = mode;
+
+	if (CManager::m_Mode != NULL)
+	{
+		CManager::m_Mode->Init();
 	}
 }

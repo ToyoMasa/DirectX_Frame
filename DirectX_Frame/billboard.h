@@ -9,6 +9,8 @@
 
 class CCamera;
 
+static const int BILLBOARD_MAX = 1000;
+
 typedef enum DRAW_TYPE
 {
 	NORMAL = 0,
@@ -64,7 +66,7 @@ public:
 	~CBillBoard() {}
 	static void Init();
 	static void Uninit();
-	static void Update();
+	static void UpdateAll();
 	static void Draw(int textureId, D3DXVECTOR3 vPos, float scale, CCamera* camera);
 	void DrawOne(CCamera* camera);
 	static void DrawFixedY(int textureId, D3DXVECTOR3 vPos, float scale, CCamera* camera);
@@ -76,7 +78,7 @@ public:
 	void SetId(int Id) { m_Id = Id; }
 	void Release();
 	static void ReleaseAll();
-	static int Create(int texId);
+	static CBillBoard* Create(int texId);
 
 private:
 	int								m_Id;					// 管理番号
@@ -92,7 +94,7 @@ private:
 	static D3DXMATRIX				m_World;				// ワールド変換行列
 	static D3DXMATRIX				m_Move;					// 座標変換行列
 	static D3DXMATRIX				m_Scale;				// 拡大縮小行列
-	static CBillBoard*				m_BillBoards[100];		// ビルボード
+	static CBillBoard*				m_BillBoards[BILLBOARD_MAX];		// ビルボード
 };
 
 

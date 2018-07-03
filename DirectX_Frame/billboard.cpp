@@ -20,7 +20,7 @@ LPDIRECT3DINDEXBUFFER9	CBillBoard::m_IndexBuffer = NULL;	// インデックスバッファ
 D3DXMATRIX				CBillBoard::m_World;				// ワールド変換行列
 D3DXMATRIX				CBillBoard::m_Move;					// 座標変換行列
 D3DXMATRIX				CBillBoard::m_Scale;				// 拡大縮小行列
-CBillBoard*				CBillBoard::m_BillBoards[100] = { NULL };
+CBillBoard*				CBillBoard::m_BillBoards[BILLBOARD_MAX] = { NULL };
 
 //======================================================================
 //	グローバル変数
@@ -105,7 +105,7 @@ void CBillBoard::Uninit()
 	}
 }
 
-void CBillBoard::Update()
+void CBillBoard::UpdateAll()
 {
 
 }
@@ -272,7 +272,7 @@ void CBillBoard::DrawAll(CCamera* camera)
 {
 	CBillBoard::DrawBegin();
 
-	for (int i = 0; i < 100; i++)
+	for (int i = 0; i < BILLBOARD_MAX; i++)
 	{
 		if (CBillBoard::m_BillBoards[i] != NULL)
 		{
@@ -314,7 +314,7 @@ void CBillBoard::Set(int texId, D3DXVECTOR3 pos, float scale, int drawtype)
 
 void CBillBoard::Release()
 {
-	for (int i = 0; i < 100; i++)
+	for (int i = 0; i < BILLBOARD_MAX; i++)
 	{
 		if (m_BillBoards[i] == this)
 		{
@@ -327,7 +327,7 @@ void CBillBoard::Release()
 
 void CBillBoard::ReleaseAll()
 {
-	for (int i = 0; i < 100; i++)
+	for (int i = 0; i < BILLBOARD_MAX; i++)
 	{
 		if (m_BillBoards[i] != NULL)
 		{
@@ -336,12 +336,12 @@ void CBillBoard::ReleaseAll()
 	}
 }
 
-int CBillBoard::Create(int texId)
+CBillBoard* CBillBoard::Create(int texId)
 {
 	CBillBoard* billboard = new CBillBoard();
-	m_BillBoards[billboard->m_Id]->Set(texId, D3DXVECTOR3(0.0f, 0.0f, 0.0f), 1.0f, 0);
+	billboard->Set(texId, D3DXVECTOR3(0.0f, 0.0f, 0.0f), 1.0f, 0);
 
-	return billboard->m_Id;
+	return billboard;
 }
 
 //typedef struct

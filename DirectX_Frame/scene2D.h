@@ -23,6 +23,10 @@ public:
 	CScene2D::CScene2D(int prioriy) :CScene(prioriy)
 	{
 		m_Pos = D3DXVECTOR3(0.0f,0.0f, 0.0f);
+		m_TexCoordX1 = 0.0f;
+		m_TexCoordX2 = 1.0f;
+		m_TexCoordY1 = 0.0f;
+		m_TexCoordY2 = 1.0f;
 		m_TexId = 0;
 	}
 
@@ -35,9 +39,14 @@ public:
 	void Uninit();
 	void Update();
 	void Draw();
+	void SetTexCoord(float texCoordx1, float texCoordx2, float texCoordy1, float texCoordy2);
 	static CScene2D* Create(int texid, float texW, float texH);
 private:
 	D3DXVECTOR2 m_TexSize;
+	float m_TexCoordX1;
+	float m_TexCoordX2;
+	float m_TexCoordY1;
+	float m_TexCoordY2;
 	int m_TexId;
 };
 
