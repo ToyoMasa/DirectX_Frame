@@ -23,14 +23,23 @@
 #include "title.h"
 #include "game.h"
 
+CScene2D* CModeTitle::m_TitleLogo = NULL;
+
 void CModeTitle::Init()
 {
+	// テクスチャの初期化
+	CTexture::Init();
 
+	m_TitleLogo = CScene2D::Create(TEX_ID_TITLE, 256.0f, 64.0f);
+	m_TitleLogo->Set(D3DXVECTOR3(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2, 0.0f));
 }
 
 void CModeTitle::Uninit()
 {
+	// 全てのテクスチャの解放
+	CTexture::ReleaseAll();
 
+	CScene::ReleaseAll();
 }
 
 void CModeTitle::Update()
@@ -48,13 +57,16 @@ void CModeTitle::Update()
 	mouseY = (float)inputMouse->GetAxisY();
 	mouseZ = (float)inputMouse->GetAxisZ();
 
-	if (inputMouse->GetLeftTrigger())
+	CScene::UpdateAll();
+
+	if (inputMouse->GetLeftTrigger() || inputKeyboard->GetKeyTrigger(DIK_SPACE)) 
 	{
 		CManager::SetMode(new CModeGame());
 	}
+
 }
 
 void CModeTitle::Draw()
 {
-
+	CScene::DrawAll();
 }

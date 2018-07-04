@@ -9,7 +9,7 @@ class CMode
 {
 public:
 	CMode() {}
-	~CMode() {}
+	virtual ~CMode() {}
 
 	virtual void Init() = 0;
 	virtual void Uninit() = 0;

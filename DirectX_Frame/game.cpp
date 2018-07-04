@@ -21,6 +21,7 @@
 #include "skybox.h"
 #include "number.h"
 #include "game.h"
+#include "result.h"
 
 CBillBoard *CModeGame::tree1 = NULL;
 CBillBoard *CModeGame::tree2 = NULL;
@@ -85,6 +86,24 @@ void CModeGame::Update()
 	CCharacter::UpdateAll();
 	CScene::UpdateAll();
 	CBillBoard::UpdateAll();
+
+	CInputKeyboard *inputKeyboard;
+	CInputMouse *inputMouse;
+	float mouseX, mouseY, mouseZ;
+
+	// キーボード取得
+	inputKeyboard = CManager::GetInputKeyboard();
+
+	// マウス取得
+	inputMouse = CManager::GetInputMouse();
+	mouseX = (float)inputMouse->GetAxisX();
+	mouseY = (float)inputMouse->GetAxisY();
+	mouseZ = (float)inputMouse->GetAxisZ();
+
+	if (inputKeyboard->GetKeyTrigger(DIK_SPACE))
+	{
+		CManager::SetMode(new CModeResult());
+	}
 }
 
 void CModeGame::Draw()
@@ -103,6 +122,8 @@ void CModeGame::Draw()
 	if (isCollisionCapsule(player->GetCapsule(), enemy->GetCapsule()))
 	{
 		ImGui::Text("Hit");
+
+		CManager::SetMode(new CModeResult());
 	}
 	ImGui::End();
 

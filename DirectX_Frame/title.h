@@ -19,7 +19,7 @@ public:
 	void Draw();
 
 private:
-
+	static CScene2D* m_TitleLogo;
 };
 
 #endif // !_TITLE_H_

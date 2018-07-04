@@ -53,6 +53,7 @@ bool CManager::Init(HINSTANCE hInstance, HWND hWnd, BOOL bWindow)
 	m_InputMouse->Init(hInstance, hWnd);
 
 	CManager::m_Mode = new CModeTitle();
+//	CManager::m_Mode = new CModeGame();
 
 	if (CManager::m_Mode != NULL)
 	{
@@ -142,3 +143,4 @@ void CManager::SetMode(CMode* mode)
 		CManager::m_Mode->Init();
 	}
 }
+

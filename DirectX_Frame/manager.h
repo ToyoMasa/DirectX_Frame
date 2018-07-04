@@ -27,10 +27,10 @@ public:
 	static void SetMode(CMode* mode);
 
 private:
-	static CInputKeyboard *m_InputKeyboard;	// キーボードへのポインタ
-	static CInputMouse *m_InputMouse;		// マウスへのポインタ
-	static CLight		*m_Light;
-	static CMode *m_Mode;
+	static CInputKeyboard	*m_InputKeyboard;	// キーボードへのポインタ
+	static CInputMouse		*m_InputMouse;		// マウスへのポインタ
+	static CLight			*m_Light;
+	static CMode	*m_Mode;
 };
 
 #endif // !_MANAGER_H_
