@@ -35,6 +35,7 @@ void CBillBoard::Init()
 	}
 
 	CTexture::Load(TEX_ID_TREE);
+	CTexture::Load(TEX_ID_STAR);
 
 	HRESULT hr;
 

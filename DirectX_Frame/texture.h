@@ -16,8 +16,10 @@ typedef enum
 	TEX_ID_TREE,					// ツリー
 	TEX_ID_SKY,						// 空
 	TEX_ID_NUMBER001,				// 数字
-	TEX_ID_TITLE,				// タイトル
-	TEX_ID_RESULT,				// リザルト
+	TEX_ID_TITLE,					// タイトル
+	TEX_ID_RESULT,					// リザルト
+	TEX_ID_CIRCLE,					// 丸いパーティクル
+	TEX_ID_STAR,					// 星
 	TEX_ID_MAX,
 } TEXTURE_ID;
 
@@ -31,6 +33,8 @@ static const std::string TEXTURE_SOURCE[] =
 	"data/textures/number001.png",
 	"data/textures/title.png",
 	"data/textures/result.png",
+	"data/textures/circle.jpg",
+	"data/textures/star.png",
 };
 
 // テクスチャがロードされているか検索するためのマップ

@@ -37,6 +37,7 @@ public:
 		D3DXVECTOR3 pos,
 		D3DXVECTOR3 velocityStart,
 		D3DXVECTOR3 velocityEnd,
+		D3DXVECTOR3 Accelerate,
 		bool loop);
 	void Uninit();
 	void Update();

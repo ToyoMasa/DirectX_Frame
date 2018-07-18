@@ -20,12 +20,14 @@ public:
 	void Update()override;
 	void Draw();
 	void Rotate(float x, float z);
+	void Rotate(D3DXVECTOR3 vec);
 	CCamera* GetCamera() { return m_Camera; }
 	static CPlayer* Create(int modelId, D3DXVECTOR3 spawnPos);
 
 private:
-	CCamera *m_Camera;
+	CCamera* m_Camera;
 	float m_CameraLength;
+	CSceneModelFBX* m_FBX;
 };
 
 #endif // !_PLAYER_H_

@@ -22,9 +22,11 @@ static const float VALUE_ROTATE_MOUSE = 0.003f;
 void CPlayer::Init(int modelId, D3DXVECTOR3 spawnPos)
 {
 	m_Model = CSceneModel::Create(MODEL_SOURCE[modelId]);
+	//m_FBX = CSceneModelFBX::Create(FBX_MODEL_SOURCE[FBX_ID_XBOT]);
 	m_Pos = spawnPos;
 	m_Model->Move(m_Pos);
-	m_Camera = CCamera::Create();
+	m_Camera = CCamera::Create(D3DXVECTOR3(0.0f, 1.5f, -2.0f), m_Pos);
+	m_Forward.z = -1.0f;
 }
 
 void CPlayer::Uninit()
@@ -67,14 +69,17 @@ void CPlayer::Update()
 	}
 
 	{
-		Rotate(moveX, moveZ);
+		Rotate(m_Camera->GetFront());
 
+		D3DXVECTOR3 cameraFront = m_Camera->GetFront();
+		D3DXVECTOR3 cameraRight = m_Camera->GetRight();
 		D3DXVECTOR3 newPos = m_Pos;
 		D3DXVECTOR3 moveVec = { moveX, 0.0f, moveZ };
 		
 		D3DXVec3Normalize(&moveVec, &moveVec);
 
-		newPos += moveVec * PLAYER_MOVE_SPEED;
+		newPos += cameraRight * PLAYER_MOVE_SPEED * moveX;
+		newPos += cameraFront * PLAYER_MOVE_SPEED * moveZ;
 		newPos.y = m_Field->GetHeight(newPos);
 
 		// コリジョンの計算
@@ -101,6 +106,7 @@ void CPlayer::Update()
 			}
 		}
 
+		m_Camera->Move(newPos - m_Pos);
 		SetPos(newPos);
 	}
 
@@ -108,68 +114,8 @@ void CPlayer::Update()
 	// 当たり判定の移動
 	m_CapsuleCollision.Set(Point(m_Pos.x, m_Pos.y + 0.25f, m_Pos.z), Point(m_Pos.x, m_Pos.y + 1.0f, m_Pos.z), 0.25f);
 
-	// カメラ回転
-	//D3DXVECTOR3 mouseRot = m_Camera->GetRot();
-	//D3DXVECTOR3 mousePos = m_Camera->GetPos();
-	//D3DXVECTOR3 mouseAt = m_Camera->GetAt();
-
-	//if (mouseX < 0)
-	//{// 視点移動「左」
-	//	mouseRot.y -= PI * mouseX * VALUE_ROTATE_MOUSE;
-	//	if (mouseRot.y < -PI)
-	//	{
-	//		mouseRot.y += PI*2.0f;
-	//	}
-
-	//	mousePos.x = mouseAt.x - sinf(mouseRot.y) * m_Camera->GetArmLength2D();
-	//	mousePos.z = mouseAt.z - cosf(mouseRot.y) * m_Camera->GetArmLength2D();
-	//}
-	//else if (mouseX > 0)
-	//{// 視点移動「右」
-	//	mouseRot.y -= PI * mouseX * VALUE_ROTATE_MOUSE;
-	//	if (mouseRot.y > PI)
-	//	{
-	//		mouseRot.y -= PI*2.0f;
-	//	}
-
-	//	mousePos.x = mouseAt.x - sinf(mouseRot.y) * m_Camera->GetArmLength2D();
-	//	mousePos.z = mouseAt.z - cosf(mouseRot.y) * m_Camera->GetArmLength2D();
-	//}
-
-	//if (mouseY < 0)
-	//{// 視点移動「上」
-	//	mouseRot.x -= PI * mouseY * VALUE_ROTATE_MOUSE;
-	//	if (mouseRot.x >(PI / 2.0f - PI*0.02f))
-	//	{
-	//		mouseRot.x = (PI / 2.0f - PI*0.02f);
-	//	}
-
-	//	mousePos.y = mouseAt.y - sinf(mouseRot.x) * m_Camera->GetArmLength();
-
-	//	m_Camera->SetArmLength2D(cosf(mouseRot.x) * m_Camera->GetArmLength());
-	//	mousePos.x = mouseAt.x - sinf(mouseRot.y) * m_Camera->GetArmLength2D();
-	//	mousePos.z = mouseAt.z - cosf(mouseRot.y) * m_Camera->GetArmLength2D();
-	//}
-	//else if (mouseY > 0)
-	//{// 視点移動「下」
-	//	mouseRot.x -= PI * mouseY * VALUE_ROTATE_MOUSE;
-	//	if (mouseRot.x < (-PI / 2.0f + PI*0.02f))
-	//	{
-	//		mouseRot.x = (-PI / 2.0f + PI*0.02f);
-	//	}
-
-	//	mousePos.y = mouseAt.y - sinf(mouseRot.x) * m_Camera->GetArmLength();
-
-	//	m_Camera->SetArmLength2D(cosf(mouseRot.x) * m_Camera->GetArmLength());
-	//	mousePos.x = mouseAt.x - sinf(mouseRot.y) * m_Camera->GetArmLength2D();
-	//	mousePos.z = mouseAt.z - cosf(mouseRot.y) * m_Camera->GetArmLength2D();
-	//}
-
-	//m_Camera->SetPos(mousePos);
-	//m_Camera->SetRot(mouseRot);
-
 	m_Camera->SetAt(D3DXVECTOR3(m_Pos.x, m_Pos.y + 1.5f, m_Pos.z));
-	m_Camera->SetPos(D3DXVECTOR3(m_Pos.x, m_Pos.y + 2.0f, m_Pos.z - 2.0f));
+	m_Camera->Rotation(PI * mouseX * VALUE_ROTATE_MOUSE, PI * mouseY * VALUE_ROTATE_MOUSE);
 	m_Camera->Update();
 }
 
@@ -200,7 +146,32 @@ void CPlayer::Rotate(float x, float z)
 	float fInner = D3DXVec3Dot(&v1, &v2);
 
 	// 回転行列(Y軸回転)を作る(回転速度)
-	D3DXMatrixRotationY(&mtxRot, fInner / 20);
+	D3DXMatrixRotationY(&mtxRot, fInner / 10);
+	m_Rotate *= mtxRot;
+	m_Model->Rotate(m_Rotate);
+
+	D3DXVec3TransformNormal(&m_Forward, &m_Forward, &mtxRot);	// ベクトルの座標変換(出力, 入力, 変換行列)
+	D3DXVec3TransformNormal(&m_Right, &m_Right, &mtxRot);	// ベクトルの座標変換(出力, 入力, 変換行列)
+	D3DXVec3Normalize(&m_Forward, &m_Forward);
+	D3DXVec3Normalize(&m_Right, &m_Right);
+}
+
+void CPlayer::Rotate(D3DXVECTOR3 vec)
+{
+	D3DXMATRIX mtxRot;
+	D3DXVECTOR3 v1 = m_Forward;
+	D3DXVECTOR3 v2 = { -vec.z, 0, vec.x };
+
+	v1.y = 0.0f;
+
+	D3DXVec3Normalize(&v1, &v1);
+	D3DXVec3Normalize(&v2, &v2);
+
+	// 今向いている方角と入力された方角の内積を取る
+	float fInner = D3DXVec3Dot(&v1, &v2);
+
+	// 回転行列(Y軸回転)を作る(回転速度)
+	D3DXMatrixRotationY(&mtxRot, fInner / 10);
 	m_Rotate *= mtxRot;
 	m_Model->Rotate(m_Rotate);
 

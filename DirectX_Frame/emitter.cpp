@@ -20,6 +20,7 @@ void CParticleEmitter::Init(
 	D3DXVECTOR3 pos,
 	D3DXVECTOR3 velocityStart,
 	D3DXVECTOR3 velocityEnd,
+	D3DXVECTOR3 Accelerate,
 	bool loop)
 {
 	m_TextureID = texId;
@@ -31,6 +32,7 @@ void CParticleEmitter::Init(
 	m_Pos = pos;
 	m_VelocityRangeStart = velocityStart;
 	m_VelocityRanegeEnd = velocityEnd;
+	m_VelocityAcceleration = Accelerate;
 	m_Loop = loop;
 }
 

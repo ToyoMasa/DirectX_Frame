@@ -39,7 +39,18 @@ void CCamera::Init()
 void CCamera::Init(D3DXVECTOR3 pos, D3DXVECTOR3 at)
 {
 	m_Pos = pos;
+	m_OldPos = m_Pos;
 	m_At = at;
+
+	D3DXVECTOR3 vec = m_At - m_Pos;
+	m_ArmLength = D3DXVec3Length(&vec);
+
+	D3DXVECTOR3 at2 = m_At;
+	at2.y = 0.0f;
+	D3DXVECTOR3 position = m_Pos;
+	position.y = 0.0f;
+	vec = at2 - position;
+	m_ArmLength2D = D3DXVec3Length(&vec);
 }
 
 void CCamera::Uninit()
@@ -50,8 +61,6 @@ void CCamera::Uninit()
 void CCamera::Update()
 {
 	LPDIRECT3DDEVICE9 pDevice = CRenderer::GetDevice();
-	D3DXVECTOR3 oldPos = m_Pos;
-	D3DXVECTOR3 oldAt = m_At;
 
 	//	--カメラの処理--
 	// ビュー行列の作成
@@ -64,36 +73,21 @@ void CCamera::Update()
 	//各種行列の設定
 	pDevice->SetTransform(D3DTS_VIEW, &m_View);
 	pDevice->SetTransform(D3DTS_PROJECTION, &m_Projection);
+
+	// 現在の座標を保存
+	m_OldPos = m_Pos;
 }
 
 void CCamera::SetPos(D3DXVECTOR3 pos)
 {
 	m_Pos = pos;
 
-	D3DXVECTOR3 vec = m_At - m_Pos;
-	m_ArmLength = D3DXVec3Length(&vec);
 
-	D3DXVECTOR3 at = m_At;
-	at.y = 0.0f;
-	D3DXVECTOR3 position = m_Pos;
-	position.y = 0.0f;
-	vec = at - position;
-	m_ArmLength2D = D3DXVec3Length(&vec);
 }
 
 void CCamera::SetAt(D3DXVECTOR3 at)
 {
 	m_At = at;
-
-	D3DXVECTOR3 vec = m_At - m_Pos;
-	m_ArmLength = D3DXVec3Length(&vec);
-
-	D3DXVECTOR3 AT = m_At;
-	AT.y = 0.0f;
-	D3DXVECTOR3 pos = m_Pos;
-	pos.y = 0.0f;
-	vec = AT - pos;
-	m_ArmLength2D = D3DXVec3Length(&vec);
 }
 
 void CCamera::SetFov(float fov)
@@ -101,11 +95,13 @@ void CCamera::SetFov(float fov)
 	m_Fov = fov;
 }
 
+void CCamera::Move(D3DXVECTOR3 pos)
+{
+	m_Pos += pos;
+}
+
 void CCamera::Move(float horizontal, float vertical)
 {
-	D3DXVECTOR3 vOldPos = m_Pos;
-	D3DXVECTOR3 vOldAt = m_At;
-
 	//*********************************************************
 	//	左右移動
 	//*********************************************************
@@ -154,7 +150,6 @@ void CCamera::Rotation(float horizontal, float vertical)
 		D3DXVec3TransformNormal(&dir, &dir, &mtxRotation);	// ベクトルの座標変換(出力, 入力, 変換行列)
 
 		m_Pos = dir + m_At;
-		//	D3DXVECTOR3 dir = m_Pos - m_At;
 
 		D3DXVec3TransformNormal(&m_Front, &m_Front, &mtxRotation);	// ベクトルの座標変換(出力, 入力, 変換行列)
 		D3DXVec3TransformNormal(&m_Right, &m_Right, &mtxRotation);	// ベクトルの座標変換(出力, 入力, 変換行列)
@@ -177,7 +172,7 @@ void CCamera::Rotation(float horizontal, float vertical)
 
 		D3DXVec3TransformNormal(&dir, &dir, &mtxRotation);	// ベクトルの座標変換(出力, 入力, 変換行列)
 
-		D3DXVECTOR3 front;	// 内積を調べるためのg_flontの代わり
+		D3DXVECTOR3 front;	
 
 		D3DXVec3TransformNormal(&front, &m_Front, &mtxRotation);	// ベクトルの座標変換(出力, 入力, 変換行列)
 
@@ -196,6 +191,8 @@ void CCamera::Rotation(float horizontal, float vertical)
 			//	m_Pos = m_At - dir;
 			D3DXVec3TransformNormal(&m_Front, &m_Front, &mtxRotation);	// ベクトルの座標変換(出力, 入力, 変換行列)
 			D3DXVec3TransformNormal(&m_Right, &m_Right, &mtxRotation);	// ベクトルの座標変換(出力, 入力, 変換行列)
+			D3DXVec3Normalize(&m_Front, &m_Front);
+			D3DXVec3Normalize(&m_Right, &m_Right);
 		}
 	}
 }
@@ -208,7 +205,20 @@ CCamera* CCamera::Create()
 	return camera;
 }
 
+CCamera* CCamera::Create(D3DXVECTOR3 pos, D3DXVECTOR3 at)
+{
+	CCamera* camera = new CCamera();
+	camera->Init(pos, at);
+
+	return camera;
+}
+
 D3DXMATRIX CCamera::GetView()
 {
 	return m_View;
+}
+
+void CCamera::SetRot(D3DXVECTOR3 rot)
+{
+
 }

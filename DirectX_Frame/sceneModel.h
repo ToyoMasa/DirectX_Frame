@@ -6,6 +6,8 @@
 #define _SCENEMODEL_H_
 
 #include <string>
+#include <fbxsdk.h>
+#pragma comment (lib, "libfbxsdk-mt.lib")
 
 // ÉÇÉfÉãä«óùópID
 typedef enum
@@ -14,6 +16,7 @@ typedef enum
 	MODEL_ID_XBOT,
 	MODEL_ID_SKYBOX,
 	MODEL_ID_SKYDOME,
+	MODEL_ID_PLAYER,
 	MODEL_ID_MAX,
 } MODEL_ID;
 
@@ -24,6 +27,7 @@ static const std::string MODEL_SOURCE[] =
 	"data/models/xbot2.x",
 	"data/models/skybox.x",
 	"data/models/skydome.x",
+	"data/models/player.x",
 };
 
 class CSceneModel : public CScene

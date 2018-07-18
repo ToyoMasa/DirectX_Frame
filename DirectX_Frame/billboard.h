@@ -9,7 +9,7 @@
 
 class CCamera;
 
-static const int BILLBOARD_MAX = 1000;
+static const int BILLBOARD_MAX = 10000;
 
 typedef enum DRAW_TYPE
 {
@@ -51,7 +51,7 @@ class CBillBoard
 public:
 	CBillBoard() 
 	{
-		for (int i = 0; i < 100; i++)
+		for (int i = 0; i < BILLBOARD_MAX; i++)
 		{
 			if (m_BillBoards[i] == NULL)
 			{

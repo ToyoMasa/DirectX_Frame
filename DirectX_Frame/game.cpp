@@ -22,12 +22,15 @@
 #include "number.h"
 #include "game.h"
 #include "result.h"
+#include "particle.h"
+#include "emitter.h"
 
 CBillBoard *CModeGame::tree1 = NULL;
 CBillBoard *CModeGame::tree2 = NULL;
 CPlayer *CModeGame::player = NULL;
 CEnemy *CModeGame::enemy = NULL;
 CLight *CModeGame::m_Light;
+CParticleEmitter emitter;
 
 void CModeGame::Init()
 {
@@ -38,7 +41,7 @@ void CModeGame::Init()
 	CField* field = CField::Create(TEX_ID_FIELD001, 2.0f, 20, 20, true);
 
 	// プレイヤー
-	player = CPlayer::Create(MODEL_ID_XBOT, D3DXVECTOR3(0.0f, 0.0f, 0.0f));
+	player = CPlayer::Create(MODEL_ID_PLAYER, D3DXVECTOR3(0.0f, 0.0f, 0.0f));
 	player->SetField(field);
 
 	// 敵
@@ -61,6 +64,14 @@ void CModeGame::Init()
 	tree1->Set(TEX_ID_TREE, D3DXVECTOR3(1.0f, 0.0f, 1.0f), 2.0f, 1);
 	tree2->Set(TEX_ID_TREE, D3DXVECTOR3(-1.0f, 0.0f, 0.0f), 2.0f, 1);
 
+	// パーティクルエミッター
+	emitter.Init(TEX_ID_STAR, 300, 3, 300, 0.2f, 0.0f,
+		D3DXVECTOR3(0.0f, 0.0f, 3.0f),
+		D3DXVECTOR3(-0.006f, 0.03f, -0.006f),
+		D3DXVECTOR3(0.006f, 0.035f, 0.006f),
+		D3DXVECTOR3(0.0f, -0.0002f, 0.0f),
+		false);
+
 	// 数字
 	//CNumber::Init();
 }
@@ -73,6 +84,8 @@ void CModeGame::Uninit()
 
 	CScene::ReleaseAll();
 
+	CParticle::ReleaseAll();
+
 	m_Light->Release();
 
 	CBillBoard::Uninit();
@@ -83,8 +96,11 @@ void CModeGame::Uninit()
 
 void CModeGame::Update()
 {
+	emitter.Update();
+
 	CCharacter::UpdateAll();
 	CScene::UpdateAll();
+	CParticle::UpdateAll();
 	CBillBoard::UpdateAll();
 
 	CInputKeyboard *inputKeyboard;
@@ -99,11 +115,6 @@ void CModeGame::Update()
 	mouseX = (float)inputMouse->GetAxisX();
 	mouseY = (float)inputMouse->GetAxisY();
 	mouseZ = (float)inputMouse->GetAxisZ();
-
-	if (inputKeyboard->GetKeyTrigger(DIK_SPACE))
-	{
-		CManager::SetMode(new CModeResult());
-	}
 }
 
 void CModeGame::Draw()
@@ -122,8 +133,6 @@ void CModeGame::Draw()
 	if (isCollisionCapsule(player->GetCapsule(), enemy->GetCapsule()))
 	{
 		ImGui::Text("Hit");
-
-		CManager::SetMode(new CModeResult());
 	}
 	ImGui::End();
 

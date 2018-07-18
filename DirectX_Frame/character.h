@@ -1,6 +1,8 @@
 #ifndef _CHARACTER_H_
 #define _CHARACTER_H_
 
+#include "sceneModelFBX.h"
+
 class CCamera;
 class CField;
 

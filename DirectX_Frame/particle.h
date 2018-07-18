@@ -7,7 +7,7 @@
 
 #include "billboard.h"
 
-static const int PARTICLE_MAX = 1000;
+static const int PARTICLE_MAX = 10000;
 
 class CParticle
 {
@@ -48,6 +48,8 @@ public:
 		float size,
 		D3DXVECTOR3 pos);
 	void Release();
+	
+	static void ReleaseAll();
 
 	static void UpdateAll();
 

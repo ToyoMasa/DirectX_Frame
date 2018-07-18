@@ -25,7 +25,7 @@ void CParticle::Init(
 	m_Size = size;
 	m_Pos = pos;
 
-	m_Billboard = new CBillBoard();
+	m_Billboard = CBillBoard::Create(texId);
 	m_Billboard->Set(m_TextureID ,m_Pos, m_Size, NORMAL);
 }
 
@@ -33,8 +33,7 @@ void CParticle::Uninit()
 {
 	if (m_Billboard != NULL)
 	{
-		delete m_Billboard;
-		m_Billboard = NULL;
+		m_Billboard->Release();
 	}
 }
 
@@ -88,6 +87,17 @@ void CParticle::Release()
 			delete CParticle::m_Particles[i];
 			CParticle::m_Particles[i] = NULL;
 			break;
+		}
+	}
+}
+
+void CParticle::ReleaseAll()
+{
+	for (int i = 0; i < PARTICLE_MAX; i++)
+	{
+		if (CParticle::m_Particles[i] != NULL)
+		{
+			CParticle::m_Particles[i]->Release();
 		}
 	}
 }
