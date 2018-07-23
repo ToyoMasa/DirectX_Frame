@@ -13,6 +13,7 @@ CScene::CScene(int priority)
 		{
 			m_Scene[priority][i] = this;
 			m_Type = SCENE_TYPE_NONE;
+			m_Visible = true;
 			break;
 		}
 	}
@@ -62,7 +63,10 @@ void CScene::DrawAll()
 		{
 			if (m_Scene[j][i] != NULL)
 			{
-				m_Scene[j][i]->Draw();
+				if (m_Scene[j][i]->m_Visible)
+				{
+					m_Scene[j][i]->Draw();
+				}
 			}
 		}
 	}

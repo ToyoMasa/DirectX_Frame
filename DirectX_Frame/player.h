@@ -4,6 +4,8 @@
 #include "character.h"
 static const float PLAYER_MOVE_SPEED = 0.03f;
 
+class CScene2D;
+
 class CPlayer : public CCharacter
 {
 public:
@@ -12,6 +14,7 @@ public:
 		m_Type = CHARACTER_PLAYER;
 		m_CameraLength = 2.0f;
 		m_Camera = NULL;
+		m_Text_Attack = NULL;
 	}
 	~CPlayer(){}
 
@@ -19,15 +22,17 @@ public:
 	void Uninit()override;
 	void Update()override;
 	void Draw();
-	void Rotate(float x, float z);
-	void Rotate(D3DXVECTOR3 vec);
 	CCamera* GetCamera() { return m_Camera; }
 	static CPlayer* Create(int modelId, D3DXVECTOR3 spawnPos);
+
+	void Attack();
 
 private:
 	CCamera* m_Camera;
 	float m_CameraLength;
 	CSceneModelFBX* m_FBX;
+	CScene2D* m_Text_Attack;
+	Capsule m_AttackingCollsion;
 };
 
 #endif // !_PLAYER_H_

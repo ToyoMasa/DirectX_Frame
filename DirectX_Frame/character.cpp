@@ -54,3 +54,28 @@ void CCharacter::ReleaseAll()
 		}
 	}
 }
+
+void CCharacter::Rotate(D3DXVECTOR3 vec)
+{
+	D3DXMATRIX mtxRot;
+	D3DXVECTOR3 v1 = m_Forward;
+	D3DXVECTOR3 v2 = { -vec.z, 0, vec.x };
+
+	v1.y = 0.0f;
+
+	D3DXVec3Normalize(&v1, &v1);
+	D3DXVec3Normalize(&v2, &v2);
+
+	// 今向いている方角と入力された方角の内積を取る
+	float fInner = D3DXVec3Dot(&v1, &v2);
+
+	// 回転行列(Y軸回転)を作る(回転速度)
+	D3DXMatrixRotationY(&mtxRot, fInner / 10);
+	m_Rotate *= mtxRot;
+	m_Model->Rotate(m_Rotate);
+
+	D3DXVec3TransformNormal(&m_Forward, &m_Forward, &mtxRot);	// ベクトルの座標変換(出力, 入力, 変換行列)
+	D3DXVec3TransformNormal(&m_Right, &m_Right, &mtxRot);	// ベクトルの座標変換(出力, 入力, 変換行列)
+	D3DXVec3Normalize(&m_Forward, &m_Forward);
+	D3DXVec3Normalize(&m_Right, &m_Right);
+}

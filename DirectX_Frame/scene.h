@@ -1,7 +1,7 @@
 #ifndef _SCENE_H_
 #define _SCENE_H_
 
-static const int OBJECT_MAX = 100;
+static const int OBJECT_MAX = 300;
 static const int PRIORITY_MAX = 3;
 
 enum SCENE_TYPE
@@ -27,6 +27,7 @@ class CScene
 protected:
 	D3DXVECTOR3 m_Pos;
 	SCENE_TYPE m_Type;
+	bool m_Visible;
 public:
 	CScene(int priority);
 	virtual ~CScene() {}
@@ -39,6 +40,8 @@ public:
 	virtual void Rotate(D3DXVECTOR3 rot) {}
 	virtual void Scale(D3DXVECTOR3 scale) {}
 	void Set(D3DXVECTOR3& pos);
+	void SetVisible(bool visible) { m_Visible = visible; }
+	bool GetVisible() { return m_Visible; }
 	D3DXVECTOR3 GetPos() { return m_Pos; }
 	void Release();
 	static void UpdateAll();

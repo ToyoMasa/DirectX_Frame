@@ -22,6 +22,15 @@
     <Filter Include="ソース ファイル\scene">
       <UniqueIdentifier>{7abc65f9-0ba7-4000-b5fe-12d3a5cce525}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ヘッダー ファイル\scene">
+      <UniqueIdentifier>{5a5b1313-68bd-4215-9d40-207cf2bc6242}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ヘッダー ファイル\AI_Action">
+      <UniqueIdentifier>{3ee975a5-811e-465f-b540-df13daf66b6c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\AI_Action">
+      <UniqueIdentifier>{687a9b55-8b62-4f40-a766-47865cfccc56}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="camera.h">
@@ -37,18 +46,6 @@
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
     <ClInclude Include="main.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="scene.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="scene2D.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="scene3D.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="sceneModel.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
     <ClInclude Include="billboard.h">
@@ -138,8 +135,38 @@
     <ClInclude Include="fade.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
+    <ClInclude Include="scene.h">
+      <Filter>ヘッダー ファイル\scene</Filter>
+    </ClInclude>
+    <ClInclude Include="scene2D.h">
+      <Filter>ヘッダー ファイル\scene</Filter>
+    </ClInclude>
+    <ClInclude Include="scene3D.h">
+      <Filter>ヘッダー ファイル\scene</Filter>
+    </ClInclude>
+    <ClInclude Include="sceneModel.h">
+      <Filter>ヘッダー ファイル\scene</Filter>
+    </ClInclude>
     <ClInclude Include="sceneModelFBX.h">
+      <Filter>ヘッダー ファイル\scene</Filter>
+    </ClInclude>
+    <ClInclude Include="targetPoint.h">
       <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="root.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="actionBase.h">
+      <Filter>ヘッダー ファイル\AI_Action</Filter>
+    </ClInclude>
+    <ClInclude Include="action.h">
+      <Filter>ヘッダー ファイル\AI_Action</Filter>
+    </ClInclude>
+    <ClInclude Include="moveToPos.h">
+      <Filter>ヘッダー ファイル\AI_Action</Filter>
+    </ClInclude>
+    <ClInclude Include="moveToPlayer.h">
+      <Filter>ヘッダー ファイル\AI_Action</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -244,6 +271,24 @@
     </ClCompile>
     <ClCompile Include="sceneModel.cpp">
       <Filter>ソース ファイル\scene</Filter>
+    </ClCompile>
+    <ClCompile Include="targetPoint.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="root.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="action.cpp">
+      <Filter>ソース ファイル\AI_Action</Filter>
+    </ClCompile>
+    <ClCompile Include="actionBase.cpp">
+      <Filter>ソース ファイル\AI_Action</Filter>
+    </ClCompile>
+    <ClCompile Include="moveToPos.cpp">
+      <Filter>ソース ファイル\AI_Action</Filter>
+    </ClCompile>
+    <ClCompile Include="moveToPlayer.cpp">
+      <Filter>ソース ファイル\AI_Action</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

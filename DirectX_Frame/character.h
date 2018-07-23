@@ -49,6 +49,7 @@ public:
 	void SetField(CField* field) { m_Field = field; }
 	void SetPos(D3DXVECTOR3 pos) { m_Pos = pos; }
 	D3DXVECTOR3 GetPos() { return m_Pos; }
+	void Rotate(D3DXVECTOR3 vec);
 	void Release();
 	static void ReleaseAll();
 	static CCharacter* GetCharacter(int id) { return m_Characters[id]; }
@@ -56,6 +57,7 @@ public:
 protected:
 	CSceneModel *m_Model;
 	D3DXVECTOR3 m_Pos;
+	D3DXVECTOR3 m_OldPos;
 	D3DXVECTOR3 m_Forward;
 	D3DXVECTOR3 m_Right;
 	D3DXVECTOR3 m_Up;

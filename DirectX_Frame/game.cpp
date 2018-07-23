@@ -24,6 +24,8 @@
 #include "result.h"
 #include "particle.h"
 #include "emitter.h"
+#include "action.h"
+#include "root.h"
 
 CBillBoard *CModeGame::tree1 = NULL;
 CBillBoard *CModeGame::tree2 = NULL;
@@ -31,9 +33,14 @@ CPlayer *CModeGame::player = NULL;
 CEnemy *CModeGame::enemy = NULL;
 CLight *CModeGame::m_Light;
 CParticleEmitter emitter;
+CParticleEmitter emitter2;
+CParticleEmitter emitter3;
 
 void CModeGame::Init()
 {
+	// ルートの設定
+	CRoot::Set();
+
 	// テクスチャの初期化
 	CTexture::Init();
 
@@ -45,14 +52,10 @@ void CModeGame::Init()
 	player->SetField(field);
 
 	// 敵
-	enemy = CEnemy::Create(MODEL_ID_XBOT, D3DXVECTOR3(0.0f, 0.0f, 5.0f));
-	enemy->SetField(field);
+	enemy = CEnemy::Create(MODEL_ID_XBOT, D3DXVECTOR3(7.0f, 0.0f, 5.0f), 1, field);
 
 	// 空
 	CSkyBox::Create(player);
-
-	CScene2D* test = CScene2D::Create(TEX_ID_CURSOR, 128, 128);
-	test->Set(D3DXVECTOR3(100.0f, 100.0f, 0.0f));
 
 	m_Light = CLight::Create(0);
 
@@ -72,6 +75,22 @@ void CModeGame::Init()
 		D3DXVECTOR3(0.0f, -0.0002f, 0.0f),
 		false);
 
+	// パーティクルエミッター
+	emitter2.Init(TEX_ID_STAR, 250, 2, 500, 0.2f, 0.001f,
+		D3DXVECTOR3(7.0f, 2.5f, 5.0f),
+		D3DXVECTOR3(-0.007f, -0.007f, -0.007f),
+		D3DXVECTOR3(0.007f, 0.007f, 0.007f),
+		D3DXVECTOR3(0.0f, 0.0f, 0.0f),
+		false);
+
+	// パーティクルエミッター
+	emitter3.Init(TEX_ID_STAR, 300, 2, 600, 0.1f, 0.002f,
+		D3DXVECTOR3(-9.0f, 4.0f, 5.0f),
+		D3DXVECTOR3(0.01f, 0.006f, -0.003f),
+		D3DXVECTOR3(0.016f, 0.0075f, 0.003f),
+		D3DXVECTOR3(0.0f, -0.0002f, 0.0f),
+		false);
+
 	// 数字
 	//CNumber::Init();
 }
@@ -79,6 +98,7 @@ void CModeGame::Init()
 void CModeGame::Uninit()
 {
 	CCharacter::ReleaseAll();
+	CActionBase::ReleaseAll();
 
 	//CNumber::Uninit();
 
@@ -97,6 +117,8 @@ void CModeGame::Uninit()
 void CModeGame::Update()
 {
 	emitter.Update();
+	emitter2.Update();
+	emitter3.Update();
 
 	CCharacter::UpdateAll();
 	CScene::UpdateAll();

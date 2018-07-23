@@ -17,6 +17,7 @@ typedef enum
 	MODEL_ID_SKYBOX,
 	MODEL_ID_SKYDOME,
 	MODEL_ID_PLAYER,
+	MODEL_ID_ENEMY01,
 	MODEL_ID_MAX,
 } MODEL_ID;
 
@@ -28,6 +29,7 @@ static const std::string MODEL_SOURCE[] =
 	"data/models/skybox.x",
 	"data/models/skydome.x",
 	"data/models/player.x",
+	"data/models/enemy01.x",
 };
 
 class CSceneModel : public CScene

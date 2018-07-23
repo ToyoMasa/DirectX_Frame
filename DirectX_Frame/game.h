@@ -18,6 +18,8 @@ public:
 	void Update();
 	void Draw();
 
+	static CPlayer* GetPlayer() { return player; }
+
 private:
 	static CBillBoard* tree1;
 	static CBillBoard* tree2;

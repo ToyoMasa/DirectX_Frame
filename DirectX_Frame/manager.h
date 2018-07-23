@@ -25,12 +25,13 @@ public:
 	static CInputKeyboard *GetInputKeyboard(void) { return m_InputKeyboard; }
 	static CInputMouse *GetInputMouse(void) { return m_InputMouse; }
 	static void SetMode(CMode* mode);
+	static CMode* GetMode() { return m_Mode; }
 
 private:
 	static CInputKeyboard	*m_InputKeyboard;	// キーボードへのポインタ
 	static CInputMouse		*m_InputMouse;		// マウスへのポインタ
 	static CLight			*m_Light;
-	static CMode	*m_Mode;
+	static CMode			*m_Mode;
 };
 
 #endif // !_MANAGER_H_
