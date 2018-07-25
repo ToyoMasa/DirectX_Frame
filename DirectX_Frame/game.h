@@ -10,7 +10,7 @@
 class CModeGame : public CMode
 {
 public:
-	CModeGame() {}
+	CModeGame() : CMode() {}
 	~CModeGame() {}
 
 	void Init();
@@ -19,13 +19,18 @@ public:
 	void Draw();
 
 	static CPlayer* GetPlayer() { return player; }
+	static void PlayerDied() { m_PlayerDied = true; }
+	static void TargetKilled();
 
 private:
 	static CBillBoard* tree1;
 	static CBillBoard* tree2;
 	static CPlayer* player;
-	static CEnemy* enemy;
+	static CEnemy* enemy[2];
+	static CEnemy* Target;
 	static CLight *m_Light;
+	static bool m_PlayerDied;
+	static bool m_TargetDied;
 
 };
 

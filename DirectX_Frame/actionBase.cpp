@@ -47,6 +47,7 @@ void CActionBase::Release()
 	{
 		if (m_ActionBase[i] == this)
 		{
+			m_ActionBase[i] = NULL;
 			delete this;
 			break;
 		}

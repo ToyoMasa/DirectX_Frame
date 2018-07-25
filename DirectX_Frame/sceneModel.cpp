@@ -168,7 +168,6 @@ void CSceneModel::Draw()
 		if (pMaterials[i].pTextureFilename != NULL)
 		{
 			pDevice->SetTexture(0, m_Texture[i]);
-			//this->m_Mesh->DrawSubset(i);
 		}
 		else
 		{

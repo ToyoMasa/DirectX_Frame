@@ -4,6 +4,9 @@
 #include "actionBase.h"
 #include "moveToPos.h"
 #include "moveToPlayer.h"
+#include "moveToRandom.h"
+#include "wait.h"
+#include "waitTime.h"
 #include "root.h"
 
 #endif // !_ACTION_H_

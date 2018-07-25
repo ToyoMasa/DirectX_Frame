@@ -17,6 +17,7 @@
 #include "input.h"
 #include "field.h"
 #include "enemy.h"
+#include "game.h"
 
 static const float VALUE_ROTATE_MOUSE = 0.003f;
 
@@ -167,6 +168,10 @@ void CPlayer::Attack()
 					CEnemy* enemy = (CEnemy*)obj;
 					if (isCollisionCapsule(m_AttackingCollsion, enemy->GetCapsule()))
 					{
+						if (enemy->GetEnemyType() == ENEMY_TYPE_TARGET)
+						{
+							CModeGame::TargetKilled();
+						}
 						enemy->Release();
 					}
 				}

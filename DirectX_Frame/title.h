@@ -10,7 +10,7 @@
 class CModeTitle : public CMode
 {
 public:
-	CModeTitle() {}
+	CModeTitle() : CMode() {}
 	~CModeTitle() {}
 
 	void Init();

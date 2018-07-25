@@ -14,6 +14,7 @@
 #include "player.h"
 #include "enemy.h"
 #include "game.h"
+#include "result.h"
 #include "input.h"
 #include "field.h"
 #include "actionBase.h"
@@ -26,8 +27,21 @@ void CEnemy::Init(int modelId, D3DXVECTOR3 spawnPos, int rootId, CField* field)
 	m_CapsuleCollision.Set(Point(m_Pos.x, m_Pos.y + 0.25f, m_Pos.z), Point(m_Pos.x, m_Pos.y + 1.0f, m_Pos.z), 0.25f);
 	m_Model->Move(m_Pos);
 	m_Field = field;
-
+	m_EnemyType = ENEMY_TYPE_PATROL;
 	m_Action = CActionMoveToPos::Create(this, rootId, 0.02f);
+}
+
+void CEnemy::Init(int modelId, D3DXVECTOR3 spawnPos, CActionBase* action, CField* field, ENEMY_TYPE type)
+{
+	m_Model = CSceneModel::Create(MODEL_SOURCE[modelId]);
+	m_Pos = spawnPos;
+	m_CapsuleCollision.Set(Point(m_Pos.x, m_Pos.y + 0.25f, m_Pos.z), Point(m_Pos.x, m_Pos.y + 1.0f, m_Pos.z), 0.25f);
+	m_Model->Move(m_Pos);
+	m_Field = field;
+	m_Action = action;
+	m_EnemyType = type;
+
+	m_Forward = D3DXVECTOR3(0.0f, 0.0f, -1.0f);
 }
 
 void CEnemy::Uninit()
@@ -82,6 +96,14 @@ CEnemy* CEnemy::Create(int modelId, D3DXVECTOR3 spawnPos, int rootId, CField* fi
 	return enemy;
 }
 
+CEnemy* CEnemy::Create(int modelId, D3DXVECTOR3 spawnPos, CActionBase* action, CField* field, ENEMY_TYPE type)
+{
+	CEnemy* enemy = new CEnemy();
+	enemy->Init(modelId, spawnPos, action, field, type);
+
+	return enemy;
+}
+
 void CEnemy::Search()
 {
 	if (!m_FindPlayer)
@@ -111,9 +133,9 @@ void CEnemy::Search()
 		// “G‚ÆƒvƒŒƒCƒ„[‚Ì‹——£
 		float len = D3DXVec3Length(&vec);
 
-		if (len > 6.0f)
+		if (len < 0.75f)
 		{
-
+			CModeGame::PlayerDied();
 		}
 	}
 }
@@ -122,7 +144,7 @@ void CEnemy::SetAction(CActionBase* action)
 {
 	if (m_Action != NULL)
 	{
-		delete m_Action;
+		m_Action->Release();
 	}
 	m_Action = action;
 }

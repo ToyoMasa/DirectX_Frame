@@ -22,6 +22,7 @@
 #include "number.h"
 #include "title.h"
 #include "game.h"
+#include "fade.h"
 
 //======================================================================
 //	Ã“Iƒƒ“ƒo•Ï”
@@ -108,6 +109,7 @@ void CManager::Update()
 	}
 
 	m_Mode->Update();
+
 }
 
 void CManager::Draw()

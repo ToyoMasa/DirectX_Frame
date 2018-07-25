@@ -26,15 +26,17 @@
 #include "emitter.h"
 #include "action.h"
 #include "root.h"
+#include "fade.h"
 
 CBillBoard *CModeGame::tree1 = NULL;
 CBillBoard *CModeGame::tree2 = NULL;
 CPlayer *CModeGame::player = NULL;
-CEnemy *CModeGame::enemy = NULL;
+CEnemy *CModeGame::enemy[2] = { NULL };
+CEnemy *CModeGame::Target = NULL;
 CLight *CModeGame::m_Light;
 CParticleEmitter emitter;
-CParticleEmitter emitter2;
-CParticleEmitter emitter3;
+bool CModeGame::m_PlayerDied = false;
+bool CModeGame::m_TargetDied = false;
 
 void CModeGame::Init()
 {
@@ -44,6 +46,10 @@ void CModeGame::Init()
 	// テクスチャの初期化
 	CTexture::Init();
 
+	// フェード
+	CFade::Init();
+	CFade::FadeIn();
+
 	// フィールド
 	CField* field = CField::Create(TEX_ID_FIELD001, 2.0f, 20, 20, true);
 
@@ -52,7 +58,10 @@ void CModeGame::Init()
 	player->SetField(field);
 
 	// 敵
-	enemy = CEnemy::Create(MODEL_ID_XBOT, D3DXVECTOR3(7.0f, 0.0f, 5.0f), 1, field);
+	enemy[0] = CEnemy::Create(MODEL_ID_ENEMY01, D3DXVECTOR3(7.0f, 0.0f, 5.0f), 1, field);
+	enemy[1] = CEnemy::Create(MODEL_ID_ENEMY01, D3DXVECTOR3(0.0f, 0.0f, -8.0f), 1, field);
+	enemy[1]->SetAction(CActionMoveToRandom::Create(enemy[1], 3.0f, 3.5f, 0.02f));
+	Target = CEnemy::Create(MODEL_ID_TARGET, D3DXVECTOR3(0.0f, 0.0f, 8.0f), CActionWait::Create(Target), field, ENEMY_TYPE_TARGET);
 
 	// 空
 	CSkyBox::Create(player);
@@ -75,24 +84,11 @@ void CModeGame::Init()
 		D3DXVECTOR3(0.0f, -0.0002f, 0.0f),
 		false);
 
-	// パーティクルエミッター
-	emitter2.Init(TEX_ID_STAR, 250, 2, 500, 0.2f, 0.001f,
-		D3DXVECTOR3(7.0f, 2.5f, 5.0f),
-		D3DXVECTOR3(-0.007f, -0.007f, -0.007f),
-		D3DXVECTOR3(0.007f, 0.007f, 0.007f),
-		D3DXVECTOR3(0.0f, 0.0f, 0.0f),
-		false);
-
-	// パーティクルエミッター
-	emitter3.Init(TEX_ID_STAR, 300, 2, 600, 0.1f, 0.002f,
-		D3DXVECTOR3(-9.0f, 4.0f, 5.0f),
-		D3DXVECTOR3(0.01f, 0.006f, -0.003f),
-		D3DXVECTOR3(0.016f, 0.0075f, 0.003f),
-		D3DXVECTOR3(0.0f, -0.0002f, 0.0f),
-		false);
-
 	// 数字
 	//CNumber::Init();
+
+	m_PlayerDied = false;
+	m_TargetDied = false;
 }
 
 void CModeGame::Uninit()
@@ -110,15 +106,17 @@ void CModeGame::Uninit()
 
 	CBillBoard::Uninit();
 
+	CFade::Uninit();
+
 	// 全てのテクスチャの解放
 	CTexture::ReleaseAll();
 }
 
 void CModeGame::Update()
 {
+	CFade::Update();
+
 	emitter.Update();
-	emitter2.Update();
-	emitter3.Update();
 
 	CCharacter::UpdateAll();
 	CScene::UpdateAll();
@@ -137,6 +135,16 @@ void CModeGame::Update()
 	mouseX = (float)inputMouse->GetAxisX();
 	mouseY = (float)inputMouse->GetAxisY();
 	mouseZ = (float)inputMouse->GetAxisZ();
+
+	if (m_TargetDied)
+	{
+		CManager::SetMode(new CModeResult());
+	}
+
+	if (m_PlayerDied)
+	{
+		CManager::SetMode(new CModeResult());
+	}
 }
 
 void CModeGame::Draw()
@@ -145,6 +153,8 @@ void CModeGame::Draw()
 
 	CBillBoard::DrawAll(player->GetCamera());
 
+	//CFade::Draw();
+
 	// デバッグ用imguiウィンドウの描画
 #if defined(_DEBUG) || defined(DEBUG)
 	CImGui::BeginDraw();
@@ -152,12 +162,13 @@ void CModeGame::Draw()
 	D3DXVECTOR3 pos = player->GetPos();
 	ImGui::Begin("Debug Window", 0);
 	ImGui::Text("X = %.2f Y = %.2f Z = %.2f", pos.x, pos.y, pos.z);
-	if (isCollisionCapsule(player->GetCapsule(), enemy->GetCapsule()))
-	{
-		ImGui::Text("Hit");
-	}
 	ImGui::End();
 
 	CImGui::EndDraw();
 #endif
+}
+
+void CModeGame::TargetKilled()
+{
+	m_TargetDied = true;
 }

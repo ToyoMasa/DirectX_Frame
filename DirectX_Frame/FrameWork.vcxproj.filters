@@ -168,6 +168,15 @@
     <ClInclude Include="moveToPlayer.h">
       <Filter>ヘッダー ファイル\AI_Action</Filter>
     </ClInclude>
+    <ClInclude Include="wait.h">
+      <Filter>ヘッダー ファイル\AI_Action</Filter>
+    </ClInclude>
+    <ClInclude Include="moveToRandom.h">
+      <Filter>ヘッダー ファイル\AI_Action</Filter>
+    </ClInclude>
+    <ClInclude Include="waitTime.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="class.cpp">
@@ -288,6 +297,15 @@
       <Filter>ソース ファイル\AI_Action</Filter>
     </ClCompile>
     <ClCompile Include="moveToPlayer.cpp">
+      <Filter>ソース ファイル\AI_Action</Filter>
+    </ClCompile>
+    <ClCompile Include="wait.cpp">
+      <Filter>ソース ファイル\AI_Action</Filter>
+    </ClCompile>
+    <ClCompile Include="moveToRandom.cpp">
+      <Filter>ソース ファイル\AI_Action</Filter>
+    </ClCompile>
+    <ClCompile Include="waitTime.cpp">
       <Filter>ソース ファイル\AI_Action</Filter>
     </ClCompile>
   </ItemGroup>

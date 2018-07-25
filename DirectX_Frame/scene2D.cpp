@@ -65,7 +65,7 @@ void CScene2D::Draw()
 	vertex[0].color =
 		vertex[1].color =
 		vertex[2].color =
-		vertex[3].color = 0xffffffff;
+		vertex[3].color = m_Color;
 
 	pDevice->SetTexture(0, CTexture::GetTexture(m_TexId));
 	pDevice->SetFVF(FVF_VERTEX_2D);

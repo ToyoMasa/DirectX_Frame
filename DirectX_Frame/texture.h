@@ -21,6 +21,7 @@ typedef enum
 	TEX_ID_CIRCLE,					// 丸いパーティクル
 	TEX_ID_STAR,					// 星
 	TEX_ID_ATTACK,					// 攻撃可能テキスト
+	TEX_ID_BLACK,					// フェード
 	TEX_ID_MAX,
 } TEXTURE_ID;
 
@@ -37,6 +38,7 @@ static const std::string TEXTURE_SOURCE[] =
 	"data/textures/circle.jpg",
 	"data/textures/star.png",
 	"data/textures/attack.png",
+	"data/textures/black.png",
 };
 
 // テクスチャがロードされているか検索するためのマップ
