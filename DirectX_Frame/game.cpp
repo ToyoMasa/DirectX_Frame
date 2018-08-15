@@ -27,6 +27,7 @@
 #include "action.h"
 #include "root.h"
 #include "fade.h"
+#include "Effekseer.h"
 
 CBillBoard *CModeGame::tree1 = NULL;
 CBillBoard *CModeGame::tree2 = NULL;
@@ -89,6 +90,13 @@ void CModeGame::Init()
 
 	m_PlayerDied = false;
 	m_TargetDied = false;
+
+	CEffekseer* effect = CEffekseer::Create(CEffekseer::Effect_SpawnAvatar, player->GetCamera());
+	effect->RepeatEffect(true);
+	effect->SetScale(0.5f, 0.5f, 0.5f);
+	effect->SetPosition(0.0f, 2.0f, 0.0f);
+	effect->Play();
+	effect->SetVisible(true);
 }
 
 void CModeGame::Uninit()

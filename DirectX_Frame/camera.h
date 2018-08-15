@@ -35,6 +35,7 @@ public:
 	void Move(float horizontal, float vertical);
 	void Rotation(float horizontal, float vertical);
 	D3DXMATRIX GetView();
+	D3DXMATRIX GetProjection() { return m_Projection; }
 	D3DXVECTOR3 GetFront() { return m_Front; }
 	D3DXVECTOR3 GetRight() { return m_Right; }
 	D3DXVECTOR3 GetUp() { return m_Up; }

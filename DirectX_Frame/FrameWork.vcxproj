@@ -71,7 +71,7 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>true</LinkIncremental>
-    <IncludePath>$(DXSDK_DIR)include;$(IncludePath)</IncludePath>
+    <IncludePath>$(DXSDK_DIR)include;D:\DirectX\Include;$(IncludePath)</IncludePath>
     <LibraryPath>C:\Program Files\Autodesk\FBX\FBX SDK\2019.0\lib\vs2015\x86\debug;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -79,7 +79,7 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
-    <IncludePath>$(DXSDK_DIR)include;$(IncludePath)</IncludePath>
+    <IncludePath>$(DXSDK_DIR)include;D:\DirectX\Include;$(IncludePath)</IncludePath>
     <LibraryPath>C:\Program Files\Autodesk\FBX\FBX SDK\2019.0\lib\vs2015\x86\release;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -101,7 +101,7 @@
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalLibraryDirectories>D:\DirectX\Lib\x86;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>winmm.lib;d3d9.lib;d3dx9d.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>winmm.lib;d3d9.lib;d3dx9d.lib;Effekseer.Debug.lib;EffekseerRendererDX9.Debug.lib;EffekseerSoundXAudio2.Debug.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -137,7 +137,7 @@
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalLibraryDirectories>D:\DirectX\Lib\x86;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>winmm.lib;d3d9.lib;d3dx9.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>winmm.lib;d3d9.lib;d3dx9.lib;Effekseer.Release.lib;EffekseerRendererDX9.Release.lib;EffekseerSoundXAudio2.Release.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -169,6 +169,7 @@
     <ClInclude Include="collision.h" />
     <ClInclude Include="common.h" />
     <ClInclude Include="controller.h" />
+    <ClInclude Include="Effekseer.h" />
     <ClInclude Include="emitter.h" />
     <ClInclude Include="enemy.h" />
     <ClInclude Include="fade.h" />
@@ -198,6 +199,7 @@
     <ClInclude Include="scene3D.h" />
     <ClInclude Include="sceneModel.h" />
     <ClInclude Include="sceneModelFBX.h" />
+    <ClInclude Include="shader.h" />
     <ClInclude Include="skybox.h" />
     <ClInclude Include="stb_rect_pack.h" />
     <ClInclude Include="stb_textedit.h" />
@@ -218,6 +220,7 @@
     <ClCompile Include="class.cpp" />
     <ClCompile Include="collision.cpp" />
     <ClCompile Include="controller.cpp" />
+    <ClCompile Include="Effekseer.cpp" />
     <ClCompile Include="emitter.cpp" />
     <ClCompile Include="enemy.cpp" />
     <ClCompile Include="fade.cpp" />
@@ -246,12 +249,21 @@
     <ClCompile Include="scene3D.cpp" />
     <ClCompile Include="sceneModel.cpp" />
     <ClCompile Include="sceneModelFBX.cpp" />
+    <ClCompile Include="shader.cpp" />
     <ClCompile Include="skybox.cpp" />
     <ClCompile Include="targetPoint.cpp" />
     <ClCompile Include="texture.cpp" />
     <ClCompile Include="title.cpp" />
     <ClCompile Include="wait.cpp" />
     <ClCompile Include="waitTime.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <FxCompile Include="shader.fx">
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Effect</ShaderType>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">2.0</ShaderModel>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Effect</ShaderType>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">2.0</ShaderModel>
+    </FxCompile>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
