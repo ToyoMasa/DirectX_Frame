@@ -58,7 +58,7 @@ typedef enum
 // モデル読み込み用のソース
 static const std::string FBX_MODEL_SOURCE[] =
 {
-	"data/models/xbot.fbx",
+	"data/models/Running.fbx",
 };
 
 class CSceneModelFBX : public CScene
@@ -129,7 +129,7 @@ private:
 	VERTEX*			m_Vertex;		// 頂点バッファ	
 	int				m_VertexCount;	// 頂点数
 	int				m_IndexCount;	// インデックスバッファ数
-	int*			m_Index;		// インデックスバッファ
+	DWORD*			m_Index;		// インデックスバッファ
 	UvSet			m_UVset;		// UV
 	ColorRGBA*		m_VertexColor;	// 頂点カラー
 };

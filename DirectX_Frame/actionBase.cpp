@@ -25,8 +25,11 @@ CActionBase::CActionBase(CCharacter* chara)
 
 	for (int i = 0; i < ACTION_MAX; i++)
 	{
-		m_ActionBase[i] = this;
-		break;
+		if (m_ActionBase[i] == NULL)
+		{
+			m_ActionBase[i] = this;
+			break;
+		}
 	}
 }
 

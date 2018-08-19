@@ -199,7 +199,10 @@
     <ClInclude Include="scene3D.h" />
     <ClInclude Include="sceneModel.h" />
     <ClInclude Include="sceneModelFBX.h" />
+    <ClInclude Include="sceneSkinMesh.h" />
     <ClInclude Include="shader.h" />
+    <ClInclude Include="SkinMeshData.h" />
+    <ClInclude Include="SkinMeshFile.h" />
     <ClInclude Include="skybox.h" />
     <ClInclude Include="stb_rect_pack.h" />
     <ClInclude Include="stb_textedit.h" />
@@ -249,7 +252,10 @@
     <ClCompile Include="scene3D.cpp" />
     <ClCompile Include="sceneModel.cpp" />
     <ClCompile Include="sceneModelFBX.cpp" />
+    <ClCompile Include="sceneSkinMesh.cpp" />
     <ClCompile Include="shader.cpp" />
+    <ClCompile Include="SkinMeshData.cpp" />
+    <ClCompile Include="SkinMeshFile.cpp" />
     <ClCompile Include="skybox.cpp" />
     <ClCompile Include="targetPoint.cpp" />
     <ClCompile Include="texture.cpp" />

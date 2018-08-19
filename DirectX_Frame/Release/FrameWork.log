@@ -1,0 +1,45 @@
+﻿  SkinMeshData.cpp
+SkinMeshData.cpp(11): warning C4316: 'FrameData': ヒープで割り当てられたオブジェクトが 16 にアラインメントされていない可能性があります
+SkinMeshData.cpp(83): warning C4018: '<': signed と unsigned の数値を比較しようとしました。
+SkinMeshData.cpp(212): warning C4018: '<': signed と unsigned の数値を比較しようとしました。
+  SkinMeshFile.cpp
+SkinMeshFile.cpp(45): warning C4018: '<': signed と unsigned の数値を比較しようとしました。
+SkinMeshFile.cpp(207): warning C4018: '<': signed と unsigned の数値を比較しようとしました。
+  action.cpp
+d:\old ファイル\school\school\3年\gm31\frameworkrepo\trunk\directx_frame\billboard.h(18): warning C4091: 'typedef ': 変数が何も宣言されていないときは、'DRAW_TYPE' の左辺を無視します。
+  actionBase.cpp
+d:\old ファイル\school\school\3年\gm31\frameworkrepo\trunk\directx_frame\billboard.h(18): warning C4091: 'typedef ': 変数が何も宣言されていないときは、'DRAW_TYPE' の左辺を無視します。
+  character.cpp
+d:\old ファイル\school\school\3年\gm31\frameworkrepo\trunk\directx_frame\billboard.h(18): warning C4091: 'typedef ': 変数が何も宣言されていないときは、'DRAW_TYPE' の左辺を無視します。
+  enemy.cpp
+d:\old ファイル\school\school\3年\gm31\frameworkrepo\trunk\directx_frame\billboard.h(18): warning C4091: 'typedef ': 変数が何も宣言されていないときは、'DRAW_TYPE' の左辺を無視します。
+  game.cpp
+d:\old ファイル\school\school\3年\gm31\frameworkrepo\trunk\directx_frame\billboard.h(18): warning C4091: 'typedef ': 変数が何も宣言されていないときは、'DRAW_TYPE' の左辺を無視します。
+  main.cpp
+  manager.cpp
+d:\old ファイル\school\school\3年\gm31\frameworkrepo\trunk\directx_frame\billboard.h(18): warning C4091: 'typedef ': 変数が何も宣言されていないときは、'DRAW_TYPE' の左辺を無視します。
+  moveToPlayer.cpp
+d:\old ファイル\school\school\3年\gm31\frameworkrepo\trunk\directx_frame\billboard.h(18): warning C4091: 'typedef ': 変数が何も宣言されていないときは、'DRAW_TYPE' の左辺を無視します。
+  moveToPos.cpp
+d:\old ファイル\school\school\3年\gm31\frameworkrepo\trunk\directx_frame\billboard.h(18): warning C4091: 'typedef ': 変数が何も宣言されていないときは、'DRAW_TYPE' の左辺を無視します。
+  moveToRandom.cpp
+d:\old ファイル\school\school\3年\gm31\frameworkrepo\trunk\directx_frame\billboard.h(18): warning C4091: 'typedef ': 変数が何も宣言されていないときは、'DRAW_TYPE' の左辺を無視します。
+  player.cpp
+d:\old ファイル\school\school\3年\gm31\frameworkrepo\trunk\directx_frame\billboard.h(18): warning C4091: 'typedef ': 変数が何も宣言されていないときは、'DRAW_TYPE' の左辺を無視します。
+  result.cpp
+d:\old ファイル\school\school\3年\gm31\frameworkrepo\trunk\directx_frame\billboard.h(18): warning C4091: 'typedef ': 変数が何も宣言されていないときは、'DRAW_TYPE' の左辺を無視します。
+  sceneSkinMesh.cpp
+  skybox.cpp
+  title.cpp
+d:\old ファイル\school\school\3年\gm31\frameworkrepo\trunk\directx_frame\billboard.h(18): warning C4091: 'typedef ': 変数が何も宣言されていないときは、'DRAW_TYPE' の左辺を無視します。
+  wait.cpp
+d:\old ファイル\school\school\3年\gm31\frameworkrepo\trunk\directx_frame\billboard.h(18): warning C4091: 'typedef ': 変数が何も宣言されていないときは、'DRAW_TYPE' の左辺を無視します。
+  waitTime.cpp
+d:\old ファイル\school\school\3年\gm31\frameworkrepo\trunk\directx_frame\billboard.h(18): warning C4091: 'typedef ': 変数が何も宣言されていないときは、'DRAW_TYPE' の左辺を無視します。
+  コード生成しています。
+  502 of 5085 functions ( 9.9%) were compiled, the rest were copied from previous compilation.
+    0 functions were new in current compilation
+    8 functions had inline decision re-evaluated but remain unchanged
+  コード生成が終了しました。
+  FrameWork.vcxproj -> D:\Old ファイル\school\school\3年\GM31\FrameWorkRepo\trunk\DirectX_Frame\Release\FrameWork.exe
+  FrameWork.vcxproj -> D:\Old ファイル\school\school\3年\GM31\FrameWorkRepo\trunk\DirectX_Frame\Release\FrameWork.pdb (Full PDB)

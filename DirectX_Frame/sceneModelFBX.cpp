@@ -288,7 +288,7 @@ void CSceneModelFBX::GetPosition(FbxMesh* mesh)
 	}
 
 	// インデックスバッファのハードコピー
-	m_Index = new int[m_IndexCount];
+	m_Index = new DWORD[m_IndexCount];
 	for (int i = 0; m_IndexCount > i; i++)
 	{
 		m_Index[i] = index[i];

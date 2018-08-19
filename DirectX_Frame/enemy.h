@@ -19,6 +19,7 @@ public:
 	{
 		m_Type = CHARACTER_ENEMY;
 		m_FindPlayer = false;
+		m_Action = NULL;
 	}
 	~CEnemy() {}
 

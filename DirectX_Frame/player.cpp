@@ -25,6 +25,7 @@ void CPlayer::Init(int modelId, D3DXVECTOR3 spawnPos)
 {
 	m_Model = CSceneModel::Create(MODEL_SOURCE[modelId]);
 	//m_FBX = CSceneModelFBX::Create(FBX_MODEL_SOURCE[FBX_ID_XBOT]);
+	m_SkinMesh = CSceneSkinMesh::Create("data/models/test.x");
 	m_Pos = spawnPos;
 	m_Model->Move(m_Pos);
 	m_Camera = CCamera::Create(D3DXVECTOR3(0.0f, 1.5f, -2.0f), m_Pos);
@@ -36,8 +37,19 @@ void CPlayer::Init(int modelId, D3DXVECTOR3 spawnPos)
 
 void CPlayer::Uninit()
 {
-	m_Camera->Release();
-	m_Model->Release();
+	if (m_Camera)
+	{
+		m_Camera->Release();
+	}
+	if (m_SkinMesh)
+	{
+		m_SkinMesh->Release();
+	}
+	if (m_Model)
+	{
+		m_Model->Release();
+	}
+	//m_FBX->Release();
 }
 
 void CPlayer::Update()
@@ -126,6 +138,7 @@ void CPlayer::Update()
 	}
 
 	m_Model->Move(m_Pos);
+	//m_SkinMesh->Move(m_Pos);
 	// “–‚½‚è”»’è‚ÌˆÚ“®
 	m_CapsuleCollision.Set(Point(m_Pos.x, m_Pos.y + 0.25f, m_Pos.z), Point(m_Pos.x, m_Pos.y + 1.0f, m_Pos.z), 0.25f);
 	D3DXVECTOR3 attackPos = m_Pos + m_Forward * 0.5f;

@@ -31,6 +31,12 @@
     <Filter Include="ソース ファイル\AI_Action">
       <UniqueIdentifier>{687a9b55-8b62-4f40-a766-47865cfccc56}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ソース ファイル\SkinMesh">
+      <UniqueIdentifier>{857fa635-f252-4646-85d8-3202f55e76d5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ヘッダー ファイル\SkinMesh">
+      <UniqueIdentifier>{748502fd-c1bc-4fe1-9fb0-da046146a94f}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="camera.h">
@@ -183,6 +189,15 @@
     <ClInclude Include="Effekseer.h">
       <Filter>ヘッダー ファイル\scene</Filter>
     </ClInclude>
+    <ClInclude Include="SkinMeshData.h">
+      <Filter>ヘッダー ファイル\SkinMesh</Filter>
+    </ClInclude>
+    <ClInclude Include="SkinMeshFile.h">
+      <Filter>ヘッダー ファイル\SkinMesh</Filter>
+    </ClInclude>
+    <ClInclude Include="sceneSkinMesh.h">
+      <Filter>ヘッダー ファイル\scene</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="class.cpp">
@@ -318,6 +333,15 @@
       <Filter>ソース ファイル</Filter>
     </ClCompile>
     <ClCompile Include="Effekseer.cpp">
+      <Filter>ソース ファイル\scene</Filter>
+    </ClCompile>
+    <ClCompile Include="SkinMeshData.cpp">
+      <Filter>ソース ファイル\SkinMesh</Filter>
+    </ClCompile>
+    <ClCompile Include="SkinMeshFile.cpp">
+      <Filter>ソース ファイル\SkinMesh</Filter>
+    </ClCompile>
+    <ClCompile Include="sceneSkinMesh.cpp">
       <Filter>ソース ファイル\scene</Filter>
     </ClCompile>
   </ItemGroup>

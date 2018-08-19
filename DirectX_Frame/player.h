@@ -2,6 +2,7 @@
 #define _PLAYER_H_
 
 #include "character.h"
+#include "sceneSkinMesh.h"
 static const float PLAYER_MOVE_SPEED = 0.03f;
 
 class CScene2D;
@@ -31,6 +32,7 @@ private:
 	CCamera* m_Camera;
 	float m_CameraLength;
 	CSceneModelFBX* m_FBX;
+	CSceneSkinMesh* m_SkinMesh;
 	CScene2D* m_Text_Attack;
 	Capsule m_AttackingCollsion;
 };

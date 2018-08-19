@@ -9,6 +9,7 @@
 #include "scene2D.h"
 #include "scene3D.h"
 #include "sceneModel.h"
+#include "SkinMeshFile.h"
 #include "camera.h"
 #include "light.h"
 #include "manager.h"
@@ -102,11 +103,12 @@ void CModeGame::Init()
 void CModeGame::Uninit()
 {
 	CCharacter::ReleaseAll();
-	CActionBase::ReleaseAll();
 
 	//CNumber::Uninit();
 
 	CScene::ReleaseAll();
+
+	CActionBase::ReleaseAll();
 
 	CParticle::ReleaseAll();
 

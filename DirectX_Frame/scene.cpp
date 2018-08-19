@@ -32,8 +32,8 @@ void CScene::Release()
 		{
 			if (m_Scene[j][i] == this)
 			{
-				m_Scene[j][i] = NULL;
 				Uninit();
+				m_Scene[j][i] = NULL;
 				delete this;
 				break;
 			}
