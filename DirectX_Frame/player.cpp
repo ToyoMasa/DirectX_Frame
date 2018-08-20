@@ -25,7 +25,7 @@ void CPlayer::Init(int modelId, D3DXVECTOR3 spawnPos)
 {
 	m_Model = CSceneModel::Create(MODEL_SOURCE[modelId]);
 	//m_FBX = CSceneModelFBX::Create(FBX_MODEL_SOURCE[FBX_ID_XBOT]);
-	m_SkinMesh = CSceneSkinMesh::Create("data/models/test.x");
+	m_SkinMesh = CSceneSkinMesh::Create("data/models/run.x");
 	m_Pos = spawnPos;
 	m_Model->Move(m_Pos);
 	m_Camera = CCamera::Create(D3DXVECTOR3(0.0f, 1.5f, -2.0f), m_Pos);

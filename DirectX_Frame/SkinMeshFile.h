@@ -7,6 +7,8 @@
 
 #include "SkinMeshData.h"
 
+static const int MAX_ANIMATION = 20;
+
 // 階層付きXFile
 class SkinMeshFile
 {
@@ -169,7 +171,7 @@ private:
 	// 現在のトラック
 
 	// アニメーション
-	LPD3DXANIMATIONSET m_AnimSet[20];
+	LPD3DXANIMATIONSET m_AnimSet[MAX_ANIMATION];
 	//現在のアニメーション
 	DWORD m_CurrentAnim;
 	//現在のアニメーションデータトラック

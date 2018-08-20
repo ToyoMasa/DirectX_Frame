@@ -3,8 +3,6 @@
 #include "main.h"
 #include "SkinMeshFile.h"
 
-extern std::map<std::string, LPDIRECT3DTEXTURE9> g_TextureList;
-
 SkinMeshFile::~SkinMeshFile()
 {
 	if (m_SkinMeshData != NULL)
@@ -16,7 +14,7 @@ SkinMeshFile::~SkinMeshFile()
 	{
 		m_AnimController->Release();
 	}
-	for (int i = 0; i < 20; i++)
+	for (int i = 0; i < MAX_ANIMATION; i++)
 	{
 		if (m_AnimSet[i] != NULL)
 		{

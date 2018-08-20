@@ -3,8 +3,6 @@
 #include <map>
 #include "SkinMeshData.h"
 
-//std::map<std::string, LPDIRECT3DTEXTURE9> g_TextureList;
-
 HRESULT SkinMeshData::CreateFrame(THIS_ LPCSTR name, LPD3DXFRAME *new_frame)
 {
 	// 自作フレームの作成
@@ -64,9 +62,6 @@ HRESULT SkinMeshData::CreateMeshContainer(
 	container->MeshData.pMesh = mesh;
 	container->MeshData.Type = D3DXMESHTYPE_MESH;
 
-	// 参照カウンタを加算する
-	mesh->AddRef();
-
 	// 隣接ポリゴン番号のコピー
 	container->pAdjacency = new DWORD[porigon_num * 3];
 	memcpy(container->pAdjacency, adjacency, sizeof(DWORD) * porigon_num * 3);
@@ -84,8 +79,6 @@ HRESULT SkinMeshData::CreateMeshContainer(
 		{
 			if (container->pMaterials[i].pTextureFilename != NULL)
 			{
-				/*if (g_TextureList[container->pMaterials[i].pTextureFilename] == NULL)
-				{*/
 				LPDIRECT3DTEXTURE9 texture;
 
 				// 追加
@@ -98,13 +91,8 @@ HRESULT SkinMeshData::CreateMeshContainer(
 					filename,
 					&texture)))
 				{
-					//g_TextureList[container->pMaterials[i].pTextureFilename] = texture;
 					container->m_TextureList[i] = texture;
 				}
-				//}
-				//else {
-				//	container->m_TextureList[i] = g_TextureList[container->pMaterials[i].pTextureFilename];
-				//}
 			}
 			else {
 				container->m_TextureList[i] = NULL;
@@ -171,18 +159,22 @@ HRESULT SkinMeshData::DestroyFrame(THIS_ LPD3DXFRAME frame)
 		{
 			DestroyMeshContainer(frame->pMeshContainer);
 		}
+		
 		if (frame->Name != NULL)
 		{
 			delete[](frame->Name);
 		}
+
 		if (frame->pFrameSibling != NULL)
 		{
 			DestroyFrame(frame->pFrameSibling);
 		}
+
 		if (frame->pFrameFirstChild != NULL)
 		{
 			DestroyFrame(frame->pFrameFirstChild);
 		}
+
 		delete(frame);
 	}
 	return S_OK;
@@ -220,6 +212,16 @@ HRESULT SkinMeshData::DestroyMeshContainer(THIS_ LPD3DXMESHCONTAINER base)
 		delete[](container->m_TextureList);
 	}
 
+	if (container->pSkinInfo != NULL)
+	{
+		container->pSkinInfo->Release();
+	}
+
+	if (container->m_BoneBuffer != NULL)
+	{
+		container->m_BoneBuffer->Release();
+	}
+
 	if (container->m_BoneMatrix != NULL)
 	{
 		delete[](container->m_BoneMatrix);
@@ -233,6 +235,7 @@ HRESULT SkinMeshData::DestroyMeshContainer(THIS_ LPD3DXMESHCONTAINER base)
 	if (container->MeshData.pMesh != NULL)
 	{
 		container->MeshData.pMesh->Release();
+		container->MeshData.pMesh = NULL;
 	}
 
 	delete(container);
