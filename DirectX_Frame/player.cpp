@@ -25,7 +25,7 @@ static const float VALUE_ROTATE_MOUSE = 0.003f;
 void CPlayer::Init(int modelId, D3DXVECTOR3 spawnPos)
 {
 	m_Model = CSceneSkinMesh::Create("data/models/running.x");
-	m_Model->ChangeAnim(PLAYER_IDLE);
+	m_Model->ChangeAnim(PLAYER_IDLE, 0.0f);
 
 	m_Pos = spawnPos;
 	m_Model->Move(m_Pos);
@@ -84,65 +84,68 @@ void CPlayer::Update()
 		moveZ = -1.0f;
 	}
 
-	{// 移動・回転
-		D3DXVECTOR3 cameraFront = m_Camera->GetFront();
-		D3DXVECTOR3 cameraRight = m_Camera->GetRight();
-		D3DXVECTOR3 newPos = m_Pos;
-		D3DXVECTOR3 moveVec = { moveX, 0.0f, moveZ };
-		
-		D3DXVec3Normalize(&moveVec, &moveVec);
+	if (!m_Model->GetPlayMontage())
+	{
+		{// 移動・回転
+			D3DXVECTOR3 cameraFront = m_Camera->GetFront();
+			D3DXVECTOR3 cameraRight = m_Camera->GetRight();
+			D3DXVECTOR3 newPos = m_Pos;
+			D3DXVECTOR3 moveVec = { moveX, 0.0f, moveZ };
 
-		// 前方向ベクトルを地面と平行に正規化
-		cameraFront.y = 0;
-		D3DXVec3Normalize(&cameraFront, &cameraFront);
+			D3DXVec3Normalize(&moveVec, &moveVec);
 
-		newPos += cameraFront * PLAYER_MOVE_SPEED * moveVec.z;
-		newPos += cameraRight * PLAYER_MOVE_SPEED * moveVec.x;
-		newPos.y = m_Field->GetHeight(newPos);
+			// 前方向ベクトルを地面と平行に正規化
+			cameraFront.y = 0;
+			D3DXVec3Normalize(&cameraFront, &cameraFront);
 
-		// コリジョンの計算
-		m_CapsuleCollision.Set(Point(newPos.x, newPos.y + 0.25f, newPos.z), Point(newPos.x, newPos.y + 1.0f, newPos.z), 0.25f);
-		for (int i = 0; i < CHARACTER_MAX; i++)
-		{
-			CCharacter* obj = CCharacter::GetCharacter(i);
-			if (obj != NULL)
+			newPos += cameraFront * PLAYER_MOVE_SPEED * moveVec.z;
+			newPos += cameraRight * PLAYER_MOVE_SPEED * moveVec.x;
+			newPos.y = m_Field->GetHeight(newPos);
+
+			// コリジョンの計算
+			m_CapsuleCollision.Set(Point(newPos.x, newPos.y + 0.25f, newPos.z), Point(newPos.x, newPos.y + 1.0f, newPos.z), 0.25f);
+			for (int i = 0; i < CHARACTER_MAX; i++)
 			{
-				if (obj->GetType() == CHARACTER_ENEMY)
+				CCharacter* obj = CCharacter::GetCharacter(i);
+				if (obj != NULL)
 				{
-					CEnemy* enemy = (CEnemy*)obj;
-					if (isCollisionCapsule(m_CapsuleCollision, enemy->GetCapsule()))
+					if (obj->GetType() == CHARACTER_ENEMY)
 					{
-						D3DXVECTOR3 vec = newPos - enemy->GetPos();
-						D3DXVec3Normalize(&vec, &vec);
+						CEnemy* enemy = (CEnemy*)obj;
+						if (isCollisionCapsule(m_CapsuleCollision, enemy->GetCapsule()))
+						{
+							D3DXVECTOR3 vec = newPos - enemy->GetPos();
+							D3DXVec3Normalize(&vec, &vec);
 
-						newPos = enemy->GetPos();
-						newPos += vec * 0.5f;
-					}
+							newPos = enemy->GetPos();
+							newPos += vec * 0.5f;
+						}
 
-					if (isCollisionCapsule(m_AttackingCollsion, enemy->GetCapsule()) && !m_Text_Attack->GetVisible())
-					{
-						m_Text_Attack->SetVisible(true);
+						if (isCollisionCapsule(m_AttackingCollsion, enemy->GetCapsule()) && !m_Text_Attack->GetVisible())
+						{
+							m_Text_Attack->SetVisible(true);
+						}
 					}
 				}
 			}
+
+			if (moveX != 0 || moveZ != 0)
+			{
+				Rotate(newPos - m_Pos);
+			}
+			m_Camera->Move(newPos - m_Pos);
+			SetPos(newPos);
+
 		}
 
 		if (moveX != 0 || moveZ != 0)
 		{
-			Rotate(newPos - m_Pos);
+			m_Model->ChangeAnim(PLAYER_RUNNING, 0.3f);
 		}
-		m_Camera->Move(newPos - m_Pos);
-		SetPos(newPos);
-
-	}
-
-	if (moveX != 0 || moveZ != 0)
-	{
-		m_Model->ChangeAnim(PLAYER_RUNNING);
-	}
-	else
-	{
-		m_Model->ChangeAnim(PLAYER_IDLE);
+		else
+		{
+			m_Model->ChangeAnim(PLAYER_IDLE, 0.3f);
+		}
 	}
 
 	m_Model->Move(m_Pos);
@@ -178,6 +181,8 @@ CPlayer* CPlayer::Create(int modelId, D3DXVECTOR3 spawnPos)
 
 void CPlayer::Attack()
 {
+	m_Model->PlayMontage(PLAYER_STAB, 0.2f, 3.3f, PLAYER_IDLE, 2.5f);
+
 	if (m_Text_Attack->GetVisible())
 	{
 		for (int i = 0; i < CHARACTER_MAX; i++)

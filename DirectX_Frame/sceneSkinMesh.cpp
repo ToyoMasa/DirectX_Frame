@@ -92,13 +92,24 @@ CSceneSkinMesh* CSceneSkinMesh::Create(const std::string& modelName)
 	return skinMesh;
 }
 
-void CSceneSkinMesh::ChangeAnim(UINT animID)
+void CSceneSkinMesh::ChangeAnim(UINT animID, float shiftTime)
 {
-	m_SkinMeshFile->ChangeAnim(animID);
+	m_SkinMeshFile->ChangeAnim(animID, shiftTime);
 	m_AnimPlaySpeed = m_DefAnimSpeed;
 }
 
 bool CSceneSkinMesh::SetLoopTime(FLOAT time)
 {
 	return m_SkinMeshFile->SetLoopTime(m_SkinMeshFile->GetCurrentAnim(), time);
+}
+
+void CSceneSkinMesh::PlayMontage(UINT animID, float shiftTime, float playTime, UINT nextAnimID)
+{
+	m_SkinMeshFile->PlayMontage(animID, shiftTime, playTime, nextAnimID);
+}
+
+void CSceneSkinMesh::PlayMontage(UINT animID, float shiftTime, float playTime, UINT nextAnimID, float playSpeed)
+{
+	m_SkinMeshFile->PlayMontage(animID, shiftTime, playTime, nextAnimID);
+	SetAnimPlaySpeed(playSpeed);
 }

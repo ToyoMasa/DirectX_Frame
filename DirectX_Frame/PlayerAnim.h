@@ -3,6 +3,7 @@
 
 typedef enum
 {
+	PLAYER_STAB,
 	PLAYER_IDLE,
 	PLAYER_RUNNING,
 	PLAYER_ANIM_MAX

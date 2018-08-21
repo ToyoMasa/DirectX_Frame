@@ -157,9 +157,15 @@ public:
 	// 追加
 	DWORD GetCurrentAnim() { return m_CurrentAnim; }
 	// アニメーション切替
-	void ChangeAnim(UINT animID);
+	void ChangeAnim(UINT animID, float shiftTime);
 	// アニメーションの速度設定
 	bool SetLoopTime(UINT animID, FLOAT time);
+	// アニメ移行時間セット
+	void SetShiftTime(float time) { m_ShiftTime = time; }
+	// 1回再生のアニメ―ション
+	void PlayMontage(UINT animID, float shiftTime, float playTime, UINT nextAnimID);
+	bool GetPlayMontage() { return m_bPlayMontage; }
+
 private:
 	// 階層データ
 	SkinMeshData *m_SkinMeshData;
@@ -179,6 +185,14 @@ private:
 	DWORD m_CurrentAnim;
 	//現在のアニメーションデータトラック
 	D3DXTRACK_DESC m_CurrentTrackDesc;
+	float m_TrackSpeed;             // トラックスピード調節値
+	float m_ShiftTime;              // シフトするのにかかる時間
+	float m_CurrentWeightTime;      // 現在のウェイト時間
+
+	// 1度きりアニメーション
+	DWORD m_NextAnim;
+	bool m_bPlayMontage;
+	float m_MontageTime;
 };
 
 #endif

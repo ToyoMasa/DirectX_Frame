@@ -38,10 +38,14 @@ public:
 
 	// アニメーション関連
 	SkinMeshFile* GetSkinMeshFile() { return m_SkinMeshFile; }
-	void ChangeAnim(UINT animID);
+	void ChangeAnim(UINT animID, float shiftTime);
 	bool SetLoopTime(FLOAT time);
 	// アニメーションの再生速度を上げる
 	void SetAnimPlaySpeed(float speed) { m_AnimPlaySpeed = m_DefAnimSpeed * speed; }
+	// 1回再生のアニメ―ション
+	void PlayMontage(UINT animID, float shiftTime, float playTime, UINT nextAnimID);
+	void PlayMontage(UINT animID, float shiftTime, float playTime, UINT nextAnimID, float playSpeed);
+	bool GetPlayMontage() { return m_SkinMeshFile->GetPlayMontage(); }
 
 	static CSceneSkinMesh* Create(const std::string& modelName);
 
