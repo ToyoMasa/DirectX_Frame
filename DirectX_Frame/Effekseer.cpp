@@ -4,50 +4,15 @@
 #include "camera.h"
 #include "Effekseer.h"
 
-//
-//CEffekseer::CEffekseer(Effect EffectType)
-//{
-//	//描画管理用インスタンスの生成
-//	effekseerRenderer_ = EffekseerRendererDX9::Renderer::Create(CRenderer::GetDevice(), 2000);
-//	// エフェクト管理用インスタンスの生成
-//	effekseerManager_ = Effekseer::Manager::Create(2000);
-//
-//	this->SetProj();
-//
-//	// 描画用インスタンスから描画機能を設定
-//	effekseerManager_->SetSpriteRenderer(effekseerRenderer_->CreateSpriteRenderer());
-//	effekseerManager_->SetRibbonRenderer(effekseerRenderer_->CreateRibbonRenderer());
-//	effekseerManager_->SetRingRenderer(effekseerRenderer_->CreateRingRenderer());
-//	effekseerManager_->SetTrackRenderer(effekseerRenderer_->CreateTrackRenderer());
-//	effekseerManager_->SetModelRenderer(effekseerRenderer_->CreateModelRenderer());
-//
-//	// 描画用インスタンスからテクスチャの読込機能を設定
-//	// 独自拡張可能、現在はファイルから読み込んでいる。
-//	effekseerManager_->SetTextureLoader(effekseerRenderer_->CreateTextureLoader());
-//	effekseerManager_->SetModelLoader(effekseerRenderer_->CreateModelLoader());
-//
-//	//左手座標系に設定
-//	effekseerManager_->SetCoordinateSystem(Effekseer::CoordinateSystem::LH);
-//
-//	this->effectType_ = EffectType;
-//	this->SetLocation({ 1.0f, 1.0f, 1.0f });
-//
-//	this->LoadEffect();
-//
-//	this->SetPosition(0.0f,0.0f,0.0f);
-//	this->SetRotate(0.0f,0.0f,0.0f);
-//	this->SetScale(1.0f,1.0f,1.0f);
-//}
-
 CEffekseer* CEffekseer::Create(Effect EffectType, CCamera* camera)
 {
-	CEffekseer* p = new CEffekseer(EffectType, 2);
-	p->Init(camera);
-	return p;
+	CEffekseer* Effekseer = new CEffekseer(EffectType, LAYER_EFFEKSEER);
+	Effekseer->Init(camera);
+	return Effekseer;
 }
 void  CEffekseer::CreateScene(Effect EffectType)
 {
-	CEffekseer* p = new CEffekseer(EffectType, 2);
+	CEffekseer* Effekseer = new CEffekseer(EffectType, LAYER_EFFEKSEER);
 }
 
 void CEffekseer::LoadEffect()
@@ -104,7 +69,11 @@ void CEffekseer::Update()
 void CEffekseer::Draw()
 {
 	//effekseerRenderer_->SetRenderMode(Effekseer::RenderMode::Wireframe);
-
+	LPDIRECT3DDEVICE9 pDevice = CRenderer::GetDevice();
+	if (pDevice == NULL)
+	{
+		return;
+	}
 	D3DXMATRIX mtxScale, mtxTrans, mtxWorld, mtxRotateX, mtxRotateY, mtxRotateZ;
 
 	D3DXMatrixTranslation(&mtxTrans, transform_.pos.x, transform_.pos.y, transform_.pos.z);
@@ -123,7 +92,7 @@ void CEffekseer::Draw()
 
 	if (GetVisible())
 	{
-		effekseerRenderer_->BeginRendering();
+		effekseerRenderer_->BeginRendering();;
 		effekseerManager_->Draw();
 		effekseerRenderer_->EndRendering();
 	}

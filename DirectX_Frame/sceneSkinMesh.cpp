@@ -26,7 +26,7 @@ void CSceneSkinMesh::Update()
 {
 	if (m_SkinMeshFile != NULL)
 	{
-		m_SkinMeshFile->UpdateAnim();
+		m_SkinMeshFile->UpdateAnim(m_AnimPlaySpeed);
 	}
 }
 
@@ -86,8 +86,19 @@ void CSceneSkinMesh::Scale(D3DXVECTOR3 scale)
 
 CSceneSkinMesh* CSceneSkinMesh::Create(const std::string& modelName)
 {
-	CSceneSkinMesh* skinMesh = new CSceneSkinMesh(1);
+	CSceneSkinMesh* skinMesh = new CSceneSkinMesh(LAYER_OBJECT3D);
 	skinMesh->Init(modelName);
 
 	return skinMesh;
+}
+
+void CSceneSkinMesh::ChangeAnim(UINT animID)
+{
+	m_SkinMeshFile->ChangeAnim(animID);
+	m_AnimPlaySpeed = m_DefAnimSpeed;
+}
+
+bool CSceneSkinMesh::SetLoopTime(FLOAT time)
+{
+	return m_SkinMeshFile->SetLoopTime(m_SkinMeshFile->GetCurrentAnim(), time);
 }

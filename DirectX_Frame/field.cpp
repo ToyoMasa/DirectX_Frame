@@ -48,7 +48,7 @@ void CField::Init(int texId, float meshSize, int sizeX, int sizeY)
 	m_NumPrimitive = sizeX * 2 * sizeY + 4 * (sizeY - 1);	// プリティブ数の計算
 	m_NumIndex = m_NumPrimitive + 2;						// インデックス数の計算
 
-	m_Scene3D = CScene3D::Create(texId, meshSize, sizeX, sizeY, m_NumPrimitive, m_NumVertex, m_NumIndex);
+	m_Scene3D = CScene3D::Create(texId, meshSize, sizeX, sizeY, m_NumPrimitive, m_NumVertex, m_NumIndex, LAYER_BACKGROUND);
 }
 
 void CField::Init(int texId, float meshSize, int sizeX, int sizeY, bool isHeight)

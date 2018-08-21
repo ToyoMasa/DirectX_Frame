@@ -191,6 +191,7 @@
     <ClInclude Include="number.h" />
     <ClInclude Include="particle.h" />
     <ClInclude Include="player.h" />
+    <ClInclude Include="PlayerAnim.h" />
     <ClInclude Include="renderer.h" />
     <ClInclude Include="result.h" />
     <ClInclude Include="root.h" />

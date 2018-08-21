@@ -18,18 +18,19 @@
 #include "field.h"
 #include "enemy.h"
 #include "game.h"
+#include "PlayerAnim.h"
 
 static const float VALUE_ROTATE_MOUSE = 0.003f;
 
 void CPlayer::Init(int modelId, D3DXVECTOR3 spawnPos)
 {
-	m_Model = CSceneModel::Create(MODEL_SOURCE[modelId]);
-	//m_FBX = CSceneModelFBX::Create(FBX_MODEL_SOURCE[FBX_ID_XBOT]);
-	m_SkinMesh = CSceneSkinMesh::Create("data/models/run.x");
+	m_Model = CSceneSkinMesh::Create("data/models/running.x");
+	m_Model->ChangeAnim(PLAYER_IDLE);
+
 	m_Pos = spawnPos;
 	m_Model->Move(m_Pos);
 	m_Camera = CCamera::Create(D3DXVECTOR3(0.0f, 1.5f, -2.0f), m_Pos);
-	m_Forward.z = -1.0f;
+	m_Forward = D3DXVECTOR3(0.0f, 0.0f, -1.0f);
 
 	m_Text_Attack = CScene2D::Create(TEX_ID_ATTACK, 128, 64);
 	m_Text_Attack->Set(D3DXVECTOR3(SCREEN_WIDTH / 2, SCREEN_HEIGHT - 200.0f, 0.0f));
@@ -41,15 +42,10 @@ void CPlayer::Uninit()
 	{
 		m_Camera->Release();
 	}
-	if (m_SkinMesh)
-	{
-		m_SkinMesh->Release();
-	}
 	if (m_Model)
 	{
 		m_Model->Release();
 	}
-	//m_FBX->Release();
 }
 
 void CPlayer::Update()
@@ -88,9 +84,7 @@ void CPlayer::Update()
 		moveZ = -1.0f;
 	}
 
-	{
-		Rotate(m_Camera->GetFront());
-
+	{// 移動・回転
 		D3DXVECTOR3 cameraFront = m_Camera->GetFront();
 		D3DXVECTOR3 cameraRight = m_Camera->GetRight();
 		D3DXVECTOR3 newPos = m_Pos;
@@ -102,8 +96,8 @@ void CPlayer::Update()
 		cameraFront.y = 0;
 		D3DXVec3Normalize(&cameraFront, &cameraFront);
 
-		newPos += cameraRight * PLAYER_MOVE_SPEED * moveX;
-		newPos += cameraFront * PLAYER_MOVE_SPEED * moveZ;
+		newPos += cameraFront * PLAYER_MOVE_SPEED * moveVec.z;
+		newPos += cameraRight * PLAYER_MOVE_SPEED * moveVec.x;
 		newPos.y = m_Field->GetHeight(newPos);
 
 		// コリジョンの計算
@@ -133,12 +127,26 @@ void CPlayer::Update()
 			}
 		}
 
+		if (moveX != 0 || moveZ != 0)
+		{
+			Rotate(newPos - m_Pos);
+		}
 		m_Camera->Move(newPos - m_Pos);
 		SetPos(newPos);
+
+	}
+
+	if (moveX != 0 || moveZ != 0)
+	{
+		m_Model->ChangeAnim(PLAYER_RUNNING);
+	}
+	else
+	{
+		m_Model->ChangeAnim(PLAYER_IDLE);
 	}
 
 	m_Model->Move(m_Pos);
-	//m_SkinMesh->Move(m_Pos);
+	
 	// 当たり判定の移動
 	m_CapsuleCollision.Set(Point(m_Pos.x, m_Pos.y + 0.25f, m_Pos.z), Point(m_Pos.x, m_Pos.y + 1.0f, m_Pos.z), 0.25f);
 	D3DXVECTOR3 attackPos = m_Pos + m_Forward * 0.5f;
@@ -150,6 +158,7 @@ void CPlayer::Update()
 		Attack();
 	}
 
+	// カメラの更新
 	m_Camera->SetAt(D3DXVECTOR3(m_Pos.x, m_Pos.y + 1.5f, m_Pos.z));
 	m_Camera->Rotation(PI * mouseX * VALUE_ROTATE_MOUSE, PI * mouseY * VALUE_ROTATE_MOUSE);
 	m_Camera->Update();

@@ -1,7 +1,7 @@
 #ifndef _CHARACTER_H_
 #define _CHARACTER_H_
 
-#include "sceneModelFBX.h"
+#include "sceneSkinMesh.h"
 
 class CCamera;
 class CField;
@@ -55,7 +55,8 @@ public:
 	static CCharacter* GetCharacter(int id) { return m_Characters[id]; }
 
 protected:
-	CSceneModel *m_Model;
+	//CSceneModel *m_Model;
+	CSceneSkinMesh *m_Model;
 	D3DXVECTOR3 m_Pos;
 	D3DXVECTOR3 m_OldPos;
 	D3DXVECTOR3 m_Forward;

@@ -220,7 +220,7 @@ void CSceneModel::Scale(D3DXVECTOR3 scale)
 
 CSceneModel* CSceneModel::Create(const std::string& modelName)
 {
-	CSceneModel* sceneModel = new CSceneModel(1);
+	CSceneModel* sceneModel = new CSceneModel(LAYER_OBJECT3D);
 	sceneModel->Init(modelName);
 
 	return sceneModel;
@@ -228,7 +228,7 @@ CSceneModel* CSceneModel::Create(const std::string& modelName)
 
 CSceneModel* CSceneModel::Create(const std::string& modelName, bool isIgnore)
 {
-	CSceneModel* sceneModel = new CSceneModel(1);
+	CSceneModel* sceneModel = new CSceneModel(LAYER_OBJECT3D);
 	sceneModel->Init(modelName);
 	sceneModel->m_isIgnoreLight = isIgnore;
 

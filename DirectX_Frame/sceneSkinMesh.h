@@ -22,6 +22,8 @@ public:
 		D3DXMatrixIdentity(&m_Scale);
 
 		m_SkinMeshFile = NULL;
+		m_DefAnimSpeed = 0.025f;
+		m_AnimPlaySpeed = m_DefAnimSpeed;
 	}
 
 	void Init(const std::string& modelName);
@@ -34,6 +36,13 @@ public:
 	void Rotate(D3DXMATRIX rot);
 	void Scale(D3DXVECTOR3 scale);
 
+	// アニメーション関連
+	SkinMeshFile* GetSkinMeshFile() { return m_SkinMeshFile; }
+	void ChangeAnim(UINT animID);
+	bool SetLoopTime(FLOAT time);
+	// アニメーションの再生速度を上げる
+	void SetAnimPlaySpeed(float speed) { m_AnimPlaySpeed = m_DefAnimSpeed * speed; }
+
 	static CSceneSkinMesh* Create(const std::string& modelName);
 
 private:
@@ -45,6 +54,8 @@ private:
 	D3DXMATRIX			m_RotZ;			// Z軸回転行列
 	D3DXMATRIX			m_Scale;		// 拡大縮小行列
 	SkinMeshFile*		m_SkinMeshFile;
+	float				m_AnimPlaySpeed;
+	float				m_DefAnimSpeed;
 };
 
 #endif

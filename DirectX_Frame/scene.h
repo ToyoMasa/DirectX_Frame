@@ -2,7 +2,6 @@
 #define _SCENE_H_
 
 static const int OBJECT_MAX = 300;
-static const int PRIORITY_MAX = 3;
 
 enum SCENE_TYPE
 {
@@ -18,8 +17,10 @@ enum SCENE_TYPE
 enum LAYER
 {
 	LAYER_BACKGROUND,
+	LAYER_EFFEKSEER,
 	LAYER_OBJECT3D,
-	LAYER_OBJECT2D
+	LAYER_OBJECT2D,
+	PRIORITY_MAX
 };
 
 class CScene

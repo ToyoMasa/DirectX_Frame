@@ -22,6 +22,8 @@ public:
 	static void PlayerDied() { m_PlayerDied = true; }
 	static void TargetKilled();
 
+	static void test(float test);
+
 private:
 	static CBillBoard* tree1;
 	static CBillBoard* tree2;

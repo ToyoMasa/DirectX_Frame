@@ -22,7 +22,7 @@
 
 void CEnemy::Init(int modelId, D3DXVECTOR3 spawnPos, int rootId, CField* field)
 {
-	m_Model = CSceneModel::Create(MODEL_SOURCE[modelId]);
+	m_Model = CSceneSkinMesh::Create(MODEL_SOURCE[modelId]);
 	m_Pos = spawnPos;
 	m_CapsuleCollision.Set(Point(m_Pos.x, m_Pos.y + 0.25f, m_Pos.z), Point(m_Pos.x, m_Pos.y + 1.0f, m_Pos.z), 0.25f);
 	m_Model->Move(m_Pos);
@@ -33,7 +33,7 @@ void CEnemy::Init(int modelId, D3DXVECTOR3 spawnPos, int rootId, CField* field)
 
 void CEnemy::Init(int modelId, D3DXVECTOR3 spawnPos, CActionBase* action, CField* field, ENEMY_TYPE type)
 {
-	m_Model = CSceneModel::Create(MODEL_SOURCE[modelId]);
+	m_Model = CSceneSkinMesh::Create(MODEL_SOURCE[modelId]);
 	m_Pos = spawnPos;
 	m_CapsuleCollision.Set(Point(m_Pos.x, m_Pos.y + 0.25f, m_Pos.z), Point(m_Pos.x, m_Pos.y + 1.0f, m_Pos.z), 0.25f);
 	m_Model->Move(m_Pos);

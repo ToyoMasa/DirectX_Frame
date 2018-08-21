@@ -253,25 +253,25 @@ void SkinMeshFile::UpdateFrame(LPD3DXFRAME base, LPD3DXMATRIX parent_matrix)
     }
 }
 
-void SkinMeshFile::UpdateAnim()
+void SkinMeshFile::UpdateAnim(float time)
 {
 	if (m_AnimController != NULL)
 	{
 		// 0.016秒ずつアニメーションを進める
-		m_AnimController->AdvanceTime(0.016f, NULL);
+		m_AnimController->AdvanceTime(time, NULL);
 	}
 }
 
 // 追加
-void SkinMeshFile::ChangeAnim(UINT newAnimID)
+void SkinMeshFile::ChangeAnim(UINT animID)
 {
 	// 存在するアニメーション番号か
-	if (newAnimID < m_AnimController->GetNumAnimationSets())
+	if (animID < m_AnimController->GetNumAnimationSets())
 	{
 		// 今のアニメーションと違うか
-		if (newAnimID != m_CurrentAnim)
+		if (animID != m_CurrentAnim)
 		{
-			m_CurrentAnim = newAnimID;
+			m_CurrentAnim = animID;
 			m_AnimController->SetTrackAnimationSet(0, m_AnimSet[m_CurrentAnim]);
 
 			D3DXTRACK_DESC CurrentTrackDesc;
@@ -281,4 +281,17 @@ void SkinMeshFile::ChangeAnim(UINT newAnimID)
 		}
 	}
 
+}
+
+bool SkinMeshFile::SetLoopTime(UINT animID, FLOAT time)
+{
+	// 指定のアニメーションIDの存在をチェック
+	if (animID < m_AnimController->GetNumAnimationSets())
+		return false;
+
+	// トラックスピード調節値を算出
+	FLOAT DefTime = m_AnimSet[animID]->GetPeriod();
+	m_AnimController->SetTrackSpeed(0, DefTime * time);
+
+	return true;
 }

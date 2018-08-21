@@ -37,6 +37,9 @@
     <Filter Include="ヘッダー ファイル\SkinMesh">
       <UniqueIdentifier>{748502fd-c1bc-4fe1-9fb0-da046146a94f}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ヘッダー ファイル\SkinMesh\AnimationList">
+      <UniqueIdentifier>{1b9a0e70-ba1c-452d-8e33-382f2e18f8fb}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="camera.h">
@@ -197,6 +200,9 @@
     </ClInclude>
     <ClInclude Include="sceneSkinMesh.h">
       <Filter>ヘッダー ファイル\scene</Filter>
+    </ClInclude>
+    <ClInclude Include="PlayerAnim.h">
+      <Filter>ヘッダー ファイル\SkinMesh\AnimationList</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

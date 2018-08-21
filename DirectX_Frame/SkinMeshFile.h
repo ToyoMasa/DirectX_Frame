@@ -152,11 +152,14 @@ public:
 			内容：
 				アニメーションを更新させる
 	*/
-	void UpdateAnim(void);
+	void UpdateAnim(float time);
 
 	// 追加
+	DWORD GetCurrentAnim() { return m_CurrentAnim; }
 	// アニメーション切替
-	void ChangeAnim(UINT newAnimID);
+	void ChangeAnim(UINT animID);
+	// アニメーションの速度設定
+	bool SetLoopTime(UINT animID, FLOAT time);
 private:
 	// 階層データ
 	SkinMeshData *m_SkinMeshData;

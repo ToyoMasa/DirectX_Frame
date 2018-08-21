@@ -1,4 +1,5 @@
 #include "common.h"
+#include "renderer.h"
 
 //======================================================================
 //	静的メンバ変数の初期化
@@ -57,6 +58,17 @@ void CScene::UpdateAll()
 
 void CScene::DrawAll()
 {
+	LPDIRECT3DDEVICE9 pDevice = CRenderer::GetDevice();
+	if (pDevice == NULL)
+	{
+		return;
+	}
+
+	// αテスト(3つセット)
+	pDevice->SetRenderState(D3DRS_ALPHATESTENABLE, TRUE);			// αテストのON/OFF
+	pDevice->SetRenderState(D3DRS_ALPHAREF, 128);					// 第2引数は0～255の好きな値
+	pDevice->SetRenderState(D3DRS_ALPHAFUNC, D3DCMP_GREATEREQUAL);	// 第2引数は不等号(GREATERは大なり)、上の値より大きければ合格
+
 	for (int j = 0; j < PRIORITY_MAX; j++)
 	{
 		for (int i = 0; i < OBJECT_MAX; i++)
@@ -70,6 +82,8 @@ void CScene::DrawAll()
 			}
 		}
 	}
+
+	pDevice->SetRenderState(D3DRS_ALPHATESTENABLE, FALSE);		// αテストのON/OFF
 }
 
 void CScene::ReleaseAll()

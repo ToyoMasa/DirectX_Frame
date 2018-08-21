@@ -245,7 +245,7 @@ void CScene3D::Draw()
 
 CScene3D* CScene3D::Create(int texId, float meshSize, int sizeX, int sizeY, int numPrimitive, int numVertex, int numIndex)
 {
-	CScene3D* scene3D = new CScene3D(0);
+	CScene3D* scene3D = new CScene3D(LAYER_OBJECT3D);
 	scene3D->Init(texId, meshSize, sizeX, sizeY, numPrimitive, numVertex, numIndex);
 
 	return scene3D;
@@ -253,7 +253,23 @@ CScene3D* CScene3D::Create(int texId, float meshSize, int sizeX, int sizeY, int 
 
 CScene3D* CScene3D::Create(int texId, VERTEX_3D* vertex, WORD* index, int numPrimitive, int numVertex, int numIndex)
 {
-	CScene3D* scene3D = new CScene3D(0);
+	CScene3D* scene3D = new CScene3D(LAYER_OBJECT3D);
+	scene3D->Init(texId, vertex, index, numPrimitive, numVertex, numIndex);
+
+	return scene3D;
+}
+
+CScene3D* CScene3D::Create(int texId, float meshSize, int sizeX, int sizeY, int numPrimitive, int numVertex, int numIndex, LAYER layer)
+{
+	CScene3D* scene3D = new CScene3D(layer);
+	scene3D->Init(texId, meshSize, sizeX, sizeY, numPrimitive, numVertex, numIndex);
+
+	return scene3D;
+}
+
+CScene3D* CScene3D::Create(int texId, VERTEX_3D* vertex, WORD* index, int numPrimitive, int numVertex, int numIndex, LAYER layer)
+{
+	CScene3D* scene3D = new CScene3D(layer);
 	scene3D->Init(texId, vertex, index, numPrimitive, numVertex, numIndex);
 
 	return scene3D;

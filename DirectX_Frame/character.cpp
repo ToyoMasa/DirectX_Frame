@@ -16,6 +16,7 @@
 #include "field.h"
 #include "character.h"
 #include "enemy.h"
+#include "game.h"
 
 CCharacter *CCharacter::m_Characters[CHARACTER_MAX] = { NULL };
 
@@ -59,7 +60,7 @@ void CCharacter::Rotate(D3DXVECTOR3 vec)
 {
 	D3DXMATRIX mtxRot;
 	D3DXVECTOR3 v1 = m_Forward;
-	D3DXVECTOR3 v2 = { -vec.z, 0, vec.x };
+	D3DXVECTOR3 v2 = { vec.x, 0, vec.z };
 
 	v1.y = 0.0f;
 
@@ -67,15 +68,50 @@ void CCharacter::Rotate(D3DXVECTOR3 vec)
 	D3DXVec3Normalize(&v2, &v2);
 
 	// 今向いている方角と入力された方角の内積を取る
-	float fInner = D3DXVec3Dot(&v1, &v2);
+	float fInner = D3DXVec3Dot(&v2, &v1);
 
-	// 回転行列(Y軸回転)を作る(回転速度)
-	D3DXMatrixRotationY(&mtxRot, fInner / 10);
-	m_Rotate *= mtxRot;
-	m_Model->Rotate(m_Rotate);
+	if (fInner != 1)
+	{
+		float sita = fInner / (D3DXVec3Length(&v1) * D3DXVec3Length(&v2));
+		float rad = acosf(sita);
+		float rot = D3DXToDegree(rad);
 
-	D3DXVec3TransformNormal(&m_Forward, &m_Forward, &mtxRot);	// ベクトルの座標変換(出力, 入力, 変換行列)
-	D3DXVec3TransformNormal(&m_Right, &m_Right, &mtxRot);	// ベクトルの座標変換(出力, 入力, 変換行列)
-	D3DXVec3Normalize(&m_Forward, &m_Forward);
-	D3DXVec3Normalize(&m_Right, &m_Right);
+		D3DXVECTOR3 cross;
+		D3DXVec3Cross(&cross, &v2, &v1);
+
+		CModeGame::test(rot);
+
+		if (cross.y < 0.0f)
+		{
+			if (rot > 7.0f)
+			{
+				// 回転行列(Y軸回転)を作る(回転速度)
+				D3DXMatrixRotationY(&mtxRot, D3DXToRadian(7.0f));
+			}
+			else
+			{
+				D3DXMatrixRotationY(&mtxRot, D3DXToRadian(rot + 0.1f));
+			}
+		}
+		else
+		{
+			if (rot > 7.0f)
+			{
+				// 回転行列(Y軸回転)を作る(回転速度)
+				D3DXMatrixRotationY(&mtxRot, -D3DXToRadian(7.0f));
+			}
+			else
+			{
+				D3DXMatrixRotationY(&mtxRot, -D3DXToRadian(rot + 0.1f));
+			}
+		}
+
+		m_Rotate *= mtxRot;
+		m_Model->Rotate(m_Rotate);
+
+		D3DXVec3TransformNormal(&m_Forward, &m_Forward, &mtxRot);	// ベクトルの座標変換(出力, 入力, 変換行列)
+		D3DXVec3TransformNormal(&m_Right, &m_Right, &mtxRot);	// ベクトルの座標変換(出力, 入力, 変換行列)
+		D3DXVec3Normalize(&m_Forward, &m_Forward);
+		D3DXVec3Normalize(&m_Right, &m_Right);
+	}
 }

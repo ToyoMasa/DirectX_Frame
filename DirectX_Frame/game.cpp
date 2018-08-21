@@ -40,6 +40,8 @@ CParticleEmitter emitter;
 bool CModeGame::m_PlayerDied = false;
 bool CModeGame::m_TargetDied = false;
 
+float g_test = 0;
+
 void CModeGame::Init()
 {
 	// ルートの設定
@@ -53,17 +55,17 @@ void CModeGame::Init()
 	CFade::FadeIn();
 
 	// フィールド
-	CField* field = CField::Create(TEX_ID_FIELD001, 2.0f, 20, 20, true);
+	CField* field = CField::Create(TEX_ID_FIELD001, 20.0f, 20, 20, true);
 
 	// プレイヤー
 	player = CPlayer::Create(MODEL_ID_PLAYER, D3DXVECTOR3(0.0f, 0.0f, 0.0f));
 	player->SetField(field);
 
 	// 敵
-	enemy[0] = CEnemy::Create(MODEL_ID_ENEMY01, D3DXVECTOR3(7.0f, 0.0f, 5.0f), 1, field);
-	enemy[1] = CEnemy::Create(MODEL_ID_ENEMY01, D3DXVECTOR3(0.0f, 0.0f, -8.0f), 1, field);
-	enemy[1]->SetAction(CActionMoveToRandom::Create(enemy[1], 3.0f, 3.5f, 0.02f));
-	Target = CEnemy::Create(MODEL_ID_TARGET, D3DXVECTOR3(0.0f, 0.0f, 8.0f), CActionWait::Create(Target), field, ENEMY_TYPE_TARGET);
+	//enemy[0] = CEnemy::Create(MODEL_ID_ENEMY01, D3DXVECTOR3(7.0f, 0.0f, 5.0f), 1, field);
+	//enemy[1] = CEnemy::Create(MODEL_ID_ENEMY01, D3DXVECTOR3(0.0f, 0.0f, -8.0f), 1, field);
+	//enemy[1]->SetAction(CActionMoveToRandom::Create(enemy[1], 3.0f, 3.5f, 0.02f));
+	//Target = CEnemy::Create(MODEL_ID_TARGET, D3DXVECTOR3(0.0f, 0.0f, 8.0f), CActionWait::Create(Target), field, ENEMY_TYPE_TARGET);
 
 	// 空
 	CSkyBox::Create(player);
@@ -95,7 +97,7 @@ void CModeGame::Init()
 	CEffekseer* effect = CEffekseer::Create(CEffekseer::Effect_SpawnAvatar, player->GetCamera());
 	effect->RepeatEffect(true);
 	effect->SetScale(0.5f, 0.5f, 0.5f);
-	effect->SetPosition(0.0f, 2.0f, 0.0f);
+	effect->SetPosition(0.0f, 5.0f, 0.0f);
 	effect->Play();
 	effect->SetVisible(true);
 }
@@ -160,7 +162,6 @@ void CModeGame::Update()
 void CModeGame::Draw()
 {
 	CScene::DrawAll();
-
 	CBillBoard::DrawAll(player->GetCamera());
 
 	//CFade::Draw();
@@ -172,6 +173,7 @@ void CModeGame::Draw()
 	D3DXVECTOR3 pos = player->GetPos();
 	ImGui::Begin("Debug Window", 0);
 	ImGui::Text("X = %.2f Y = %.2f Z = %.2f", pos.x, pos.y, pos.z);
+	ImGui::Text("test = %.4f", g_test);
 	ImGui::End();
 
 	CImGui::EndDraw();
@@ -181,4 +183,9 @@ void CModeGame::Draw()
 void CModeGame::TargetKilled()
 {
 	m_TargetDied = true;
+}
+
+void CModeGame::test(float test)
+{
+	g_test = test;
 }
