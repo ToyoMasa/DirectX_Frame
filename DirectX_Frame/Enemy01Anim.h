@@ -1,0 +1,11 @@
+#ifndef _ENEMY01_ANIM_H_
+#define _ENEMY01_ANIM_H_
+
+typedef enum
+{
+	ENEMY01_RUNNING,
+	ENEMY01_IDLE,
+	ENEMY01_ANIM_MAX
+}ENEMY01_ANIM_LIST;
+
+#endif // !_ENEMY01_ANIM_H_

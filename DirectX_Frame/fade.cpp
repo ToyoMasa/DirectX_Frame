@@ -6,51 +6,45 @@
 #include "fade.h"
 #include "texture.h"
 
-D3DXVECTOR2 CFade::m_TexSize;
 int CFade::m_Alpha;
-int CFade::m_TexId;
 bool CFade::m_FadeIn = false;
 bool CFade::m_FadeOut = false;
 
 void CFade::Init()
 {
-	m_TexId = TEX_ID_BLACK;
-	CTexture::Load(m_TexId);
-
-	m_TexSize = D3DXVECTOR2(SCREEN_WIDTH, SCREEN_HEIGHT);
-
 	m_Alpha = 255;
 }
 
 void CFade::Uninit()
 {
-	// テクスチャの解放
-	CTexture::Release(m_TexId);
+
 }
 
 void CFade::Update()
 {
 	if (m_FadeIn)
 	{
-		if (m_Alpha > 0)
+		if (m_Alpha > 3)
 		{
 			m_Alpha -= 255 / 120;
 		}
 		else
 		{
 			m_FadeIn = false;
+			m_FadeOut = false;
 		}
 	}
 
 	if (m_FadeOut)
 	{
-		if (m_Alpha < 255)
+		if (m_Alpha < 252)
 		{
 			m_Alpha += 255 / 120;
 		}
 		else
 		{
 			m_FadeOut = false;
+			m_FadeIn = false;
 		}
 	}
 
@@ -80,19 +74,19 @@ void CFade::Draw()
 		vertex[0].color =
 			vertex[1].color =
 			vertex[2].color =
-			vertex[3].color = D3DCOLOR_RGBA(255, 255, 255, m_Alpha);
+			vertex[3].color = D3DCOLOR_RGBA(0, 0, 0, m_Alpha);
 
-		pDevice->SetTexture(0, CTexture::GetTexture(m_TexId));
+		pDevice->SetTexture(0, NULL);
 		pDevice->SetFVF(FVF_VERTEX_2D);
 
 		// αテスト(3つセット)
-		pDevice->SetRenderState(D3DRS_ALPHATESTENABLE, TRUE);			// αテストのON
-		pDevice->SetRenderState(D3DRS_ALPHAREF, 128);					// 第2引数は0～255の好きな値
-		pDevice->SetRenderState(D3DRS_ALPHAFUNC, D3DCMP_GREATEREQUAL);	// 第2引数は不等号(GREATERは大なり)、上の値より大きければ合格
+		//pDevice->SetRenderState(D3DRS_ALPHATESTENABLE, TRUE);			// αテストのON
+		//pDevice->SetRenderState(D3DRS_ALPHAREF, 128);					// 第2引数は0～255の好きな値
+		//pDevice->SetRenderState(D3DRS_ALPHAFUNC, D3DCMP_GREATEREQUAL);	// 第2引数は不等号(GREATERは大なり)、上の値より大きければ合格
 
 		pDevice->DrawPrimitiveUP(D3DPT_TRIANGLESTRIP, 2, &vertex[0], sizeof(VERTEX_2D));
 
-		pDevice->SetRenderState(D3DRS_ALPHATESTENABLE, FALSE);			// αテストのOFF
+		//pDevice->SetRenderState(D3DRS_ALPHATESTENABLE, FALSE);			// αテストのOFF
 	}
 }
 

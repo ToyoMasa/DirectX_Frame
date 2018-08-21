@@ -51,6 +51,8 @@ public:
 	D3DXVECTOR3 GetPos() { return m_Pos; }
 	void Rotate(D3DXVECTOR3 vec);
 	void Release();
+	CSceneSkinMesh* GetModel() { return m_Model; }
+
 	static void ReleaseAll();
 	static CCharacter* GetCharacter(int id) { return m_Characters[id]; }
 

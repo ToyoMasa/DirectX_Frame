@@ -61,11 +61,15 @@ bool CManager::Init(HINSTANCE hInstance, HWND hWnd, BOOL bWindow)
 		CManager::m_Mode->Init();
 	}
 
+	CFade::Init();
+
 	return true;
 }
 
 void CManager::Uninit()
 {
+	CFade::Uninit();
+
 	CManager::m_Mode->Uninit();
 	delete CManager::m_Mode;
 
@@ -96,6 +100,8 @@ void CManager::Uninit()
 
 void CManager::Update()
 {
+	CFade::Update();
+
 	// キーボード更新処理
 	if (m_InputKeyboard)
 	{
@@ -123,6 +129,8 @@ void CManager::Draw()
 	{
 		//描画
 		m_Mode->Draw();
+
+		CFade::Draw();
 
 		CRenderer::DrawEnd();
 	}

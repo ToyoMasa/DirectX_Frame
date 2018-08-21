@@ -51,7 +51,6 @@ void CModeGame::Init()
 	CTexture::Init();
 
 	// フェード
-	CFade::Init();
 	CFade::FadeIn();
 
 	// フィールド
@@ -106,8 +105,6 @@ void CModeGame::Uninit()
 {
 	CCharacter::ReleaseAll();
 
-	//CNumber::Uninit();
-
 	CScene::ReleaseAll();
 
 	CActionBase::ReleaseAll();
@@ -118,16 +115,12 @@ void CModeGame::Uninit()
 
 	CBillBoard::Uninit();
 
-	CFade::Uninit();
-
 	// 全てのテクスチャの解放
 	CTexture::ReleaseAll();
 }
 
 void CModeGame::Update()
 {
-	CFade::Update();
-
 	emitter.Update();
 
 	CCharacter::UpdateAll();
@@ -163,8 +156,6 @@ void CModeGame::Draw()
 {
 	CScene::DrawAll();
 	CBillBoard::DrawAll(player->GetCamera());
-
-	//CFade::Draw();
 
 	// デバッグ用imguiウィンドウの描画
 #if defined(_DEBUG) || defined(DEBUG)

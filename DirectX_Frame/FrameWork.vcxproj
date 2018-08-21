@@ -172,6 +172,7 @@
     <ClInclude Include="Effekseer.h" />
     <ClInclude Include="emitter.h" />
     <ClInclude Include="enemy.h" />
+    <ClInclude Include="Enemy01Anim.h" />
     <ClInclude Include="fade.h" />
     <ClInclude Include="field.h" />
     <ClInclude Include="game.h" />

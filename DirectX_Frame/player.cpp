@@ -24,7 +24,7 @@ static const float VALUE_ROTATE_MOUSE = 0.003f;
 
 void CPlayer::Init(int modelId, D3DXVECTOR3 spawnPos)
 {
-	m_Model = CSceneSkinMesh::Create("data/models/running.x");
+	m_Model = CSceneSkinMesh::Create(SKINMESH_SOURCE[SM_ID_PLAYER]);
 	m_Model->ChangeAnim(PLAYER_IDLE, 0.0f);
 
 	m_Pos = spawnPos;
@@ -181,7 +181,7 @@ CPlayer* CPlayer::Create(int modelId, D3DXVECTOR3 spawnPos)
 
 void CPlayer::Attack()
 {
-	m_Model->PlayMontage(PLAYER_STAB, 0.2f, 3.3f, PLAYER_IDLE, 2.5f);
+	m_Model->PlayMontage(PLAYER_STAB, 0.2f, 3.4f, PLAYER_IDLE, 2.0f);
 
 	if (m_Text_Attack->GetVisible())
 	{
