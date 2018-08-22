@@ -1,7 +1,7 @@
 #ifndef _SCENE_H_
 #define _SCENE_H_
 
-static const int OBJECT_MAX = 300;
+static const int OBJECT_MAX = 50;
 
 enum SCENE_TYPE
 {
@@ -12,6 +12,7 @@ enum SCENE_TYPE
 	SCENE_TYPE_ENEMY,
 	SCENE_TYPE_BULLET,
 	SCENE_TYPE_BILLBOARD,
+	SCENE_TYPE_WALL,
 };
 
 enum LAYER

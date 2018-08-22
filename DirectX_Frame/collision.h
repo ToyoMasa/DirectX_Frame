@@ -227,7 +227,7 @@ class OBB
 {
 private:
 	D3DXVECTOR3 m_Pos;					// 位置
-	D3DXVECTOR3 m_NormaDirect[3];		// 方向ベクトル
+	D3DXVECTOR3 m_NormalDirect[3];		// 方向ベクトル
 	float m_fLength[3];					// 各軸方向の長さ
 
 public:
@@ -235,11 +235,20 @@ public:
 	float GetLen(int elem);				// 指定軸方向の長さを取得
 	D3DXVECTOR3 GetPos();				// 位置を取得
 
+	void SetPos(D3DXVECTOR3 pos) { m_Pos = pos; }
+	void SetNormal(int index, D3DXVECTOR3 normal) { m_NormalDirect[index] = normal; }
+	void SetLength(float x, float y, float z)
+	{
+		m_fLength[0] = x;
+		m_fLength[1] = y;
+		m_fLength[2] = z;
+	}
+
 	OBB()
 	{
-		m_NormaDirect[0] = D3DXVECTOR3(1, 0, 0);
-		m_NormaDirect[1] = D3DXVECTOR3(0, 1, 0);
-		m_NormaDirect[2] = D3DXVECTOR3(0, 0, 1);
+		m_NormalDirect[0] = D3DXVECTOR3(1, 0, 0);
+		m_NormalDirect[1] = D3DXVECTOR3(0, 1, 0);
+		m_NormalDirect[2] = D3DXVECTOR3(0, 0, 1);
 	}
 };
 

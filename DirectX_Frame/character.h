@@ -54,6 +54,8 @@ public:
 	void Release();
 	CSceneSkinMesh* GetModel() { return m_Model; }
 
+	D3DXVECTOR3 PushOut(D3DXVECTOR3 newPos, D3DXVECTOR3 oldPos, D3DXVECTOR3 normal);
+
 	static void ReleaseAll();
 	static CCharacter* GetCharacter(int id) { return m_Characters[id]; }
 

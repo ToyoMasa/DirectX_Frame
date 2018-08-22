@@ -162,6 +162,7 @@
     <ClInclude Include="action.h" />
     <ClInclude Include="actionBase.h" />
     <ClInclude Include="billboard.h" />
+    <ClInclude Include="box.h" />
     <ClInclude Include="bullet.h" />
     <ClInclude Include="camera.h" />
     <ClInclude Include="character.h" />
@@ -214,11 +215,13 @@
     <ClInclude Include="title.h" />
     <ClInclude Include="wait.h" />
     <ClInclude Include="waitTime.h" />
+    <ClInclude Include="wall.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="action.cpp" />
     <ClCompile Include="actionBase.cpp" />
     <ClCompile Include="billboard.cpp" />
+    <ClCompile Include="box.cpp" />
     <ClCompile Include="bullet.cpp" />
     <ClCompile Include="camera.cpp" />
     <ClCompile Include="character.cpp" />
@@ -264,6 +267,7 @@
     <ClCompile Include="title.cpp" />
     <ClCompile Include="wait.cpp" />
     <ClCompile Include="waitTime.cpp" />
+    <ClCompile Include="wall.cpp" />
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="shader.fx">

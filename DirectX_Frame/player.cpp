@@ -19,6 +19,7 @@
 #include "enemy.h"
 #include "game.h"
 #include "PlayerAnim.h"
+#include "wall.h"
 
 static const float VALUE_ROTATE_MOUSE = 0.003f;
 
@@ -104,6 +105,8 @@ void CPlayer::Update()
 
 			// コリジョンの計算
 			m_CapsuleCollision.Set(Point(newPos.x, newPos.y + 0.25f, newPos.z), Point(newPos.x, newPos.y + 1.0f, newPos.z), 0.25f);
+
+			// キャラクターとの当たり判定
 			for (int i = 0; i < CHARACTER_MAX; i++)
 			{
 				CCharacter* obj = CCharacter::GetCharacter(i);
@@ -124,6 +127,51 @@ void CPlayer::Update()
 						if (isCollisionCapsule(m_AttackingCollsion, enemy->GetCapsule()) && !m_Text_Attack->GetVisible())
 						{
 							m_Text_Attack->SetVisible(true);
+						}
+					}
+				}
+			}
+
+			// 壁との当たり判定
+			for (int i = 0; i < OBJECT_MAX; i++)
+			{
+				if (CScene::GetScene(LAYER_OBJECT3D, i) != NULL)
+				{
+					CScene* obj = CScene::GetScene(LAYER_OBJECT3D, i);
+
+					if (obj->GetType() == SCENE_TYPE_WALL)
+					{
+						CWall* wall = (CWall*)obj;
+						Sphere charaSphere;
+						charaSphere.pos = m_Pos;
+						charaSphere.pos.y += 0.4f;
+						charaSphere.rad = 0.4f;
+
+						if (isCollisionOBBtoSphere(wall->GetOBB(), charaSphere))
+						{
+							// 衝突していた場合どの面と衝突したか検索
+							for (int j = 0; j < 6; j++)
+							{
+								//int face = wall->FindHitPlane(charaSphere);
+/*
+								D3DXVECTOR3 normal = wall->GetNormal(face);
+								D3DXVECTOR3 normalPos = wall->GetNormalPos(face);*/
+
+								if (isCollisionSpheretoPlane(charaSphere, wall->GetNormalPos(j), wall->GetNormal(j)))
+								{
+									D3DXVECTOR3 normal = wall->GetNormal(j);
+									D3DXVECTOR3 vec = m_Pos - wall->GetNormalPos(j);
+
+									D3DXVec3Normalize(&normal, &normal);
+									D3DXVec3Normalize(&vec, &vec);
+
+									if (0 < D3DXVec3Dot(&normal, &vec))
+									{
+										newPos = PushOut(newPos, m_Pos, wall->GetNormal(j));
+									}
+								}
+
+							}
 						}
 					}
 				}

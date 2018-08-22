@@ -199,7 +199,7 @@ bool isCollisionOBBs(OBB &obb1, OBB &obb2)
 // 指定軸番号の方向ベクトルを取得
 D3DXVECTOR3 OBB::GetDirect(int elem)
 {
-	return m_NormaDirect[elem];
+	return m_NormalDirect[elem];
 }
 
 // 指定軸方向の長さを取得

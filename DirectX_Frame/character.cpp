@@ -127,3 +127,26 @@ void CCharacter::Rotate(D3DXVECTOR3 vec)
 		D3DXVec3Normalize(&m_Right, &m_Right);
 	}
 }
+
+//======================================================================
+//	壁にめり込んだプレイヤーを押し出す
+//======================================================================
+D3DXVECTOR3 CCharacter::PushOut(D3DXVECTOR3 newPos, D3DXVECTOR3 oldPos, D3DXVECTOR3 normal)
+{
+	D3DXVECTOR3 moveVec = newPos - oldPos;
+/*
+	float L = distancePointToPlane(normal, newPos, normalPos);
+
+	D3DXVECTOR3 newVec = moveVec + (L + sphere.rad) * normal * 0.09f;*/
+
+	//D3DXVec3Normalize(&newVec, &newVec);
+
+	D3DXVECTOR3 newVec;
+
+	D3DXVec3Cross(&newVec, &moveVec, &normal);
+	D3DXVec3Cross(&newVec, &normal, &newVec);
+
+	newVec += normal * 0.002f;
+
+	return oldPos + newVec;
+}

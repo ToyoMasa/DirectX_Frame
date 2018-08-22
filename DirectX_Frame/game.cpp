@@ -30,6 +30,7 @@
 #include "root.h"
 #include "fade.h"
 #include "Effekseer.h"
+#include "wall.h"
 
 CBillBoard *CModeGame::tree1 = NULL;
 CBillBoard *CModeGame::tree2 = NULL;
@@ -40,6 +41,8 @@ CLight *CModeGame::m_Light;
 CParticleEmitter emitter;
 bool CModeGame::m_PlayerDied = false;
 bool CModeGame::m_TargetDied = false;
+
+CWall* wall;
 
 float g_test = 0;
 
@@ -90,6 +93,8 @@ void CModeGame::Init()
 
 	// êîéö
 	//CNumber::Init();
+
+	wall = CWall::Create(D3DXVECTOR3(0.0f, 0.0f, -5.0f), 5.0f, 2.0f, 1.0f, TEX_ID_FIELD001);
 
 	m_PlayerDied = false;
 	m_TargetDied = false;
