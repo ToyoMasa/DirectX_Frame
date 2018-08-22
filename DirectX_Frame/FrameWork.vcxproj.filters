@@ -204,7 +204,7 @@
     <ClInclude Include="PlayerAnim.h">
       <Filter>ヘッダー ファイル\SkinMesh\AnimationList</Filter>
     </ClInclude>
-    <ClInclude Include="Enemy01Anim.h">
+    <ClInclude Include="EnemyAnim.h">
       <Filter>ヘッダー ファイル\SkinMesh\AnimationList</Filter>
     </ClInclude>
   </ItemGroup>

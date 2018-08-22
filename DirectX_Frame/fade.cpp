@@ -3,12 +3,27 @@
 #include "mode.h"
 #include "scene.h"
 #include "scene2D.h"
-#include "fade.h"
+#include "scene3D.h"
+#include "sceneModel.h"
+#include "camera.h"
+#include "light.h"
+#include "manager.h"
 #include "texture.h"
+#include "billboard.h"
+#include "field.h"
+#include "player.h"
+#include "enemy.h"
+#include "input.h"
+#include "skybox.h"
+#include "number.h"
+#include "title.h"
+#include "game.h"
+#include "fade.h"
 
 int CFade::m_Alpha;
 bool CFade::m_FadeIn = false;
 bool CFade::m_FadeOut = false;
+CMode* CFade::m_NextMode = NULL;
 
 void CFade::Init()
 {
@@ -45,6 +60,8 @@ void CFade::Update()
 		{
 			m_FadeOut = false;
 			m_FadeIn = false;
+
+			CManager::SetMode(m_NextMode);
 		}
 	}
 
@@ -94,14 +111,12 @@ void CFade::FadeIn()
 {
 	m_FadeIn = true;
 	m_FadeOut = false;
-
-	m_Alpha = 255;
 }
 
-void CFade::FadeOut()
+void CFade::FadeOut(CMode* nextMode)
 {
 	m_FadeOut = true;
 	m_FadeIn = false;
 
-	m_Alpha = 0;
+	m_NextMode = nextMode;
 }

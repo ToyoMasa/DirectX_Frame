@@ -16,14 +16,16 @@ public:
 	static void Update();
 	static void Draw();
 	static bool GetFade() { return m_FadeIn | m_FadeOut; }
+	static bool GetFadeOut() { return m_FadeOut; }
 
 	static void FadeIn();
-	static void FadeOut();
+	static void FadeOut(CMode* nextMode);
 
 private:
 	static int m_Alpha;
 	static bool m_FadeIn;
 	static bool m_FadeOut;
+	static CMode* m_NextMode;
 };
 
 #endif // !_FADE_H_

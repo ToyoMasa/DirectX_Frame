@@ -23,6 +23,7 @@
 #include "title.h"
 #include "game.h"
 #include "result.h"
+#include "fade.h"
 
 CScene2D* CModeResult::m_ResultText = NULL;
 
@@ -33,6 +34,8 @@ void CModeResult::Init()
 
 	m_ResultText = CScene2D::Create(TEX_ID_RESULT, 256.0f, 64.0f);
 	m_ResultText->Set(D3DXVECTOR3(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2, 0.0f));
+
+	CFade::FadeIn();
 }
 
 void CModeResult::Uninit()
@@ -62,7 +65,7 @@ void CModeResult::Update()
 
 	if (inputMouse->GetLeftTrigger() || inputKeyboard->GetKeyTrigger(DIK_SPACE))
 	{
-		CManager::SetMode(new CModeTitle());
+		CFade::FadeOut(new CModeTitle());
 	}
 
 }

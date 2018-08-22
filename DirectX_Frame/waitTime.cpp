@@ -17,6 +17,8 @@
 #include "input.h"
 #include "field.h"
 #include "waitTime.h"
+#include "sceneSkinMesh.h"
+#include "EnemyAnim.h"
 
 void CActionWaitTime::Init(int waitFrame, CActionBase* nextAction)
 {
@@ -29,6 +31,8 @@ void CActionWaitTime::Update()
 	if (m_WaitCount > 0)
 	{
 		m_WaitCount--;
+
+		m_Character->GetModel()->ChangeAnim(ENEMY_IDLE, 0.3f);
 	}
 	else
 	{

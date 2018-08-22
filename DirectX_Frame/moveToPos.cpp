@@ -18,6 +18,8 @@
 #include "field.h"
 #include "moveToPos.h"
 #include "root.h"
+#include "sceneSkinMesh.h"
+#include "EnemyAnim.h"
 
 void CActionMoveToPos::Init(int rootId, float speed)
 {
@@ -32,14 +34,21 @@ void CActionMoveToPos::Update()
 	newPos.y = 0;
 	D3DXVECTOR3 vec = m_TargetPos - newPos;
 
+	m_Character->GetModel()->ChangeAnim(ENEMY_WALKING, 0.3f);
+
 	if (D3DXVec3Length(&vec) > m_Speed)
 	{
 		D3DXVec3Normalize(&vec, &vec);
+
 		newPos += m_Speed * vec;
+
+		m_Character->Rotate(newPos - m_Character->GetPos());
 		m_Character->SetPos(newPos);
 	}
 	else
 	{
+		D3DXVec3Normalize(&vec, &vec);
+
 		newPos = m_TargetPos;
 		m_Character->SetPos(newPos);
 
@@ -49,7 +58,6 @@ void CActionMoveToPos::Update()
 	}
 
 	D3DXVec3Normalize(&vec, &vec);
-	m_Character->Rotate(vec);
 }
 
 CActionMoveToPos* CActionMoveToPos::Create(CCharacter* chara, int rootId, float speed)

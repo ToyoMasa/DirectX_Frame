@@ -30,6 +30,8 @@ void CEnemy::Init(int modelId, D3DXVECTOR3 spawnPos, int rootId, CField* field)
 	m_Field = field;
 	m_EnemyType = ENEMY_TYPE_PATROL;
 	m_Action = CActionMoveToPos::Create(this, rootId, 0.02f);
+
+	m_Forward = D3DXVECTOR3(0.0f, 0.0f, -1.0f);
 }
 
 void CEnemy::Init(int modelId, D3DXVECTOR3 spawnPos, CActionBase* action, CField* field, ENEMY_TYPE type)

@@ -1,7 +1,10 @@
-﻿  fade.cpp
-  game.cpp
+﻿  moveToPlayer.cpp
 d:\old ファイル\school\school\3年\gm31\frameworkrepo\trunk\directx_frame\billboard.h(18): warning C4091: 'typedef ': 変数が何も宣言されていないときは、'DRAW_TYPE' の左辺を無視します。
-  manager.cpp
+  moveToPos.cpp
+d:\old ファイル\school\school\3年\gm31\frameworkrepo\trunk\directx_frame\billboard.h(18): warning C4091: 'typedef ': 変数が何も宣言されていないときは、'DRAW_TYPE' の左辺を無視します。
+  moveToRandom.cpp
+d:\old ファイル\school\school\3年\gm31\frameworkrepo\trunk\directx_frame\billboard.h(18): warning C4091: 'typedef ': 変数が何も宣言されていないときは、'DRAW_TYPE' の左辺を無視します。
+  waitTime.cpp
 d:\old ファイル\school\school\3年\gm31\frameworkrepo\trunk\directx_frame\billboard.h(18): warning C4091: 'typedef ': 変数が何も宣言されていないときは、'DRAW_TYPE' の左辺を無視します。
   コードを生成中...
   FrameWork.vcxproj -> D:\Old ファイル\school\school\3年\GM31\FrameWorkRepo\trunk\DirectX_Frame\Debug\FrameWork.exe

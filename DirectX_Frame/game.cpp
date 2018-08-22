@@ -9,6 +9,7 @@
 #include "scene2D.h"
 #include "scene3D.h"
 #include "sceneModel.h"
+#include "sceneSkinMesh.h"
 #include "SkinMeshFile.h"
 #include "camera.h"
 #include "light.h"
@@ -61,8 +62,8 @@ void CModeGame::Init()
 	player->SetField(field);
 
 	// 敵
-	//enemy[0] = CEnemy::Create(MODEL_ID_ENEMY01, D3DXVECTOR3(7.0f, 0.0f, 5.0f), 1, field);
-	//enemy[1] = CEnemy::Create(MODEL_ID_ENEMY01, D3DXVECTOR3(0.0f, 0.0f, -8.0f), 1, field);
+	enemy[0] = CEnemy::Create(SM_ID_ENEMY01, D3DXVECTOR3(7.0f, 0.0f, 5.0f), 1, field);
+	//enemy[1] = CEnemy::Create(SM_ID_ENEMY01, D3DXVECTOR3(0.0f, 0.0f, -8.0f), 1, field);
 	//enemy[1]->SetAction(CActionMoveToRandom::Create(enemy[1], 3.0f, 3.5f, 0.02f));
 	//Target = CEnemy::Create(MODEL_ID_TARGET, D3DXVECTOR3(0.0f, 0.0f, 8.0f), CActionWait::Create(Target), field, ENEMY_TYPE_TARGET);
 
@@ -121,34 +122,37 @@ void CModeGame::Uninit()
 
 void CModeGame::Update()
 {
-	emitter.Update();
-
-	CCharacter::UpdateAll();
-	CScene::UpdateAll();
-	CParticle::UpdateAll();
-	CBillBoard::UpdateAll();
-
-	CInputKeyboard *inputKeyboard;
-	CInputMouse *inputMouse;
-	float mouseX, mouseY, mouseZ;
-
-	// キーボード取得
-	inputKeyboard = CManager::GetInputKeyboard();
-
-	// マウス取得
-	inputMouse = CManager::GetInputMouse();
-	mouseX = (float)inputMouse->GetAxisX();
-	mouseY = (float)inputMouse->GetAxisY();
-	mouseZ = (float)inputMouse->GetAxisZ();
-
-	if (m_TargetDied)
+	if (!CFade::GetFadeOut())
 	{
-		CManager::SetMode(new CModeResult());
-	}
+		emitter.Update();
 
-	if (m_PlayerDied)
-	{
-		CManager::SetMode(new CModeResult());
+		CCharacter::UpdateAll();
+		CScene::UpdateAll();
+		CParticle::UpdateAll();
+		CBillBoard::UpdateAll();
+
+		CInputKeyboard *inputKeyboard;
+		CInputMouse *inputMouse;
+		float mouseX, mouseY, mouseZ;
+
+		// キーボード取得
+		inputKeyboard = CManager::GetInputKeyboard();
+
+		// マウス取得
+		inputMouse = CManager::GetInputMouse();
+		mouseX = (float)inputMouse->GetAxisX();
+		mouseY = (float)inputMouse->GetAxisY();
+		mouseZ = (float)inputMouse->GetAxisZ();
+
+		if (m_TargetDied)
+		{
+			CFade::FadeOut(new CModeResult());
+		}
+
+		if (m_PlayerDied)
+		{
+			CFade::FadeOut(new CModeResult());
+		}
 	}
 }
 
@@ -164,7 +168,6 @@ void CModeGame::Draw()
 	D3DXVECTOR3 pos = player->GetPos();
 	ImGui::Begin("Debug Window", 0);
 	ImGui::Text("X = %.2f Y = %.2f Z = %.2f", pos.x, pos.y, pos.z);
-	ImGui::Text("test = %.4f", g_test);
 	ImGui::End();
 
 	CImGui::EndDraw();

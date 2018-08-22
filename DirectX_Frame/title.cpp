@@ -22,6 +22,7 @@
 #include "number.h"
 #include "title.h"
 #include "game.h"
+#include "fade.h"
 
 CScene2D* CModeTitle::m_TitleLogo = NULL;
 
@@ -32,6 +33,9 @@ void CModeTitle::Init()
 
 	m_TitleLogo = CScene2D::Create(TEX_ID_TITLE, 256.0f, 64.0f);
 	m_TitleLogo->Set(D3DXVECTOR3(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2, 0.0f));
+
+	// フェードイン
+	CFade::FadeIn();
 }
 
 void CModeTitle::Uninit()
@@ -61,7 +65,7 @@ void CModeTitle::Update()
 
 	if (inputMouse->GetLeftTrigger() || inputKeyboard->GetKeyTrigger(DIK_SPACE)) 
 	{
-		CManager::SetMode(new CModeGame());
+		CFade::FadeOut(new CModeGame());
 	}
 
 }

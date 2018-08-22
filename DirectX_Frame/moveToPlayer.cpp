@@ -18,6 +18,8 @@
 #include "field.h"
 #include "moveToPlayer.h"
 #include "root.h"
+#include "sceneSkinMesh.h"
+#include "EnemyAnim.h"
 
 void CActionMoveToPlayer::Init(CCharacter* target, float speed)
 {
@@ -32,6 +34,8 @@ void CActionMoveToPlayer::Update()
 	D3DXVECTOR3 targetPos = m_Target->GetPos();
 	targetPos.y = 0;
 	D3DXVECTOR3 vec = targetPos - newPos;
+
+	m_Character->GetModel()->ChangeAnim(ENEMY_RUNNING, 0.3f);
 
 	if (D3DXVec3Length(&vec) > m_Speed)
 	{

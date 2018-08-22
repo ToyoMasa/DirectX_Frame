@@ -14,6 +14,8 @@
 #include "field.h"
 #include "action.h"
 #include "root.h"
+#include "sceneSkinMesh.h"
+#include "EnemyAnim.h"
 
 void CActionMoveToRandom::Init(float min, float max, float speed)
 {
@@ -35,6 +37,8 @@ void CActionMoveToRandom::Update()
 	D3DXVECTOR3 newPos = m_Character->GetPos();
 	newPos.y = 0;
 	D3DXVECTOR3 vec = m_TargetPos - newPos;
+
+	m_Character->GetModel()->ChangeAnim(ENEMY_WALKING, 0.3f);
 
 	if (D3DXVec3Length(&vec) > m_Speed)
 	{

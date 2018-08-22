@@ -49,6 +49,7 @@ public:
 	void SetField(CField* field) { m_Field = field; }
 	void SetPos(D3DXVECTOR3 pos) { m_Pos = pos; }
 	D3DXVECTOR3 GetPos() { return m_Pos; }
+	D3DXVECTOR3 GetForward() { return m_Forward; }
 	void Rotate(D3DXVECTOR3 vec);
 	void Release();
 	CSceneSkinMesh* GetModel() { return m_Model; }
