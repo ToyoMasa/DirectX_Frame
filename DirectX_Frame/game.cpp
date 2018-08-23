@@ -38,11 +38,8 @@ CPlayer *CModeGame::player = NULL;
 CEnemy *CModeGame::enemy[2] = { NULL };
 CEnemy *CModeGame::Target = NULL;
 CLight *CModeGame::m_Light;
-CParticleEmitter emitter;
 bool CModeGame::m_PlayerDied = false;
 bool CModeGame::m_TargetDied = false;
-
-CWall* wall;
 
 float g_test = 0;
 
@@ -77,34 +74,11 @@ void CModeGame::Init()
 
 	CBillBoard::Init();
 
-	tree1 = CBillBoard::Create(TEX_ID_TREE);
-	tree2 = CBillBoard::Create(TEX_ID_TREE);
-
-	tree1->Set(TEX_ID_TREE, D3DXVECTOR3(1.0f, 0.0f, 1.0f), 2.0f, 1);
-	tree2->Set(TEX_ID_TREE, D3DXVECTOR3(-1.0f, 0.0f, 0.0f), 2.0f, 1);
-
-	// パーティクルエミッター
-	emitter.Init(TEX_ID_STAR, 300, 3, 300, 0.2f, 0.0f,
-		D3DXVECTOR3(0.0f, 0.0f, 3.0f),
-		D3DXVECTOR3(-0.006f, 0.03f, -0.006f),
-		D3DXVECTOR3(0.006f, 0.035f, 0.006f),
-		D3DXVECTOR3(0.0f, -0.0002f, 0.0f),
-		false);
-
-	// 数字
-	//CNumber::Init();
-
-	wall = CWall::Create(D3DXVECTOR3(0.0f, 0.0f, -5.0f), 5.0f, 2.0f, 1.0f, TEX_ID_FIELD001);
+	MakeMap();
 
 	m_PlayerDied = false;
 	m_TargetDied = false;
 
-	CEffekseer* effect = CEffekseer::Create(CEffekseer::Effect_SpawnAvatar, player->GetCamera());
-	effect->RepeatEffect(true);
-	effect->SetScale(0.5f, 0.5f, 0.5f);
-	effect->SetPosition(0.0f, 5.0f, 0.0f);
-	effect->Play();
-	effect->SetVisible(true);
 }
 
 void CModeGame::Uninit()
@@ -129,8 +103,6 @@ void CModeGame::Update()
 {
 	if (!CFade::GetFadeOut())
 	{
-		emitter.Update();
-
 		CCharacter::UpdateAll();
 		CScene::UpdateAll();
 		CParticle::UpdateAll();
@@ -188,4 +160,36 @@ void CModeGame::TargetKilled()
 void CModeGame::test(float test)
 {
 	g_test = test;
+}
+
+void CModeGame::MakeMap()
+{
+	CWall::Create(D3DXVECTOR3(13.5f, 0.0f, -24.5f), 23.0f, 4.0f, 1.0f, TEX_ID_WALL01);
+	CWall::Create(D3DXVECTOR3(-13.5f, 0.0f, -24.5f), 23.0f, 4.0f, 1.0f, TEX_ID_WALL01);
+	CWall::Create(D3DXVECTOR3(-24.5f, 0.0f, -2.0f), 1.0f, 4.0f, 44.0f, TEX_ID_WALL01);
+	CWall::Create(D3DXVECTOR3(24.5f, 0.0f, -13.0f), 1.0f, 4.0f, 22.0f, TEX_ID_WALL01);
+	CWall::Create(D3DXVECTOR3(0.0f, 0.0f, 24.5f), 50.0f, 4.0f, 1.0f, TEX_ID_WALL01);
+	CWall::Create(D3DXVECTOR3(9.5f, 0.0f, 12.5f), 7.0f, 4.0f, 1.0f, TEX_ID_WALL01);
+	CWall::Create(D3DXVECTOR3(-22.0f, 0.0f, -13.5f), 4.0f, 4.0f, 1.0f, TEX_ID_WALL01);
+	CWall::Create(D3DXVECTOR3(-8.5f, 0.0f, -16.0f), 1.0f, 4.0f, 4.0f, TEX_ID_WALL01);
+	CWall::Create(D3DXVECTOR3(-8.5f, 0.0f, -22.0f), 1.0f, 4.0f, 4.0f, TEX_ID_WALL01);
+	CWall::Create(D3DXVECTOR3(-13.0f, 0.0f, -13.5f), 10.0f, 4.0f, 1.0f, TEX_ID_WALL01);
+	CWall::Create(D3DXVECTOR3(7.5f, 0.0f, -18.5f), 1.0f, 4.0f, 11.0f, TEX_ID_WALL01);
+	CWall::Create(D3DXVECTOR3(-14.5f, 0.0f, 2.5f), 1.0f, 4.0f, 9.0f, TEX_ID_WALL01);
+	CWall::Create(D3DXVECTOR3(5.5f, 0.0f, 18.0f), 1.0f, 4.0f, 12.0f, TEX_ID_WALL01);
+	CWall::Create(D3DXVECTOR3(-12.0f, 0.0f, 18.5f), 4.0f, 4.0f, 1.0f, TEX_ID_WALL01);
+	CWall::Create(D3DXVECTOR3(-20.0f, 0.0f, 18.5f), 8.0f, 4.0f, 1.0f, TEX_ID_WALL01);
+	CWall::Create(D3DXVECTOR3(-19.0f, 0.0f, 12.5f), 10.0f, 4.0f, 1.0f, TEX_ID_WALL01);
+	CWall::Create(D3DXVECTOR3(-11.5f, 0.0f, 21.5f), 1.0f, 4.0f, 5.0f, TEX_ID_WALL01);
+	CWall::Create(D3DXVECTOR3(-5.0f, 0.0f, 18.5f), 6.0f, 4.0f, 1.0f, TEX_ID_WALL01);
+	CWall::Create(D3DXVECTOR3(1.0f, 0.0f, 18.5f), 2.0f, 4.0f, 1.0f, TEX_ID_WALL01);
+	CWall::Create(D3DXVECTOR3(1.5f, 0.0f, 21.5f), 1.0f, 4.0f, 5.0f, TEX_ID_WALL01);
+	CWall::Create(D3DXVECTOR3(-19.0f, 0.0f, -7.5f), 10.0f, 4.0f, 1.0f, TEX_ID_WALL01);
+	CWall::Create(D3DXVECTOR3(20.5f, 0.0f, 12.5f), 7.0f, 4.0f, 1.0f, TEX_ID_WALL01);
+	CWall::Create(D3DXVECTOR3(-24.5f, 0.0f, 23.5f), 1.0f, 4.0f, 1.0f, TEX_ID_WALL01);
+	CWall::Create(D3DXVECTOR3(24.5f, 0.0f, 13.0f), 1.0f, 4.0f, 22.0f, TEX_ID_WALL01);
+	CWall::Create(D3DXVECTOR3(10.5f, 0.0f, -12.5f), 7.0f, 4.0f, 1.0f, TEX_ID_WALL01);
+	CWall::Create(D3DXVECTOR3(21.0f, 0.0f, -12.5f), 6.0f, 4.0f, 1.0f, TEX_ID_WALL01);
+	CWall::Create(D3DXVECTOR3(-14.5f, 0.0f, 11.0f), 1.0f, 4.0f, 2.0f, TEX_ID_WALL01);
+	CWall::Create(D3DXVECTOR3(-14.5f, 0.0f, -6.0f), 1.0f, 4.0f, 2.0f, TEX_ID_WALL01);
 }

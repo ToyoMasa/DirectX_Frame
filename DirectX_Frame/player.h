@@ -3,7 +3,9 @@
 
 #include "character.h"
 #include "sceneSkinMesh.h"
-static const float PLAYER_MOVE_SPEED = 0.06f;
+#include "Effekseer.h"
+
+static const float PLAYER_MOVE_SPEED = 0.08f;
 
 class CScene2D;
 
@@ -35,6 +37,8 @@ private:
 	CScene2D* m_Text_Attack;
 	Capsule m_AttackingCollsion;
 	bool m_isPreAttack;
+
+	CEffekseer* m_BloodEffect;
 };
 
 #endif // !_PLAYER_H_

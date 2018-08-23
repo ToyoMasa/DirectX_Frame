@@ -22,6 +22,7 @@ typedef enum
 	TEX_ID_STAR,					// 星
 	TEX_ID_ATTACK,					// 攻撃可能テキスト
 	TEX_ID_BLACK,					// フェード
+	TEX_ID_WALL01,					// 壁
 	TEX_ID_MAX,
 } TEXTURE_ID;
 
@@ -39,6 +40,7 @@ static const std::string TEXTURE_SOURCE[] =
 	"data/textures/star.png",
 	"data/textures/attack.png",
 	"data/textures/black.png",
+	"data/textures/shikkui02.jpg",
 };
 
 // テクスチャがロードされているか検索するためのマップ

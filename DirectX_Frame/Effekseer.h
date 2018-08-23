@@ -28,10 +28,12 @@ public:
 	const enum Effect
 	{
 		Effect_SpawnAvatar,
+		Effect_BloodLoss,
 		Effect_Max
 	};
 	const EffectFile fileName_[Effect_Max]{
 		L"data/effects/test.efk",
+		L"data/effects/BloodLoss.efk",
 	};
 
 

@@ -150,6 +150,7 @@ bool CBox::Init(float X, float Y, float Z, int texID)
 	m_mat.Ambient.a = 1.0f;
 
 	CTexture::Load(texID);
+	m_TexID = texID;
 
 	return true;
 }

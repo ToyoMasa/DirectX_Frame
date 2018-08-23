@@ -35,6 +35,11 @@ void CPlayer::Init(int modelId, D3DXVECTOR3 spawnPos)
 
 	m_Text_Attack = CScene2D::Create(TEX_ID_ATTACK, 128, 64);
 	m_Text_Attack->Set(D3DXVECTOR3(SCREEN_WIDTH / 2, SCREEN_HEIGHT - 200.0f, 0.0f));
+
+	m_BloodEffect = CEffekseer::Create(CEffekseer::Effect_BloodLoss, m_Camera);
+	m_BloodEffect->RepeatEffect(false);
+	m_BloodEffect->SetScale(0.1f, 0.1f, 0.1f);
+	m_BloodEffect->SetVisible(true);
 }
 
 void CPlayer::Uninit()
@@ -186,6 +191,12 @@ void CPlayer::Update()
 							//	CModeGame::TargetKilled();
 							//}
 							//enemy->Release();
+
+							D3DXVECTOR3 bloodPos = enemy->GetPos();
+							bloodPos.y += 1.2f;
+							m_BloodEffect->SetPosition(bloodPos);
+							m_BloodEffect->Play();
+
 							enemy->Death();
 						}
 					}

@@ -21,6 +21,8 @@ public:
 	static CPlayer* GetPlayer() { return player; }
 	static void PlayerDied() { m_PlayerDied = true; }
 	static void TargetKilled();
+	static CCamera* GetCamera() { return player->GetCamera(); }
+	static void MakeMap();
 
 	static void test(float test);
 

@@ -21,6 +21,7 @@
 #include "actionBase.h"
 #include "action.h"
 #include "EnemyAnim.h"
+#include "Effekseer.h"
 
 void CEnemy::Init(int modelId, D3DXVECTOR3 spawnPos, int rootId, CField* field)
 {
@@ -167,6 +168,16 @@ void CEnemy::Death()
 {
 	m_Model->PlayMontage(ENEMY_DEATH, 0.3f, 8.0f, ENEMY_DEATH);
 	m_Model->SetAnimPlaySpeed(1.5f);
+/*
+	CEffekseer* effect = CEffekseer::Create(CEffekseer::Effect_BloodLoss, CModeGame::GetCamera());
+	effect->RepeatEffect(false);
+	effect->SetScale(0.1f, 0.1f, 0.1f);
 
+	D3DXVECTOR3 bloodPos = m_Pos;
+	bloodPos.y += 1.25f;
+	effect->SetPosition(bloodPos);
+	effect->Play();
+	effect->SetVisible(true);
+*/
 	m_isPreDeath = true;
 }
