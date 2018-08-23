@@ -66,8 +66,8 @@ void CModeGame::Init()
 
 	// “G
 	enemy[0] = CEnemy::Create(SM_ID_ENEMY01, D3DXVECTOR3(7.0f, 0.0f, 5.0f), 1, field);
-	//enemy[1] = CEnemy::Create(SM_ID_ENEMY01, D3DXVECTOR3(0.0f, 0.0f, -8.0f), 1, field);
-	//enemy[1]->SetAction(CActionMoveToRandom::Create(enemy[1], 3.0f, 3.5f, 0.02f));
+	enemy[1] = CEnemy::Create(SM_ID_ENEMY01, D3DXVECTOR3(0.0f, 0.0f, -8.0f), 1, field);
+	enemy[1]->SetAction(CActionMoveToRandom::Create(enemy[1], 3.0f, 3.5f, 0.02f));
 	//Target = CEnemy::Create(MODEL_ID_TARGET, D3DXVECTOR3(0.0f, 0.0f, 8.0f), CActionWait::Create(Target), field, ENEMY_TYPE_TARGET);
 
 	// ‹ó

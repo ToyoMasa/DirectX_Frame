@@ -11,6 +11,7 @@
 #include "sceneModel.h"
 #include "texture.h"
 #include "billboard.h"
+#include "character.h"
 #include "player.h"
 #include "enemy.h"
 #include "game.h"
@@ -46,6 +47,9 @@ void CActionMoveToPlayer::Update()
 	{
 
 	}
+
+	// •Ç‚Æ‚Ì“–‚½‚è”»’è
+	newPos = m_Character->HitWall(newPos);
 
 	D3DXVec3Normalize(&vec, &vec);
 	m_Character->Rotate(vec);

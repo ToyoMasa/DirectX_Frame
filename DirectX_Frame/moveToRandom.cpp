@@ -44,6 +44,10 @@ void CActionMoveToRandom::Update()
 	{
 		D3DXVec3Normalize(&vec, &vec);
 		newPos += m_Speed * vec;
+
+		// •Ç‚Æ‚Ì“–‚½‚è”»’è
+		newPos = m_Character->HitWall(newPos);
+
 		m_Character->SetPos(newPos);
 
 		D3DXVec3Normalize(&vec, &vec);
@@ -52,6 +56,10 @@ void CActionMoveToRandom::Update()
 	else
 	{
 		newPos = m_TargetPos;
+
+		// •Ç‚Æ‚Ì“–‚½‚è”»’è
+		newPos = m_Character->HitWall(newPos);
+
 		m_Character->SetPos(newPos);
 
 		D3DXVec3Normalize(&vec, &vec);
