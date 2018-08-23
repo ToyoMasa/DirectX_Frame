@@ -46,6 +46,8 @@ public:
 	void PlayMontage(UINT animID, float shiftTime, float playTime, UINT nextAnimID);
 	void PlayMontage(UINT animID, float shiftTime, float playTime, UINT nextAnimID, float playSpeed);
 	bool GetPlayMontage() { return m_SkinMeshFile->GetPlayMontage(); }
+	// アニメーションの再生時間を取得
+	float GetWeightTime() { return m_SkinMeshFile->GetWeightTime(); }
 
 	static CSceneSkinMesh* Create(const std::string& modelName);
 

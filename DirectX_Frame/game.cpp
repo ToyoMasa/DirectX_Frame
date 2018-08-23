@@ -173,6 +173,7 @@ void CModeGame::Draw()
 	D3DXVECTOR3 pos = player->GetPos();
 	ImGui::Begin("Debug Window", 0);
 	ImGui::Text("X = %.2f Y = %.2f Z = %.2f", pos.x, pos.y, pos.z);
+	//ImGui::Text("test = %.2f", g_test);
 	ImGui::End();
 
 	CImGui::EndDraw();

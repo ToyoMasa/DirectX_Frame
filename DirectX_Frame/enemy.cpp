@@ -20,6 +20,7 @@
 #include "field.h"
 #include "actionBase.h"
 #include "action.h"
+#include "EnemyAnim.h"
 
 void CEnemy::Init(int modelId, D3DXVECTOR3 spawnPos, int rootId, CField* field)
 {
@@ -59,36 +60,46 @@ void CEnemy::Update()
 {
 	m_OldPos = m_Pos;
 
-	m_Action->Update();
-
-	Search();
-
-	m_Pos.y = m_Field->GetHeight(m_Pos);
-
-	// コリジョンの計算
-	m_CapsuleCollision.Set(Point(m_Pos.x, m_Pos.y + 0.25f, m_Pos.z), Point(m_Pos.x, m_Pos.y + 1.0f, m_Pos.z), 0.25f);
-	for (int i = 0; i < CHARACTER_MAX; i++)
+	if (m_isPreDeath)
 	{
-		CCharacter* obj = CCharacter::GetCharacter(i);
-		if (obj != NULL && obj != this)
+		if (m_Model->GetWeightTime() >= 8.0f)
 		{
-			if (obj->GetType() == CHARACTER_ENEMY)
-			{
-				CEnemy* enemy = (CEnemy*)obj;
-				if (isCollisionCapsule(m_CapsuleCollision, enemy->GetCapsule()))
-				{
-					D3DXVECTOR3 vec = m_Pos - enemy->GetPos();
-					D3DXVec3Normalize(&vec, &vec);
+			Release();
+		}
+	}
+	else
+	{
+		m_Action->Update();
 
-					m_Pos = enemy->GetPos();
-					m_Pos += vec * 0.5f;
+		Search();
+
+		m_Pos.y = m_Field->GetHeight(m_Pos);
+
+		// コリジョンの計算
+		m_CapsuleCollision.Set(Point(m_Pos.x, m_Pos.y + 0.25f, m_Pos.z), Point(m_Pos.x, m_Pos.y + 1.0f, m_Pos.z), 0.25f);
+		for (int i = 0; i < CHARACTER_MAX; i++)
+		{
+			CCharacter* obj = CCharacter::GetCharacter(i);
+			if (obj != NULL && obj != this)
+			{
+				if (obj->GetType() == CHARACTER_ENEMY)
+				{
+					CEnemy* enemy = (CEnemy*)obj;
+					if (isCollisionCapsule(m_CapsuleCollision, enemy->GetCapsule()))
+					{
+						D3DXVECTOR3 vec = m_Pos - enemy->GetPos();
+						D3DXVec3Normalize(&vec, &vec);
+
+						m_Pos = enemy->GetPos();
+						m_Pos += vec * 0.5f;
+					}
 				}
 			}
 		}
+		m_Model->Move(m_Pos);
+		// 当たり判定の移動
+		m_CapsuleCollision.Set(Point(m_Pos.x, m_Pos.y + 0.25f, m_Pos.z), Point(m_Pos.x, m_Pos.y + 1.0f, m_Pos.z), 0.25f);
 	}
-	m_Model->Move(m_Pos);
-	// 当たり判定の移動
-	m_CapsuleCollision.Set(Point(m_Pos.x, m_Pos.y + 0.25f, m_Pos.z), Point(m_Pos.x, m_Pos.y + 1.0f, m_Pos.z), 0.25f);
 }
 
 CEnemy* CEnemy::Create(int modelId, D3DXVECTOR3 spawnPos, int rootId, CField* field)
@@ -150,4 +161,12 @@ void CEnemy::SetAction(CActionBase* action)
 		m_Action->Release();
 	}
 	m_Action = action;
+}
+
+void CEnemy::Death()
+{
+	m_Model->PlayMontage(ENEMY_DEATH, 0.3f, 8.0f, ENEMY_DEATH);
+	m_Model->SetAnimPlaySpeed(1.5f);
+
+	m_isPreDeath = true;
 }

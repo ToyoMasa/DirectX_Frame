@@ -3,7 +3,7 @@
 
 typedef enum
 {
-	ENEMY_Death,
+	ENEMY_DEATH,
 	ENEMY_ATTACK,
 	ENEMY_WALKING,
 	ENEMY_RUNNING,

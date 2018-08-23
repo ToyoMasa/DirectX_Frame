@@ -20,6 +20,7 @@ public:
 		m_Type = CHARACTER_ENEMY;
 		m_FindPlayer = false;
 		m_Action = NULL;
+		m_isPreDeath = false;
 	}
 	~CEnemy() {}
 
@@ -35,11 +36,13 @@ public:
 	Capsule GetCapsule() { return m_CapsuleCollision; }
 	ENEMY_TYPE GetEnemyType() { return m_EnemyType; }
 	void Search();
+	void Death();
 
 private:
 	CActionBase* m_Action;
 	ENEMY_TYPE m_EnemyType;
 	bool m_FindPlayer;
+	bool m_isPreDeath;
 };
 
 #endif // !_ENEMY_H_
