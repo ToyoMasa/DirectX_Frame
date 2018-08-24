@@ -40,16 +40,41 @@ CEnemy *CModeGame::Target = NULL;
 CLight *CModeGame::m_Light;
 bool CModeGame::m_PlayerDied = false;
 bool CModeGame::m_TargetDied = false;
+CScene2D *CModeGame::Load = NULL;
+CScene2D *CModeGame::LoadFrame = NULL;
+CScene2D *CModeGame::LoadGage = NULL;
 
 float g_test = 0;
 
 void CModeGame::Init()
 {
-	// ルートの設定
-	CRoot::Set();
-
 	// テクスチャの初期化
 	CTexture::Init();
+
+	Load = CScene2D::Create(TEX_ID_NOWLOADING, 1545 / 2.0f, 414 / 2.0f);
+	Load->Set(D3DXVECTOR3(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2, 0));
+
+	LoadFrame = CScene2D::Create(TEX_ID_LOADFRAME, 960, 64);
+	LoadFrame->Set(D3DXVECTOR3(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2 + 200.0f, 0));
+
+	LoadGage = CScene2D::Create(TEX_ID_LOADGAGE, 950, 54);
+	LoadGage->Set(D3DXVECTOR3(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2 + 200.0f, 0));
+
+	HRESULT hr;
+	hr = CRenderer::DrawBegin();
+
+	// ロード画面を描画
+	if (SUCCEEDED(hr))
+	{
+		//描画
+		Load->Draw();
+		LoadFrame->Draw();
+
+		CRenderer::DrawEnd();
+	}
+
+	// ルートの設定
+	CRoot::Set();
 
 	// フェード
 	CFade::FadeIn();
@@ -57,15 +82,103 @@ void CModeGame::Init()
 	// フィールド
 	CField* field = CField::Create(TEX_ID_FIELD001, 20.0f, 20, 20, true);
 
+	{
+		hr = CRenderer::DrawBegin();
+		LoadGage->SetSize(D3DXVECTOR2(950 * 0.1f, 54));
+		LoadGage->Set(D3DXVECTOR3((SCREEN_WIDTH / 2 - 950 / 2.0f) + 950 * 0.1f / 2.0f, SCREEN_HEIGHT / 2 + 200.0f, 0));
+
+		// ロード画面を描画
+		if (SUCCEEDED(hr))
+		{
+			//描画
+			Load->Draw();
+			LoadFrame->Draw();
+			LoadGage->Draw();
+
+			CRenderer::DrawEnd();
+		}
+	}
+
 	// プレイヤー
 	player = CPlayer::Create(MODEL_ID_PLAYER, D3DXVECTOR3(0.0f, 0.0f, 0.0f));
 	player->SetField(field);
 
+	{
+		hr = CRenderer::DrawBegin();
+		LoadGage->SetSize(D3DXVECTOR2(950 * 0.3f, 54));
+		LoadGage->Set(D3DXVECTOR3((SCREEN_WIDTH / 2 - 950 / 2.0f) + 950 * 0.3f / 2.0f, SCREEN_HEIGHT / 2 + 200.0f, 0));
+
+		// ロード画面を描画
+		if (SUCCEEDED(hr))
+		{
+			//描画
+			Load->Draw();
+			LoadFrame->Draw();
+			LoadGage->Draw();
+
+			CRenderer::DrawEnd();
+		}
+	}
+
 	// 敵
 	enemy[0] = CEnemy::Create(SM_ID_ENEMY01, D3DXVECTOR3(7.0f, 0.0f, 5.0f), 1, field);
+
+	{
+		hr = CRenderer::DrawBegin();
+		LoadGage->SetSize(D3DXVECTOR2(950 * 0.5f, 54));
+		LoadGage->Set(D3DXVECTOR3((SCREEN_WIDTH / 2 - 950 / 2.0f) + 950 * 0.5f / 2.0f, SCREEN_HEIGHT / 2 + 200.0f, 0));
+
+		// ロード画面を描画
+		if (SUCCEEDED(hr))
+		{
+			//描画
+			Load->Draw();
+			LoadFrame->Draw();
+			LoadGage->Draw();
+
+			CRenderer::DrawEnd();
+		}
+	}
+
 	enemy[1] = CEnemy::Create(SM_ID_ENEMY01, D3DXVECTOR3(0.0f, 0.0f, -8.0f), 1, field);
 	enemy[1]->SetAction(CActionMoveToRandom::Create(enemy[1], 3.0f, 3.5f, 0.02f));
-	//Target = CEnemy::Create(MODEL_ID_TARGET, D3DXVECTOR3(0.0f, 0.0f, 8.0f), CActionWait::Create(Target), field, ENEMY_TYPE_TARGET);
+
+	{
+		hr = CRenderer::DrawBegin();
+		LoadGage->SetSize(D3DXVECTOR2(950 * 0.75f, 54));
+		LoadGage->Set(D3DXVECTOR3((SCREEN_WIDTH / 2 - 950 / 2.0f) + 950 * 0.75f / 2.0f, SCREEN_HEIGHT / 2 + 200.0f, 0));
+
+		// ロード画面を描画
+		if (SUCCEEDED(hr))
+		{
+			//描画
+			Load->Draw();
+			LoadFrame->Draw();
+			LoadGage->Draw();
+
+			CRenderer::DrawEnd();
+		}
+	}
+
+	Target = CEnemy::Create(SM_ID_ENEMY02, D3DXVECTOR3(0.0f, 0.0f, 8.0f), 1, field, ENEMY_TYPE_TARGET);
+	Target->SetAction(CActionWait::Create(Target));
+
+	{
+		hr = CRenderer::DrawBegin();
+		LoadGage->SetSize(D3DXVECTOR2(950, 54));
+		LoadGage->Set(D3DXVECTOR3(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2 + 200.0f, 0));
+
+		// ロード画面を描画
+		if (SUCCEEDED(hr))
+		{
+			//描画
+			Load->Draw();
+			LoadFrame->Draw();
+			LoadGage->Draw();
+
+			CRenderer::DrawEnd();
+		}
+	}
 
 	// 空
 	CSkyBox::Create(player);
@@ -79,6 +192,10 @@ void CModeGame::Init()
 	m_PlayerDied = false;
 	m_TargetDied = false;
 
+	// ロード画面を解放
+	Load->Release();
+	LoadFrame->Release();
+	LoadGage->Release();
 }
 
 void CModeGame::Uninit()

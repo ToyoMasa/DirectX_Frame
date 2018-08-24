@@ -23,6 +23,9 @@ typedef enum
 	TEX_ID_ATTACK,					// 攻撃可能テキスト
 	TEX_ID_BLACK,					// フェード
 	TEX_ID_WALL01,					// 壁
+	TEX_ID_NOWLOADING,				// ロード画面
+	TEX_ID_LOADFRAME,				// ロード画面
+	TEX_ID_LOADGAGE,				// ロード画面
 	TEX_ID_MAX,
 } TEXTURE_ID;
 
@@ -41,6 +44,9 @@ static const std::string TEXTURE_SOURCE[] =
 	"data/textures/attack.png",
 	"data/textures/black.png",
 	"data/textures/shikkui02.jpg",
+	"data/textures/NowLoading.png",
+	"data/textures/LoadFrame.png",
+	"data/textures/LoadGage.png",
 };
 
 // テクスチャがロードされているか検索するためのマップ

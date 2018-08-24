@@ -35,6 +35,9 @@ private:
 	static CLight *m_Light;
 	static bool m_PlayerDied;
 	static bool m_TargetDied;
+	static CScene2D* Load;
+	static CScene2D* LoadFrame;
+	static CScene2D* LoadGage;
 
 };
 

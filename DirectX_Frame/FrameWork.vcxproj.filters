@@ -183,9 +183,6 @@
     <ClInclude Include="moveToRandom.h">
       <Filter>ヘッダー ファイル\AI_Action</Filter>
     </ClInclude>
-    <ClInclude Include="waitTime.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
     <ClInclude Include="shader.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
@@ -212,6 +209,9 @@
     </ClInclude>
     <ClInclude Include="wall.h">
       <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="waitTime.h">
+      <Filter>ヘッダー ファイル\AI_Action</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

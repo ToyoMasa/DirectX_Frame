@@ -17,10 +17,17 @@
 #include "input.h"
 #include "field.h"
 #include "wait.h"
+#include "sceneSkinMesh.h"
+#include "EnemyAnim.h"
 
 void CActionWait::Init()
 {
 
+}
+
+void CActionWait::Update()
+{
+	m_Character->GetModel()->ChangeAnim(ENEMY_IDLE, 0.3f);
 }
 
 CActionWait* CActionWait::Create(CCharacter* chara)

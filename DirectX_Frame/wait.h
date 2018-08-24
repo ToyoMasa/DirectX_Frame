@@ -11,7 +11,7 @@ public:
 	~CActionWait() {}
 
 	void Init();
-	void Update(){}
+	void Update();
 	static CActionWait* Create(CCharacter* chara);
 private:
 };

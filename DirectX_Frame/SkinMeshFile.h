@@ -14,12 +14,14 @@ typedef enum
 {
 	SM_ID_PLAYER,
 	SM_ID_ENEMY01,
+	SM_ID_ENEMY02,
 } SKINMESH_MODEL_ID;
 
 static const std::string SKINMESH_SOURCE[] =
 {
 	"data/models/running.x",
-	"data/models/enemy_01.x"
+	"data/models/enemy_01.x",
+	"data/models/enemy_02.x"
 };
 // ŠK‘w•t‚«XFile
 class SkinMeshFile

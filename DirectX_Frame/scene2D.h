@@ -43,6 +43,8 @@ public:
 
 	void SetColor(D3DCOLOR color) { m_Color = color; }
 	void SetTexCoord(float texCoordx1, float texCoordx2, float texCoordy1, float texCoordy2);
+	void SetSize(D3DXVECTOR2 size) { m_TexSize = size; }
+
 	static CScene2D* Create(int texid, float texW, float texH);
 private:
 	D3DXVECTOR2 m_TexSize;

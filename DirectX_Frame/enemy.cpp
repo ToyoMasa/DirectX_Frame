@@ -36,6 +36,19 @@ void CEnemy::Init(int modelId, D3DXVECTOR3 spawnPos, int rootId, CField* field)
 	m_Forward = D3DXVECTOR3(0.0f, 0.0f, -1.0f);
 }
 
+void CEnemy::Init(int modelId, D3DXVECTOR3 spawnPos, int rootId, CField* field, ENEMY_TYPE type)
+{
+	m_Model = CSceneSkinMesh::Create(SKINMESH_SOURCE[modelId]);
+	m_Pos = spawnPos;
+	m_CapsuleCollision.Set(Point(m_Pos.x, m_Pos.y + 0.25f, m_Pos.z), Point(m_Pos.x, m_Pos.y + 1.0f, m_Pos.z), 0.25f);
+	m_Model->Move(m_Pos);
+	m_Field = field;
+	m_EnemyType = type;
+	m_Action = CActionMoveToPos::Create(this, rootId, 0.02f);
+
+	m_Forward = D3DXVECTOR3(0.0f, 0.0f, -1.0f);
+}
+
 void CEnemy::Init(int modelId, D3DXVECTOR3 spawnPos, CActionBase* action, CField* field, ENEMY_TYPE type)
 {
 	m_Model = CSceneSkinMesh::Create(SKINMESH_SOURCE[modelId]);
@@ -65,6 +78,10 @@ void CEnemy::Update()
 	{
 		if (m_Model->GetWeightTime() >= 8.0f)
 		{
+			if (m_EnemyType == ENEMY_TYPE_TARGET)
+			{
+				CModeGame::TargetKilled();
+			}
 			Release();
 		}
 	}
@@ -107,6 +124,14 @@ CEnemy* CEnemy::Create(int modelId, D3DXVECTOR3 spawnPos, int rootId, CField* fi
 {
 	CEnemy* enemy = new CEnemy();
 	enemy->Init(modelId, spawnPos, rootId, field);
+
+	return enemy;
+}
+
+CEnemy* CEnemy::Create(int modelId, D3DXVECTOR3 spawnPos, int rootId, CField* field, ENEMY_TYPE type)
+{
+	CEnemy* enemy = new CEnemy();
+	enemy->Init(modelId, spawnPos, rootId, field, type);
 
 	return enemy;
 }
@@ -168,16 +193,6 @@ void CEnemy::Death()
 {
 	m_Model->PlayMontage(ENEMY_DEATH, 0.3f, 8.0f, ENEMY_DEATH);
 	m_Model->SetAnimPlaySpeed(1.5f);
-/*
-	CEffekseer* effect = CEffekseer::Create(CEffekseer::Effect_BloodLoss, CModeGame::GetCamera());
-	effect->RepeatEffect(false);
-	effect->SetScale(0.1f, 0.1f, 0.1f);
 
-	D3DXVECTOR3 bloodPos = m_Pos;
-	bloodPos.y += 1.25f;
-	effect->SetPosition(bloodPos);
-	effect->Play();
-	effect->SetVisible(true);
-*/
 	m_isPreDeath = true;
 }

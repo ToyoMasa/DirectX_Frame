@@ -147,13 +147,15 @@ D3DXVECTOR3 CCharacter::PushOut(D3DXVECTOR3 newPos, D3DXVECTOR3 oldPos, D3DXVECT
 	D3DXVec3Cross(&newVec, &moveVec, &normal);
 	D3DXVec3Cross(&newVec, &normal, &newVec);
 
-	newVec += normal * 0.002f;
+	newVec += normal * 0.001f;
 
 	return oldPos + newVec;
 }
 
 D3DXVECTOR3 CCharacter::HitWall(D3DXVECTOR3 newPos)
 {
+	D3DXVECTOR3 rePos = newPos;
+
 	// •Ç‚Æ‚Ì“–‚½‚è”»’è
 	for (int i = 0; i < OBJECT_MAX; i++)
 	{
@@ -174,11 +176,6 @@ D3DXVECTOR3 CCharacter::HitWall(D3DXVECTOR3 newPos)
 					// Õ“Ë‚µ‚Ä‚¢‚½ê‡‚Ç‚Ì–Ê‚ÆÕ“Ë‚µ‚½‚©ŒŸõ
 					for (int j = 0; j < 6; j++)
 					{
-						//int face = wall->FindHitPlane(charaSphere);
-						/*
-						D3DXVECTOR3 normal = wall->GetNormal(face);
-						D3DXVECTOR3 normalPos = wall->GetNormalPos(face);*/
-
 						if (isCollisionSpheretoPlane(charaSphere, wall->GetNormalPos(j), wall->GetNormal(j)))
 						{
 							D3DXVECTOR3 normal = wall->GetNormal(j);
@@ -189,15 +186,14 @@ D3DXVECTOR3 CCharacter::HitWall(D3DXVECTOR3 newPos)
 
 							if (0 < D3DXVec3Dot(&normal, &vec))
 							{
-								return PushOut(newPos, m_Pos, wall->GetNormal(j));
+								rePos = PushOut(rePos, m_Pos, wall->GetNormal(j));
 							}
 						}
-
 					}
 				}
 			}
 		}
 	}
 
-	return newPos;
+	return rePos;
 }

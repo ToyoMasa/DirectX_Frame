@@ -25,6 +25,7 @@ public:
 	~CEnemy() {}
 
 	void Init(int modelId, D3DXVECTOR3 spawnPos, int rootId, CField* field);
+	void Init(int modelId, D3DXVECTOR3 spawnPos, int rootId, CField* field, ENEMY_TYPE type);
 	void Init(int modelId, D3DXVECTOR3 spawnPos, CActionBase* action, CField* field, ENEMY_TYPE type);
 	void Uninit();
 	void Update();
@@ -32,6 +33,7 @@ public:
 	void SetAction(CActionBase* action);
 	void ReleaseAction() { delete m_Action; }
 	static CEnemy* Create(int modelId, D3DXVECTOR3 spawnPos, int rootId, CField* field);
+	static CEnemy* Create(int modelId, D3DXVECTOR3 spawnPos, int rootId, CField* field, ENEMY_TYPE type);
 	static CEnemy* Create(int modelId, D3DXVECTOR3 spawnPos, CActionBase* action, CField* field, ENEMY_TYPE type);
 	Capsule GetCapsule() { return m_CapsuleCollision; }
 	ENEMY_TYPE GetEnemyType() { return m_EnemyType; }
