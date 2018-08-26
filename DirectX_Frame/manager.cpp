@@ -23,6 +23,7 @@
 #include "title.h"
 #include "game.h"
 #include "fade.h"
+#include "sound.h"
 
 //======================================================================
 //	静的メンバ変数
@@ -38,6 +39,8 @@ bool CManager::Init(HINSTANCE hInstance, HWND hWnd, BOOL bWindow)
 	{
 		return false;
 	}
+
+	CSound::Init();
 
 	// imguiの初期化と設定
 #if defined(_DEBUG) || defined(DEBUG)
@@ -72,6 +75,8 @@ void CManager::Uninit()
 
 	CManager::m_Mode->Uninit();
 	delete CManager::m_Mode;
+
+	CSound::ReleaseAll();
 
 	// キーボードの開放処理
 	if (m_InputKeyboard)

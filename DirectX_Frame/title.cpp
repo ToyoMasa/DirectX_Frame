@@ -25,12 +25,14 @@
 #include "game.h"
 #include "fade.h"
 #include "PlayerAnim.h"
+#include "sound.h"
 
 CScene2D* CModeTitle::m_TitleLogo = NULL;
 
 CScene2D* pressSpace;
 CSceneSkinMesh* mesh;
 CCamera* camera;
+CSound* bgm;
 int count;
 
 void CModeTitle::Init()
@@ -54,6 +56,9 @@ void CModeTitle::Init()
 	// フェードイン
 	CFade::FadeIn();
 
+	bgm = CSound::Create(SOUND_LABEL_BGM_TITLE);
+	bgm->Play();
+
 	count = 0;
 }
 
@@ -65,6 +70,8 @@ void CModeTitle::Uninit()
 	CScene::ReleaseAll();
 
 	camera->Release();
+
+	bgm->Release();
 }
 
 void CModeTitle::Update()
