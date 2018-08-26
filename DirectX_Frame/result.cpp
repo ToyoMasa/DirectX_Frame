@@ -32,7 +32,7 @@ void CModeResult::Init()
 	// テクスチャの初期化
 	CTexture::Init();
 
-	m_ResultText = CScene2D::Create(TEX_ID_RESULT, 256.0f, 64.0f);
+	m_ResultText = CScene2D::Create(TEX_ID_RESULT, 193.0f, 103.0f);
 	m_ResultText->Set(D3DXVECTOR3(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2, 0.0f));
 
 	CFade::FadeIn();

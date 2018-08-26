@@ -9,6 +9,7 @@
 #include "scene2D.h"
 #include "scene3D.h"
 #include "sceneModel.h"
+#include "SkinMeshFile.h"
 #include "camera.h"
 #include "light.h"
 #include "manager.h"
@@ -23,19 +24,37 @@
 #include "title.h"
 #include "game.h"
 #include "fade.h"
+#include "PlayerAnim.h"
 
 CScene2D* CModeTitle::m_TitleLogo = NULL;
+
+CScene2D* pressSpace;
+CSceneSkinMesh* mesh;
+CCamera* camera;
+int count;
 
 void CModeTitle::Init()
 {
 	// テクスチャの初期化
 	CTexture::Init();
 
-	m_TitleLogo = CScene2D::Create(TEX_ID_TITLE, 256.0f, 64.0f);
-	m_TitleLogo->Set(D3DXVECTOR3(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2, 0.0f));
+	m_TitleLogo = CScene2D::Create(TEX_ID_TITLE, 1153.0f, 323.0f);
+	m_TitleLogo->Set(D3DXVECTOR3(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2 - 150.0f, 0.0f));
+
+	pressSpace = CScene2D::Create(TEX_ID_PRESS_SPACE, 501.0f, 105.0f);
+	pressSpace->Set(D3DXVECTOR3(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2 + 200.0f, 0.0f));
+
+	camera = CCamera::Create();
+	camera->SetPos(D3DXVECTOR3(-0.2f, 1.7f, -1.0f));
+	camera->SetAt(D3DXVECTOR3(0.0f, 1.5f, 0.0f));
+
+	mesh = CSceneSkinMesh::Create(SKINMESH_SOURCE[SM_ID_PLAYER]);
+	mesh->ChangeAnim(PLAYER_IDLE, 0.0f);
 
 	// フェードイン
 	CFade::FadeIn();
+
+	count = 0;
 }
 
 void CModeTitle::Uninit()
@@ -44,6 +63,8 @@ void CModeTitle::Uninit()
 	CTexture::ReleaseAll();
 
 	CScene::ReleaseAll();
+
+	camera->Release();
 }
 
 void CModeTitle::Update()
@@ -51,6 +72,8 @@ void CModeTitle::Update()
 	CInputKeyboard *inputKeyboard;
 	CInputMouse *inputMouse;
 	float mouseX, mouseY, mouseZ;
+
+	camera->Update();
 
 	// キーボード取得
 	inputKeyboard = CManager::GetInputKeyboard();
@@ -60,6 +83,17 @@ void CModeTitle::Update()
 	mouseX = (float)inputMouse->GetAxisX();
 	mouseY = (float)inputMouse->GetAxisY();
 	mouseZ = (float)inputMouse->GetAxisZ();
+
+	count++;
+
+	if (count / 256 % 2 == 0.0f)
+	{
+		pressSpace->SetColor(D3DCOLOR_RGBA(255, 255, 255, count % 256));
+	}
+	else
+	{
+		pressSpace->SetColor(D3DCOLOR_RGBA(255, 255, 255, 255 - (count % 256)));
+	}
 
 	CScene::UpdateAll();
 
@@ -72,5 +106,16 @@ void CModeTitle::Update()
 
 void CModeTitle::Draw()
 {
+	LPDIRECT3DDEVICE9 pDevice = CRenderer::GetDevice();
+	if (pDevice == NULL)
+	{
+		return;
+	}
+
+	pDevice->SetRenderState(D3DRS_LIGHTING, FALSE);
+
 	CScene::DrawAll();
+
+	pDevice->SetRenderState(D3DRS_LIGHTING, TRUE);
+
 }

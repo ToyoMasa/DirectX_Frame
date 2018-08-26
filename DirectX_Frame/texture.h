@@ -26,6 +26,7 @@ typedef enum
 	TEX_ID_NOWLOADING,				// ロード画面
 	TEX_ID_LOADFRAME,				// ロード画面
 	TEX_ID_LOADGAGE,				// ロード画面
+	TEX_ID_PRESS_SPACE,				// ロード画面
 	TEX_ID_MAX,
 } TEXTURE_ID;
 
@@ -37,7 +38,7 @@ static const std::string TEXTURE_SOURCE[] =
 	"data/textures/tree.png",
 	"data/textures/sky001.jpg",
 	"data/textures/number001.png",
-	"data/textures/title.png",
+	"data/textures/title_logo.png",
 	"data/textures/result.png",
 	"data/textures/circle.jpg",
 	"data/textures/star.png",
@@ -47,6 +48,7 @@ static const std::string TEXTURE_SOURCE[] =
 	"data/textures/NowLoading.png",
 	"data/textures/LoadFrame.png",
 	"data/textures/LoadGage.png",
+	"data/textures/press_space.png",
 };
 
 // テクスチャがロードされているか検索するためのマップ

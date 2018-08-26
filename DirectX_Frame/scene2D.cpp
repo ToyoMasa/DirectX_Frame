@@ -72,7 +72,7 @@ void CScene2D::Draw()
 
 	// αテスト(3つセット)
 	pDevice->SetRenderState(D3DRS_ALPHATESTENABLE, TRUE);			// αテストのON
-	pDevice->SetRenderState(D3DRS_ALPHAREF, 128);					// 第2引数は0～255の好きな値
+	pDevice->SetRenderState(D3DRS_ALPHAREF, 0);					// 第2引数は0～255の好きな値
 	pDevice->SetRenderState(D3DRS_ALPHAFUNC, D3DCMP_GREATEREQUAL);	// 第2引数は不等号(GREATERは大なり)、上の値より大きければ合格
 
 	pDevice->DrawPrimitiveUP(D3DPT_TRIANGLESTRIP, 2, &vertex[0], sizeof(VERTEX_2D));
