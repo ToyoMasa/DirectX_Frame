@@ -194,5 +194,11 @@ void CEnemy::Death()
 	m_Model->PlayMontage(ENEMY_DEATH, 0.3f, 8.0f, ENEMY_DEATH);
 	m_Model->SetAnimPlaySpeed(1.5f);
 
+	CModeGame::IncrementNumKill();
+	if (!m_FindPlayer)
+	{
+		CModeGame::IncrenentNumSneak();
+	}
+
 	m_isPreDeath = true;
 }

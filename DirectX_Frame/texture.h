@@ -15,6 +15,7 @@ typedef enum
 	TEX_ID_CURSOR,					// カーソル
 	TEX_ID_TREE,					// ツリー
 	TEX_ID_SKY,						// 空
+	TEX_ID_SKY002,					// 夜空
 	TEX_ID_NUMBER001,				// 数字
 	TEX_ID_TITLE,					// タイトル
 	TEX_ID_RESULT,					// リザルト
@@ -23,10 +24,13 @@ typedef enum
 	TEX_ID_ATTACK,					// 攻撃可能テキスト
 	TEX_ID_BLACK,					// フェード
 	TEX_ID_WALL01,					// 壁
-	TEX_ID_NOWLOADING,				// ロード画面
-	TEX_ID_LOADFRAME,				// ロード画面
-	TEX_ID_LOADGAGE,				// ロード画面
-	TEX_ID_PRESS_SPACE,				// ロード画面
+	TEX_ID_NOWLOADING,				// ロード画面文字
+	TEX_ID_LOADFRAME,				// ロード画面ゲージフレーム
+	TEX_ID_LOADGAGE,				// ロード画面ゲージ中身
+	TEX_ID_PRESS_SPACE,				// スペースを押す
+	TEX_ID_RANK_A,					// A
+	TEX_ID_RANK_B,					// B
+	TEX_ID_RANK_C,					// C
 	TEX_ID_MAX,
 } TEXTURE_ID;
 
@@ -37,6 +41,7 @@ static const std::string TEXTURE_SOURCE[] =
 	"data/textures/yajirusi.png",
 	"data/textures/tree.png",
 	"data/textures/sky001.jpg",
+	"data/textures/sky002.jpg",
 	"data/textures/number001.png",
 	"data/textures/title_logo.png",
 	"data/textures/result.png",
@@ -49,6 +54,9 @@ static const std::string TEXTURE_SOURCE[] =
 	"data/textures/LoadFrame.png",
 	"data/textures/LoadGage.png",
 	"data/textures/press_space.png",
+	"data/textures/rank_a.png",
+	"data/textures/rank_b.png",
+	"data/textures/rank_c.png",
 };
 
 // テクスチャがロードされているか検索するためのマップ

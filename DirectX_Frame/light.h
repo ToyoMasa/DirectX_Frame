@@ -5,11 +5,6 @@
 #ifndef _LIGHT_H_
 #define _LIGHT_H_
 
-void LightInit(void);
-void LightUninit(void);
-void LightUpdate(void);
-void LightSet(void);
-
 class CLight : public CGameObject
 {
 public:
@@ -18,7 +13,7 @@ public:
 
 	void Init(int id);
 	void Uninit();
-	void SetLight();
+	void SetLight(float diff1, float diff2, float diff3, float diff4, float amb1, float amb2, float amb3, float amb4);
 	static CLight* Create(int id);
 
 private:

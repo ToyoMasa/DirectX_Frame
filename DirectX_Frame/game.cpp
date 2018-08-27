@@ -43,6 +43,8 @@ bool CModeGame::m_TargetDied = false;
 CScene2D *CModeGame::Load = NULL;
 CScene2D *CModeGame::LoadFrame = NULL;
 CScene2D *CModeGame::LoadGage = NULL;
+int CModeGame::m_NumKill = 0;
+int CModeGame::m_NumSneak = 0;
 
 float g_test = 0;
 
@@ -183,14 +185,18 @@ void CModeGame::Init()
 	// 空
 	CSkyBox::Create(player);
 
+	// ライト
 	m_Light = CLight::Create(0);
 
 	CBillBoard::Init();
 
 	MakeMap();
 
+	// スコア等のリセット
 	m_PlayerDied = false;
 	m_TargetDied = false;
+	m_NumKill = 0;
+	m_NumSneak = 0;
 
 	// ロード画面を解放
 	Load->Release();
@@ -240,12 +246,12 @@ void CModeGame::Update()
 
 		if (m_TargetDied)
 		{
-			CFade::FadeOut(new CModeResult());
+			CFade::FadeOut(new CModeResult(m_NumKill, m_NumSneak, true));
 		}
 
 		if (m_PlayerDied)
 		{
-			CFade::FadeOut(new CModeResult());
+			CFade::FadeOut(new CModeResult(m_NumKill, m_NumSneak, false));
 		}
 	}
 }

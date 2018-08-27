@@ -25,41 +25,103 @@
 #include "game.h"
 #include "fade.h"
 #include "PlayerAnim.h"
-#include "sound.h"
 
 CScene2D* CModeTitle::m_TitleLogo = NULL;
-
-CScene2D* pressSpace;
-CSceneSkinMesh* mesh;
-CCamera* camera;
-CSound* bgm;
-int count;
+CScene2D *CModeTitle::m_Text_PressSpace = NULL;
+CSceneSkinMesh *CModeTitle::m_Mesh = NULL;
+CCamera *CModeTitle::m_Camera = NULL;
+CSound *CModeTitle::m_BGM = NULL;
+int CModeTitle::m_Count = 0;
+CScene2D *CModeTitle::Load = NULL;
+CScene2D *CModeTitle::LoadFrame = NULL;
+CScene2D *CModeTitle::LoadGage = NULL;
 
 void CModeTitle::Init()
 {
 	// テクスチャの初期化
 	CTexture::Init();
 
+	Load = CScene2D::Create(TEX_ID_NOWLOADING, 1545 / 2.0f, 414 / 2.0f);
+	Load->Set(D3DXVECTOR3(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2, 0));
+
+	LoadFrame = CScene2D::Create(TEX_ID_LOADFRAME, 960, 64);
+	LoadFrame->Set(D3DXVECTOR3(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2 + 200.0f, 0));
+
+	LoadGage = CScene2D::Create(TEX_ID_LOADGAGE, 950, 54);
+	LoadGage->Set(D3DXVECTOR3(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2 + 200.0f, 0));
+
+	HRESULT hr;
+	hr = CRenderer::DrawBegin();
+
+	// ロード画面を描画
+	if (SUCCEEDED(hr))
+	{
+		//描画
+		Load->Draw();
+		LoadFrame->Draw();
+
+		CRenderer::DrawEnd();
+	}
+
 	m_TitleLogo = CScene2D::Create(TEX_ID_TITLE, 1153.0f, 323.0f);
 	m_TitleLogo->Set(D3DXVECTOR3(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2 - 150.0f, 0.0f));
 
-	pressSpace = CScene2D::Create(TEX_ID_PRESS_SPACE, 501.0f, 105.0f);
-	pressSpace->Set(D3DXVECTOR3(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2 + 200.0f, 0.0f));
+	m_Text_PressSpace = CScene2D::Create(TEX_ID_PRESS_SPACE, 501.0f, 105.0f);
+	m_Text_PressSpace->Set(D3DXVECTOR3(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2 + 200.0f, 0.0f));
 
-	camera = CCamera::Create();
-	camera->SetPos(D3DXVECTOR3(-0.2f, 1.7f, -1.0f));
-	camera->SetAt(D3DXVECTOR3(0.0f, 1.5f, 0.0f));
+	m_Camera = CCamera::Create();
+	m_Camera->SetPos(D3DXVECTOR3(-0.2f, 1.7f, -1.0f));
+	m_Camera->SetAt(D3DXVECTOR3(0.0f, 1.5f, 0.0f));
 
-	mesh = CSceneSkinMesh::Create(SKINMESH_SOURCE[SM_ID_PLAYER]);
-	mesh->ChangeAnim(PLAYER_IDLE, 0.0f);
+	{
+		hr = CRenderer::DrawBegin();
+		LoadGage->SetSize(D3DXVECTOR2(950 * 0.3f, 54));
+		LoadGage->Set(D3DXVECTOR3((SCREEN_WIDTH / 2 - 950 / 2.0f) + 950 * 0.3f / 2.0f, SCREEN_HEIGHT / 2 + 200.0f, 0));
+
+		// ロード画面を描画
+		if (SUCCEEDED(hr))
+		{
+			//描画
+			Load->Draw();
+			LoadFrame->Draw();
+			LoadGage->Draw();
+
+			CRenderer::DrawEnd();
+		}
+	}
+
+	m_Mesh = CSceneSkinMesh::Create(SKINMESH_SOURCE[SM_ID_PLAYER]);
+	m_Mesh->ChangeAnim(PLAYER_IDLE, 0.0f);
+
+	{
+		hr = CRenderer::DrawBegin();
+		LoadGage->SetSize(D3DXVECTOR2(950 * 0.75f, 54));
+		LoadGage->Set(D3DXVECTOR3((SCREEN_WIDTH / 2 - 950 / 2.0f) + 950 * 0.75f / 2.0f, SCREEN_HEIGHT / 2 + 200.0f, 0));
+
+		// ロード画面を描画
+		if (SUCCEEDED(hr))
+		{
+			//描画
+			Load->Draw();
+			LoadFrame->Draw();
+			LoadGage->Draw();
+
+			CRenderer::DrawEnd();
+		}
+	}
 
 	// フェードイン
 	CFade::FadeIn();
 
-	bgm = CSound::Create(SOUND_LABEL_BGM_TITLE);
-	bgm->Play();
+	m_BGM = CSound::Create(SOUND_LABEL_BGM_TITLE);
+	m_BGM->Play();
 
-	count = 0;
+	m_Count = 0;
+
+	// ロード画面を解放
+	Load->Release();
+	LoadFrame->Release();
+	LoadGage->Release();
 }
 
 void CModeTitle::Uninit()
@@ -69,9 +131,9 @@ void CModeTitle::Uninit()
 
 	CScene::ReleaseAll();
 
-	camera->Release();
+	m_Camera->Release();
 
-	bgm->Release();
+	m_BGM->Release();
 }
 
 void CModeTitle::Update()
@@ -80,7 +142,7 @@ void CModeTitle::Update()
 	CInputMouse *inputMouse;
 	float mouseX, mouseY, mouseZ;
 
-	camera->Update();
+	m_Camera->Update();
 
 	// キーボード取得
 	inputKeyboard = CManager::GetInputKeyboard();
@@ -91,15 +153,15 @@ void CModeTitle::Update()
 	mouseY = (float)inputMouse->GetAxisY();
 	mouseZ = (float)inputMouse->GetAxisZ();
 
-	count++;
+	m_Count++;
 
-	if (count / 256 % 2 == 0.0f)
+	if (m_Count / 256 % 2 == 0.0f)
 	{
-		pressSpace->SetColor(D3DCOLOR_RGBA(255, 255, 255, count % 256));
+		m_Text_PressSpace->SetColor(D3DCOLOR_RGBA(255, 255, 255, m_Count % 256));
 	}
 	else
 	{
-		pressSpace->SetColor(D3DCOLOR_RGBA(255, 255, 255, 255 - (count % 256)));
+		m_Text_PressSpace->SetColor(D3DCOLOR_RGBA(255, 255, 255, 255 - (m_Count % 256)));
 	}
 
 	CScene::UpdateAll();

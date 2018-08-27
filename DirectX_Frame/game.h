@@ -23,6 +23,8 @@ public:
 	static void TargetKilled();
 	static CCamera* GetCamera() { return player->GetCamera(); }
 	static void MakeMap();
+	static void IncrementNumKill() { m_NumKill++; }
+	static void IncrenentNumSneak() { m_NumSneak++; }
 
 	static void test(float test);
 
@@ -38,7 +40,8 @@ private:
 	static CScene2D* Load;
 	static CScene2D* LoadFrame;
 	static CScene2D* LoadGage;
-
+	static int m_NumKill;
+	static int m_NumSneak;
 };
 
 #endif // !_GAME_H_
