@@ -7,6 +7,8 @@
 
 #include "mode.h"
 
+static const int ENEMY_NUM = 8;
+
 class CModeGame : public CMode
 {
 public:
@@ -32,7 +34,7 @@ private:
 	static CBillBoard* tree1;
 	static CBillBoard* tree2;
 	static CPlayer* player;
-	static CEnemy* enemy[2];
+	static CEnemy* enemy[ENEMY_NUM];
 	static CEnemy* Target;
 	static CLight *m_Light;
 	static bool m_PlayerDied;

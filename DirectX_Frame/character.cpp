@@ -57,6 +57,43 @@ void CCharacter::ReleaseAll()
 	}
 }
 
+void CCharacter::SetRotation(D3DXVECTOR3 vec)
+{
+	D3DXMATRIX mtxRot;
+	D3DXMATRIX mtxIdentity;	// 比較用
+	D3DXVECTOR3 v1 = m_Forward;
+	D3DXVECTOR3 v2 = { vec.x, 0, vec.z };
+
+	v1.y = 0.0f;
+
+	D3DXVec3Normalize(&v1, &v1);
+	D3DXVec3Normalize(&v2, &v2);
+
+	D3DXMatrixIdentity(&mtxRot);
+	D3DXMatrixIdentity(&mtxIdentity);
+
+	// 今向いている方角と入力された方角の内積を取る
+	float fInner = D3DXVec3Dot(&v2, &v1);
+
+	if (fInner != 1)
+	{
+		float sita = fInner / (D3DXVec3Length(&v1) * D3DXVec3Length(&v2));
+		float rad = acosf(fInner);
+
+		D3DXMatrixRotationY(&mtxRot, rad);
+
+		//mtxIdentity = m_Rotate;
+		m_Rotate *= mtxRot;
+		m_Model->Rotate(m_Rotate);
+
+		D3DXVec3TransformNormal(&m_Forward, &m_Forward, &mtxRot);	// ベクトルの座標変換(出力, 入力, 変換行列)
+		D3DXVec3TransformNormal(&m_Right, &m_Right, &mtxRot);	// ベクトルの座標変換(出力, 入力, 変換行列)
+		D3DXVec3Normalize(&m_Forward, &m_Forward);
+
+		D3DXVec3Normalize(&m_Right, &m_Right);
+	}
+}
+
 void CCharacter::Rotate(D3DXVECTOR3 vec)
 {
 	D3DXMATRIX mtxRot;

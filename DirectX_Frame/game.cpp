@@ -35,7 +35,7 @@
 CBillBoard *CModeGame::tree1 = NULL;
 CBillBoard *CModeGame::tree2 = NULL;
 CPlayer *CModeGame::player = NULL;
-CEnemy *CModeGame::enemy[2] = { NULL };
+CEnemy *CModeGame::enemy[ENEMY_NUM] = { NULL };
 CEnemy *CModeGame::Target = NULL;
 CLight *CModeGame::m_Light;
 bool CModeGame::m_PlayerDied = false;
@@ -107,8 +107,8 @@ void CModeGame::Init()
 
 	{
 		hr = CRenderer::DrawBegin();
-		LoadGage->SetSize(D3DXVECTOR2(950 * 0.3f, 54));
-		LoadGage->Set(D3DXVECTOR3((SCREEN_WIDTH / 2 - 950 / 2.0f) + 950 * 0.3f / 2.0f, SCREEN_HEIGHT / 2 + 200.0f, 0));
+		LoadGage->SetSize(D3DXVECTOR2(950 * 0.2f, 54));
+		LoadGage->Set(D3DXVECTOR3((SCREEN_WIDTH / 2 - 950 / 2.0f) + 950 * 0.2f / 2.0f, SCREEN_HEIGHT / 2 + 200.0f, 0));
 
 		// ƒ[ƒh‰æ–Ê‚ð•`‰æ
 		if (SUCCEEDED(hr))
@@ -127,6 +127,48 @@ void CModeGame::Init()
 
 	{
 		hr = CRenderer::DrawBegin();
+		LoadGage->SetSize(D3DXVECTOR2(950 * 0.3f, 54));
+		LoadGage->Set(D3DXVECTOR3((SCREEN_WIDTH / 2 - 950 / 2.0f) + 950 * 0.3f / 2.0f, SCREEN_HEIGHT / 2 + 200.0f, 0));
+
+		// ƒ[ƒh‰æ–Ê‚ð•`‰æ
+		if (SUCCEEDED(hr))
+		{
+			//•`‰æ
+			Load->Draw();
+			LoadFrame->Draw();
+			LoadGage->Draw();
+
+			CRenderer::DrawEnd();
+		}
+	}
+
+	enemy[1] = CEnemy::Create(SM_ID_ENEMY01, D3DXVECTOR3(23.0f, 0.0f, 3.0f), 1, field);
+	enemy[1]->SetRotation(D3DXVECTOR3(-1.0f, 0.0f, 0.0f));
+	enemy[1]->SetAction(CActionWait::Create(enemy[1]));
+
+	{
+		hr = CRenderer::DrawBegin();
+		LoadGage->SetSize(D3DXVECTOR2(950 * 0.4f, 54));
+		LoadGage->Set(D3DXVECTOR3((SCREEN_WIDTH / 2 - 950 / 2.0f) + 950 * 0.4f / 2.0f, SCREEN_HEIGHT / 2 + 200.0f, 0));
+
+		// ƒ[ƒh‰æ–Ê‚ð•`‰æ
+		if (SUCCEEDED(hr))
+		{
+			//•`‰æ
+			Load->Draw();
+			LoadFrame->Draw();
+			LoadGage->Draw();
+
+			CRenderer::DrawEnd();
+		}
+	}
+
+	enemy[2] = CEnemy::Create(SM_ID_ENEMY01, D3DXVECTOR3(-1.0f, 0.0f, 17.0f), 1, field);
+	enemy[2]->SetRotation(D3DXVECTOR3(0.0f, 0.0f, -1.0f));
+	enemy[2]->SetAction(CActionWait::Create(enemy[2]));
+
+	{
+		hr = CRenderer::DrawBegin();
 		LoadGage->SetSize(D3DXVECTOR2(950 * 0.5f, 54));
 		LoadGage->Set(D3DXVECTOR3((SCREEN_WIDTH / 2 - 950 / 2.0f) + 950 * 0.5f / 2.0f, SCREEN_HEIGHT / 2 + 200.0f, 0));
 
@@ -142,13 +184,14 @@ void CModeGame::Init()
 		}
 	}
 
-	enemy[1] = CEnemy::Create(SM_ID_ENEMY01, D3DXVECTOR3(0.0f, 0.0f, -8.0f), 1, field);
-	enemy[1]->SetAction(CActionMoveToRandom::Create(enemy[1], 3.0f, 3.5f, 0.02f));
+	enemy[3] = CEnemy::Create(SM_ID_ENEMY01, D3DXVECTOR3(3.0f, 0.0f, -23.0f), 1, field);
+	enemy[3]->SetRotation(D3DXVECTOR3(0.0f, 0.0f, 1.0f));
+	enemy[3]->SetAction(CActionWait::Create(enemy[3]));
 
 	{
 		hr = CRenderer::DrawBegin();
-		LoadGage->SetSize(D3DXVECTOR2(950 * 0.75f, 54));
-		LoadGage->Set(D3DXVECTOR3((SCREEN_WIDTH / 2 - 950 / 2.0f) + 950 * 0.75f / 2.0f, SCREEN_HEIGHT / 2 + 200.0f, 0));
+		LoadGage->SetSize(D3DXVECTOR2(950 * 0.6f, 54));
+		LoadGage->Set(D3DXVECTOR3((SCREEN_WIDTH / 2 - 950 / 2.0f) + 950 * 0.6f / 2.0f, SCREEN_HEIGHT / 2 + 200.0f, 0));
 
 		// ƒ[ƒh‰æ–Ê‚ð•`‰æ
 		if (SUCCEEDED(hr))
@@ -162,6 +205,64 @@ void CModeGame::Init()
 		}
 	}
 
+	enemy[4] = CEnemy::Create(SM_ID_ENEMY01, D3DXVECTOR3(-20.0f, 0.0f, 8.5f), 5, field);
+
+	{
+		hr = CRenderer::DrawBegin();
+		LoadGage->SetSize(D3DXVECTOR2(950 * 0.7f, 54));
+		LoadGage->Set(D3DXVECTOR3((SCREEN_WIDTH / 2 - 950 / 2.0f) + 950 * 0.7f / 2.0f, SCREEN_HEIGHT / 2 + 200.0f, 0));
+
+		// ƒ[ƒh‰æ–Ê‚ð•`‰æ
+		if (SUCCEEDED(hr))
+		{
+			//•`‰æ
+			Load->Draw();
+			LoadFrame->Draw();
+			LoadGage->Draw();
+
+			CRenderer::DrawEnd();
+		}
+	}
+
+	enemy[5] = CEnemy::Create(SM_ID_ENEMY01, D3DXVECTOR3(-11.0f, 0.0f, -16.0f), 10, field);
+
+	{
+		hr = CRenderer::DrawBegin();
+		LoadGage->SetSize(D3DXVECTOR2(950 * 0.8f, 54));
+		LoadGage->Set(D3DXVECTOR3((SCREEN_WIDTH / 2 - 950 / 2.0f) + 950 * 0.8f / 2.0f, SCREEN_HEIGHT / 2 + 200.0f, 0));
+
+		// ƒ[ƒh‰æ–Ê‚ð•`‰æ
+		if (SUCCEEDED(hr))
+		{
+			//•`‰æ
+			Load->Draw();
+			LoadFrame->Draw();
+			LoadGage->Draw();
+
+			CRenderer::DrawEnd();
+		}
+	}
+
+	enemy[6] = CEnemy::Create(SM_ID_ENEMY01, D3DXVECTOR3(15.0f, 0.0f, 20.0f), 13, field);
+
+	{
+		hr = CRenderer::DrawBegin();
+		LoadGage->SetSize(D3DXVECTOR2(950 * 0.9f, 54));
+		LoadGage->Set(D3DXVECTOR3((SCREEN_WIDTH / 2 - 950 / 2.0f) + 950 * 0.9f / 2.0f, SCREEN_HEIGHT / 2 + 200.0f, 0));
+
+		// ƒ[ƒh‰æ–Ê‚ð•`‰æ
+		if (SUCCEEDED(hr))
+		{
+			//•`‰æ
+			Load->Draw();
+			LoadFrame->Draw();
+			LoadGage->Draw();
+
+			CRenderer::DrawEnd();
+		}
+	}
+
+	// ƒ^[ƒQƒbƒg
 	Target = CEnemy::Create(SM_ID_ENEMY02, D3DXVECTOR3(0.0f, 0.0f, 8.0f), 1, field, ENEMY_TYPE_TARGET);
 	Target->SetAction(CActionWait::Create(Target));
 

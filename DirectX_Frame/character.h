@@ -50,6 +50,7 @@ public:
 	void SetPos(D3DXVECTOR3 pos) { m_Pos = pos; }
 	D3DXVECTOR3 GetPos() { return m_Pos; }
 	D3DXVECTOR3 GetForward() { return m_Forward; }
+	void SetRotation(D3DXVECTOR3 vec);
 	void Rotate(D3DXVECTOR3 vec);
 	void Release();
 	CSceneSkinMesh* GetModel() { return m_Model; }
