@@ -187,4 +187,18 @@ void CModeTitle::Draw()
 
 	pDevice->SetRenderState(D3DRS_LIGHTING, TRUE);
 
+	// デバッグ用imguiウィンドウの描画
+#if defined(_DEBUG) || defined(DEBUG)
+	CImGui::BeginDraw();
+
+	ImGui::Begin("Debug Window");
+	ImGui::Text("test1");
+	ImGui::End();
+
+	ImGui::Begin("Debug Window2");
+	ImGui::Text("test2");
+	ImGui::End();
+
+	CImGui::EndDraw();
+#endif
 }

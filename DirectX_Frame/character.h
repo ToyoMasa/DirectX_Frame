@@ -5,6 +5,7 @@
 
 class CCamera;
 class CField;
+class CSceneShadow;
 
 static const int CHARACTER_MAX = 100;
 
@@ -18,26 +19,7 @@ enum CHARACTER_TYPE
 class CCharacter
 {
 public:
-	CCharacter::CCharacter()
-	{
-		for (int i = 0; i < CHARACTER_MAX; i++)
-		{
-			if (m_Characters[i] == NULL)
-			{
-				m_Characters[i] = this;
-				m_Type = CHARACTER_NONE;
-				break;
-			}
-		}
-
-		m_Model = NULL;
-		m_Forward = D3DXVECTOR3(0.0f, 0.0f, 1.0f);
-		m_Right = D3DXVECTOR3(1.0f, 0.0f, 0.0f);
-		m_Up = D3DXVECTOR3(0.0f, 1.0f, 0.0f);
-		m_WalkSpeed = 0.02f;
-		m_CapsuleCollision.Set(Point(m_Pos.x, m_Pos.y + 0.5f, m_Pos.z), Point(m_Pos.x, m_Pos.y + 1.0f, m_Pos.z), 0.5f);
-		D3DXMatrixIdentity(&m_Rotate);
-	}
+	CCharacter();
 	~CCharacter() {}
 
 	void Init() {}
@@ -74,7 +56,7 @@ protected:
 	Capsule m_CapsuleCollision;
 	float m_WalkSpeed;
 	CHARACTER_TYPE m_Type;
-
+	CSceneShadow *m_Shadow;
 private:
 	static CCharacter* m_Characters[CHARACTER_MAX];
 };

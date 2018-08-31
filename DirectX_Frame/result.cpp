@@ -56,12 +56,12 @@ void CModeResult::Init()
 		result += 50;
 	}
 
-	if (result > 80)
+	if (result > 120)
 	{
 		m_Rank = 0;
 		m_RankColor = D3DCOLOR_RGBA(255, 0, 0, 255);
 	}
-	else if (result > 50)
+	else if (result > 70)
 	{
 		m_Rank = 1;
 		m_RankColor = D3DCOLOR_RGBA(0, 0, 255, 255);

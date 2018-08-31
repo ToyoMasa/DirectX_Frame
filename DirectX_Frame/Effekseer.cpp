@@ -6,13 +6,13 @@
 
 CEffekseer* CEffekseer::Create(Effect EffectType, CCamera* camera)
 {
-	CEffekseer* Effekseer = new CEffekseer(EffectType, LAYER_EFFEKSEER);
+	CEffekseer* Effekseer = new CEffekseer(EffectType, LAYER_OBJECT3D);
 	Effekseer->Init(camera);
 	return Effekseer;
 }
 void  CEffekseer::CreateScene(Effect EffectType)
 {
-	CEffekseer* Effekseer = new CEffekseer(EffectType, LAYER_EFFEKSEER);
+	CEffekseer* Effekseer = new CEffekseer(EffectType, LAYER_OBJECT3D);
 }
 
 void CEffekseer::LoadEffect()

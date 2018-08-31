@@ -102,7 +102,7 @@ void CModeGame::Init()
 	}
 
 	// ƒvƒŒƒCƒ„[
-	player = CPlayer::Create(MODEL_ID_PLAYER, D3DXVECTOR3(0.0f, 0.0f, 0.0f));
+	player = CPlayer::Create(MODEL_ID_PLAYER, D3DXVECTOR3(0.0f, 0.0f, -30.0f));
 	player->SetField(field);
 
 	{
@@ -142,7 +142,7 @@ void CModeGame::Init()
 		}
 	}
 
-	enemy[1] = CEnemy::Create(SM_ID_ENEMY01, D3DXVECTOR3(23.0f, 0.0f, 3.0f), 1, field);
+	enemy[1] = CEnemy::Create(SM_ID_ENEMY01, D3DXVECTOR3(22.0f, 0.0f, 3.0f), 1, field);
 	enemy[1]->SetRotation(D3DXVECTOR3(-1.0f, 0.0f, 0.0f));
 	enemy[1]->SetAction(CActionWait::Create(enemy[1]));
 
@@ -184,7 +184,7 @@ void CModeGame::Init()
 		}
 	}
 
-	enemy[3] = CEnemy::Create(SM_ID_ENEMY01, D3DXVECTOR3(3.0f, 0.0f, -23.0f), 1, field);
+	enemy[3] = CEnemy::Create(SM_ID_ENEMY01, D3DXVECTOR3(3.0f, 0.0f, -22.0f), 1, field);
 	enemy[3]->SetRotation(D3DXVECTOR3(0.0f, 0.0f, 1.0f));
 	enemy[3]->SetAction(CActionWait::Create(enemy[3]));
 

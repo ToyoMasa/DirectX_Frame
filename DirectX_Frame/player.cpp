@@ -10,6 +10,7 @@
 #include "scene2D.h"
 #include "scene3D.h"
 #include "sceneModel.h"
+#include "sceneShadow.h"
 #include "texture.h"
 #include "billboard.h"
 #include "character.h"
@@ -30,7 +31,7 @@ void CPlayer::Init(int modelId, D3DXVECTOR3 spawnPos)
 
 	m_Pos = spawnPos;
 	m_Model->Move(m_Pos);
-	m_Camera = CCamera::Create(D3DXVECTOR3(0.0f, 1.5f, -2.0f), m_Pos);
+	m_Camera = CCamera::Create(D3DXVECTOR3(m_Pos.x + 0.0f, m_Pos.y + 1.5f, m_Pos.z - 2.0f), m_Pos);
 	m_Forward = D3DXVECTOR3(0.0f, 0.0f, -1.0f);
 
 	m_Text_Attack = CScene2D::Create(TEX_ID_ATTACK, 128, 64);
@@ -202,8 +203,27 @@ void CPlayer::Update()
 					}
 				}
 			}
-
 			m_isPreAttack = false;
+		}
+		else
+		{
+			for (int i = 0; i < CHARACTER_MAX; i++)
+			{
+				CCharacter* obj = CCharacter::GetCharacter(i);
+				if (obj != NULL)
+				{
+					if (obj->GetType() == CHARACTER_ENEMY)
+					{
+						CEnemy* enemy = (CEnemy*)obj;
+						if (isCollisionCapsule(m_AttackingCollsion, enemy->GetCapsule()))
+						{
+							D3DXVECTOR3 rotatePos = enemy->GetPos() - m_Pos;
+
+							Rotate(rotatePos);
+						}
+					}
+				}
+			}
 		}
 	}
 
@@ -211,6 +231,11 @@ void CPlayer::Update()
 	m_Camera->SetAt(D3DXVECTOR3(m_Pos.x, m_Pos.y + 1.5f, m_Pos.z));
 	m_Camera->Rotation(PI * mouseX * VALUE_ROTATE_MOUSE, PI * mouseY * VALUE_ROTATE_MOUSE);
 	m_Camera->Update();
+
+	if (m_Shadow != NULL)
+	{
+		m_Shadow->Move(m_Pos);
+	}
 }
 
 void CPlayer::Draw()

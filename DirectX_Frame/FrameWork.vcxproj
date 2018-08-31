@@ -202,6 +202,7 @@
     <ClInclude Include="scene3D.h" />
     <ClInclude Include="sceneModel.h" />
     <ClInclude Include="sceneModelFBX.h" />
+    <ClInclude Include="sceneShadow.h" />
     <ClInclude Include="sceneSkinMesh.h" />
     <ClInclude Include="shader.h" />
     <ClInclude Include="SkinMeshData.h" />
@@ -258,6 +259,7 @@
     <ClCompile Include="scene3D.cpp" />
     <ClCompile Include="sceneModel.cpp" />
     <ClCompile Include="sceneModelFBX.cpp" />
+    <ClCompile Include="sceneShadow.cpp" />
     <ClCompile Include="sceneSkinMesh.cpp" />
     <ClCompile Include="shader.cpp" />
     <ClCompile Include="SkinMeshData.cpp" />

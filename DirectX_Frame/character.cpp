@@ -9,6 +9,7 @@
 #include "scene.h"
 #include "scene3D.h"
 #include "sceneModel.h"
+#include "sceneShadow.h"
 #include "texture.h"
 #include "billboard.h"
 #include "player.h"
@@ -20,6 +21,30 @@
 #include "wall.h"
 
 CCharacter *CCharacter::m_Characters[CHARACTER_MAX] = { NULL };
+
+CCharacter::CCharacter()
+{
+	for (int i = 0; i < CHARACTER_MAX; i++)
+	{
+		if (m_Characters[i] == NULL)
+		{
+			m_Characters[i] = this;
+			m_Type = CHARACTER_NONE;
+			break;
+		}
+	}
+
+	m_Model = NULL;
+	m_Forward = D3DXVECTOR3(0.0f, 0.0f, 1.0f);
+	m_Right = D3DXVECTOR3(1.0f, 0.0f, 0.0f);
+	m_Up = D3DXVECTOR3(0.0f, 1.0f, 0.0f);
+	m_WalkSpeed = 0.02f;
+	m_CapsuleCollision.Set(Point(m_Pos.x, m_Pos.y + 0.5f, m_Pos.z), Point(m_Pos.x, m_Pos.y + 1.0f, m_Pos.z), 0.5f);
+	D3DXMatrixIdentity(&m_Rotate);
+
+	// ‰e‚Ìì¬
+	m_Shadow = CSceneShadow::Create();
+}
 
 void CCharacter::UpdateAll()
 {
@@ -38,6 +63,10 @@ void CCharacter::Release()
 	{
 		if (m_Characters[i] == this)
 		{
+			if (m_Characters[i]->m_Shadow != NULL)
+			{
+				m_Characters[i]->m_Shadow->Release();
+			}
 			m_Characters[i]->Uninit();
 			m_Characters[i] = NULL;
 			delete this;

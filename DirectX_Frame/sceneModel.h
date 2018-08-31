@@ -28,7 +28,7 @@ static const std::string MODEL_SOURCE[] =
 	"data/models/player_ufo.x",
 	"data/models/xbot2.x",
 	"data/models/skybox.x",
-	"data/models/skydome.x",
+	"data/models/sky.x",
 	"data/models/player.x",
 	"data/models/enemy01.x",
 	"data/models/target.x",
