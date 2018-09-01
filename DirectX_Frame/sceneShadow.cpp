@@ -46,10 +46,10 @@ void CSceneShadow::Init()
 	// 頂点バッファ
 	m_VertexBuffer->Lock(0, 0, (void**)&pV, D3DLOCK_DISCARD);
 
-	pV[0] = { D3DXVECTOR3(-0.5, 0,  0.5), D3DXVECTOR3(0.0f, 1.0f, 0.0f), D3DCOLOR_RGBA(64, 64, 64, 255), D3DXVECTOR2(0.0f, 0.0f) };
-	pV[1] = { D3DXVECTOR3(0.5, 0,  0.5), D3DXVECTOR3(0.0f, 1.0f, 0.0f), D3DCOLOR_RGBA(64, 64, 64, 255), D3DXVECTOR2(1.0f, 0.0f) };
-	pV[2] = { D3DXVECTOR3(-0.5, 0, -0.5), D3DXVECTOR3(0.0f, 1.0f, 0.0f), D3DCOLOR_RGBA(64, 64, 64, 255), D3DXVECTOR2(0.0f, 1.0f) };
-	pV[3] = { D3DXVECTOR3(0.5, 0, -0.5), D3DXVECTOR3(0.0f, 1.0f, 0.0f), D3DCOLOR_RGBA(64, 64, 64, 255), D3DXVECTOR2(1.0f, 1.0f) };
+	pV[0] = { D3DXVECTOR3(-0.5, 0,  0.5), D3DXVECTOR3(0.0f, 1.0f, 0.0f), D3DCOLOR_RGBA(255, 255, 255, 255), D3DXVECTOR2(0.0f, 0.0f) };
+	pV[1] = { D3DXVECTOR3( 0.5, 0,  0.5), D3DXVECTOR3(0.0f, 1.0f, 0.0f), D3DCOLOR_RGBA(255, 255, 255, 255), D3DXVECTOR2(1.0f, 0.0f) };
+	pV[2] = { D3DXVECTOR3(-0.5, 0, -0.5), D3DXVECTOR3(0.0f, 1.0f, 0.0f), D3DCOLOR_RGBA(255, 255, 255, 255), D3DXVECTOR2(0.0f, 1.0f) };
+	pV[3] = { D3DXVECTOR3( 0.5, 0, -0.5), D3DXVECTOR3(0.0f, 1.0f, 0.0f), D3DCOLOR_RGBA(255, 255, 255, 255), D3DXVECTOR2(1.0f, 1.0f) };
 
 	m_VertexBuffer->Unlock();
 
@@ -103,6 +103,8 @@ void CSceneShadow::Draw()
 		return;
 	}
 
+	m_World = m_Rotate * m_Scale * m_Move;
+
 	// ライティングを無効
 	pDevice->SetRenderState(D3DRS_LIGHTING, FALSE);
 
@@ -110,7 +112,7 @@ void CSceneShadow::Draw()
 
 	// αテスト(3つセット)
 	pDevice->SetRenderState(D3DRS_ALPHATESTENABLE, TRUE);			// αテストのON/OFF
-	pDevice->SetRenderState(D3DRS_ALPHAREF, 128);					// 第2引数は0～255の好きな値
+	pDevice->SetRenderState(D3DRS_ALPHAREF, 32);					// 第2引数は0～255の好きな値
 	pDevice->SetRenderState(D3DRS_ALPHAFUNC, D3DCMP_GREATEREQUAL);	// 第2引数は不等号(GREATERは大なり)、上の値より大きければ合格
 
 	// 減算合成の設定
@@ -142,7 +144,7 @@ void CSceneShadow::Draw()
 
 void CSceneShadow::Move(D3DXVECTOR3 pos)
 {
-	D3DXMatrixTranslation(&m_Move, pos.x, pos.y + 0.001f, pos.z);
+	D3DXMatrixTranslation(&m_Move, pos.x, pos.y + 0.01f, pos.z);
 
 	m_World = m_Rotate * m_Scale * m_Move;
 }

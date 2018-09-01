@@ -26,7 +26,7 @@ public:
 	static CCamera* GetCamera() { return player->GetCamera(); }
 	static void MakeMap();
 	static void IncrementNumKill() { m_NumKill++; }
-	static void IncrenentNumSneak() { m_NumSneak++; }
+	static void IncrementNumSneak() { m_NumSneak++; }
 
 	static void test(float test);
 

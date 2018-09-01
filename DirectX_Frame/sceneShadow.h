@@ -11,7 +11,7 @@ public:
 	//======================================================================
 	//	コンストラクタ
 	//======================================================================
-	CSceneShadow::CSceneShadow() : CScene(LAYER_OBJECT3D)
+	CSceneShadow::CSceneShadow() : CScene(LAYER_EFFEKSEER)
 	{
 
 	}

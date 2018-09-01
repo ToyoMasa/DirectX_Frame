@@ -43,7 +43,7 @@ CCharacter::CCharacter()
 	D3DXMatrixIdentity(&m_Rotate);
 
 	// ‰e‚Ìì¬
-	m_Shadow = CSceneShadow::Create();
+	//m_Shadow = CSceneShadow::Create();
 }
 
 void CCharacter::UpdateAll()
@@ -53,6 +53,11 @@ void CCharacter::UpdateAll()
 		if (m_Characters[i] != NULL)
 		{
 			m_Characters[i]->Update();
+
+			//if (m_Characters[i]->m_Shadow != NULL)
+			//{
+			//	m_Characters[i]->m_Shadow->Move(m_Characters[i]->m_Pos);
+			//}
 		}
 	}
 }
@@ -63,10 +68,11 @@ void CCharacter::Release()
 	{
 		if (m_Characters[i] == this)
 		{
-			if (m_Characters[i]->m_Shadow != NULL)
-			{
-				m_Characters[i]->m_Shadow->Release();
-			}
+			//if (m_Characters[i]->m_Shadow != NULL)
+			//{
+			//	m_Characters[i]->m_Shadow->Release();
+			//	m_Characters[i]->m_Shadow = NULL;
+			//}
 			m_Characters[i]->Uninit();
 			m_Characters[i] = NULL;
 			delete this;

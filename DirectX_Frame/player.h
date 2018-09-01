@@ -18,6 +18,7 @@ public:
 		m_CameraLength = 2.0f;
 		m_Camera = NULL;
 		m_Text_Attack = NULL;
+		m_isPreDeath  = false;
 		m_isPreAttack = false;
 	}
 	~CPlayer(){}
@@ -27,15 +28,18 @@ public:
 	void Update()override;
 	void Draw();
 	CCamera* GetCamera() { return m_Camera; }
+	bool GetPlayerDeath() { return m_isPreDeath; }
 	static CPlayer* Create(int modelId, D3DXVECTOR3 spawnPos);
 
 	void Attack();
+	void Death();
 
 private:
 	CCamera* m_Camera;
 	float m_CameraLength;
 	CScene2D* m_Text_Attack;
 	Capsule m_AttackingCollsion;
+	bool m_isPreDeath;
 	bool m_isPreAttack;
 
 	CEffekseer* m_BloodEffect;

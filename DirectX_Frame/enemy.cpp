@@ -87,36 +87,55 @@ void CEnemy::Update()
 	}
 	else
 	{
-		m_Action->Update();
-
-		Search();
-
-		m_Pos.y = m_Field->GetHeight(m_Pos);
-
-		// コリジョンの計算
-		m_CapsuleCollision.Set(Point(m_Pos.x, m_Pos.y + 0.25f, m_Pos.z), Point(m_Pos.x, m_Pos.y + 1.0f, m_Pos.z), 0.25f);
-		for (int i = 0; i < CHARACTER_MAX; i++)
+		if (m_isPreAttack)
 		{
-			CCharacter* obj = CCharacter::GetCharacter(i);
-			if (obj != NULL && obj != this)
+			if (m_Model->GetWeightTime() >= 2.0f)
 			{
-				if (obj->GetType() == CHARACTER_ENEMY)
+				CPlayer* player = CModeGame::GetPlayer();
+				if (isCollisionCapsule(m_AttackingCollsion, player->GetCapsule()))
 				{
-					CEnemy* enemy = (CEnemy*)obj;
-					if (isCollisionCapsule(m_CapsuleCollision, enemy->GetCapsule()))
-					{
-						D3DXVECTOR3 vec = m_Pos - enemy->GetPos();
-						D3DXVec3Normalize(&vec, &vec);
+					CModeGame::GetPlayer()->Death();
+					SetAction(CActionWait::Create(this));
+				}
 
-						m_Pos = enemy->GetPos();
-						m_Pos += vec * 0.5f;
+				m_isPreAttack = false;
+			}
+		}
+		else
+		{
+			m_Action->Update();
+
+			Search();
+
+			m_Pos.y = m_Field->GetHeight(m_Pos);
+
+			// コリジョンの計算
+			m_CapsuleCollision.Set(Point(m_Pos.x, m_Pos.y + 0.25f, m_Pos.z), Point(m_Pos.x, m_Pos.y + 1.0f, m_Pos.z), 0.25f);
+			for (int i = 0; i < CHARACTER_MAX; i++)
+			{
+				CCharacter* obj = CCharacter::GetCharacter(i);
+				if (obj != NULL && obj != this)
+				{
+					if (obj->GetType() == CHARACTER_ENEMY)
+					{
+						CEnemy* enemy = (CEnemy*)obj;
+						if (isCollisionCapsule(m_CapsuleCollision, enemy->GetCapsule()))
+						{
+							D3DXVECTOR3 vec = m_Pos - enemy->GetPos();
+							D3DXVec3Normalize(&vec, &vec);
+
+							m_Pos = enemy->GetPos();
+							m_Pos += vec * 0.5f;
+						}
 					}
 				}
 			}
+			m_Model->Move(m_Pos);
+			// 当たり判定の移動
+			m_CapsuleCollision.Set(Point(m_Pos.x, m_Pos.y + 0.25f, m_Pos.z), Point(m_Pos.x, m_Pos.y + 1.0f, m_Pos.z), 0.25f);
+			D3DXVECTOR3 attackPos = m_Pos + m_Forward * 1.0f;
+			m_AttackingCollsion.Set(Point(attackPos.x, attackPos.y + 0.25f, attackPos.z), Point(attackPos.x, attackPos.y + 1.0f, attackPos.z), 0.5f);
 		}
-		m_Model->Move(m_Pos);
-		// 当たり判定の移動
-		m_CapsuleCollision.Set(Point(m_Pos.x, m_Pos.y + 0.25f, m_Pos.z), Point(m_Pos.x, m_Pos.y + 1.0f, m_Pos.z), 0.25f);
 	}
 }
 
@@ -173,9 +192,10 @@ void CEnemy::Search()
 		// 敵とプレイヤーの距離
 		float len = D3DXVec3Length(&vec);
 
-		if (len < 0.75f)
+		bool playerdeath = CModeGame::GetPlayer()->GetPlayerDeath();
+		if (len < 1.25f && !playerdeath)
 		{
-			CModeGame::PlayerDied();
+			Attack();
 		}
 	}
 }
@@ -197,8 +217,15 @@ void CEnemy::Death()
 	CModeGame::IncrementNumKill();
 	if (!m_FindPlayer)
 	{
-		CModeGame::IncrenentNumSneak();
+		CModeGame::IncrementNumSneak();
 	}
 
 	m_isPreDeath = true;
+}
+
+void CEnemy::Attack()
+{
+	m_Model->PlayMontage(ENEMY_ATTACK, 0.2f, 6.0f, ENEMY_IDLE, 1.5f);
+
+	m_isPreAttack = true;
 }

@@ -238,7 +238,7 @@ void CScene3D::Draw()
 
 	pDevice->SetTransform(D3DTS_WORLD, &m_World);
 
-	pDevice->SetTexture(0, CTexture::GetTexture(m_TexId));
+	pDevice->SetTexture(0, NULL/*CTexture::GetTexture(m_TexId)*/);
 
 	pDevice->DrawIndexedPrimitive(D3DPT_TRIANGLESTRIP, 0, 0, m_NumVertex, 0, m_NumPrimitive);
 }

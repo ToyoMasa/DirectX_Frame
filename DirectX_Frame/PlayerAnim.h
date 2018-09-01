@@ -3,6 +3,7 @@
 
 typedef enum
 {
+	PLAYER_DEATH,
 	PLAYER_CROUCH_IDLE,
 	PLAYER_STAB,
 	PLAYER_IDLE,

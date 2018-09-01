@@ -61,180 +61,184 @@ void CPlayer::Update()
 	CInputMouse *inputMouse;
 	float mouseX, mouseY, mouseZ;
 
-	// 攻撃可能か表示を一旦リセット
-	m_Text_Attack->SetVisible(false);
-
-	// キーボード取得
-	inputKeyboard = CManager::GetInputKeyboard();
-
-	// マウス取得
-	inputMouse = CManager::GetInputMouse();
-	mouseX = (float)inputMouse->GetAxisX();
-	mouseY = (float)inputMouse->GetAxisY();
-	mouseZ = (float)inputMouse->GetAxisZ();
-
-	float moveX = 0.0f, moveZ = 0.0f;
-	if (inputKeyboard->GetKeyPress(DIK_A))
+	if (m_isPreDeath)
 	{
-		moveX = -1.0f;
+		if (m_Model->GetWeightTime() >= 8.0f)
+		{
+			CModeGame::PlayerDied();
+		}
 	}
-	if (inputKeyboard->GetKeyPress(DIK_D))
+	else
 	{
-		moveX = 1.0f;
-	}
-	if (inputKeyboard->GetKeyPress(DIK_W))
-	{
-		moveZ = 1.0f;
-	}
-	if (inputKeyboard->GetKeyPress(DIK_S))
-	{
-		moveZ = -1.0f;
-	}
+		// 攻撃可能か表示を一旦リセット
+		m_Text_Attack->SetVisible(false);
 
-	if (!m_Model->GetPlayMontage())
-	{
-		{// 移動・回転
-			D3DXVECTOR3 cameraFront = m_Camera->GetFront();
-			D3DXVECTOR3 cameraRight = m_Camera->GetRight();
-			D3DXVECTOR3 newPos = m_Pos;
-			D3DXVECTOR3 moveVec = { moveX, 0.0f, moveZ };
+		// キーボード取得
+		inputKeyboard = CManager::GetInputKeyboard();
 
-			D3DXVec3Normalize(&moveVec, &moveVec);
+		// マウス取得
+		inputMouse = CManager::GetInputMouse();
+		mouseX = (float)inputMouse->GetAxisX();
+		mouseY = (float)inputMouse->GetAxisY();
+		mouseZ = (float)inputMouse->GetAxisZ();
 
-			// 前方向ベクトルを地面と平行に正規化
-			cameraFront.y = 0;
-			D3DXVec3Normalize(&cameraFront, &cameraFront);
+		float moveX = 0.0f, moveZ = 0.0f;
+		if (inputKeyboard->GetKeyPress(DIK_A))
+		{
+			moveX = -1.0f;
+		}
+		if (inputKeyboard->GetKeyPress(DIK_D))
+		{
+			moveX = 1.0f;
+		}
+		if (inputKeyboard->GetKeyPress(DIK_W))
+		{
+			moveZ = 1.0f;
+		}
+		if (inputKeyboard->GetKeyPress(DIK_S))
+		{
+			moveZ = -1.0f;
+		}
 
-			newPos += cameraFront * PLAYER_MOVE_SPEED * moveVec.z;
-			newPos += cameraRight * PLAYER_MOVE_SPEED * moveVec.x;
-			newPos.y = m_Field->GetHeight(newPos);
+		if (!m_Model->GetPlayMontage())
+		{
+			{// 移動・回転
+				D3DXVECTOR3 cameraFront = m_Camera->GetFront();
+				D3DXVECTOR3 cameraRight = m_Camera->GetRight();
+				D3DXVECTOR3 newPos = m_Pos;
+				D3DXVECTOR3 moveVec = { moveX, 0.0f, moveZ };
 
-			// コリジョンの計算
-			m_CapsuleCollision.Set(Point(newPos.x, newPos.y + 0.25f, newPos.z), Point(newPos.x, newPos.y + 1.0f, newPos.z), 0.25f);
+				D3DXVec3Normalize(&moveVec, &moveVec);
 
-			// キャラクターとの当たり判定
-			for (int i = 0; i < CHARACTER_MAX; i++)
-			{
-				CCharacter* obj = CCharacter::GetCharacter(i);
-				if (obj != NULL)
+				// 前方向ベクトルを地面と平行に正規化
+				cameraFront.y = 0;
+				D3DXVec3Normalize(&cameraFront, &cameraFront);
+
+				newPos += cameraFront * PLAYER_MOVE_SPEED * moveVec.z;
+				newPos += cameraRight * PLAYER_MOVE_SPEED * moveVec.x;
+				newPos.y = m_Field->GetHeight(newPos);
+
+				// コリジョンの計算
+				m_CapsuleCollision.Set(Point(newPos.x, newPos.y + 0.25f, newPos.z), Point(newPos.x, newPos.y + 1.0f, newPos.z), 0.25f);
+
+				// キャラクターとの当たり判定
+				for (int i = 0; i < CHARACTER_MAX; i++)
 				{
-					if (obj->GetType() == CHARACTER_ENEMY)
+					CCharacter* obj = CCharacter::GetCharacter(i);
+					if (obj != NULL)
 					{
-						CEnemy* enemy = (CEnemy*)obj;
-						if (isCollisionCapsule(m_CapsuleCollision, enemy->GetCapsule()))
+						if (obj->GetType() == CHARACTER_ENEMY)
 						{
-							D3DXVECTOR3 vec = newPos - enemy->GetPos();
-							D3DXVec3Normalize(&vec, &vec);
+							CEnemy* enemy = (CEnemy*)obj;
+							if (isCollisionCapsule(m_CapsuleCollision, enemy->GetCapsule()))
+							{
+								D3DXVECTOR3 vec = newPos - enemy->GetPos();
+								D3DXVec3Normalize(&vec, &vec);
 
-							newPos = enemy->GetPos();
-							newPos += vec * 0.5f;
+								newPos = enemy->GetPos();
+								newPos += vec * 0.5f;
+							}
+
+							//if (isCollisionCapsule(m_AttackingCollsion, enemy->GetCapsule()) && !m_Text_Attack->GetVisible())
+							//{
+							//	m_Text_Attack->SetVisible(true);
+							//}
 						}
-
-						//if (isCollisionCapsule(m_AttackingCollsion, enemy->GetCapsule()) && !m_Text_Attack->GetVisible())
-						//{
-						//	m_Text_Attack->SetVisible(true);
-						//}
 					}
 				}
-			}
 
-			// 壁との当たり判定
-			newPos = HitWall(newPos);
+				// 壁との当たり判定
+				newPos = HitWall(newPos);
+
+				if (moveX != 0 || moveZ != 0)
+				{
+					Rotate(newPos - m_Pos);
+				}
+				m_Camera->Move(newPos - m_Pos);
+				SetPos(newPos);
+
+			}
 
 			if (moveX != 0 || moveZ != 0)
 			{
-				Rotate(newPos - m_Pos);
+				m_Model->ChangeAnim(PLAYER_RUNNING, 0.3f);
 			}
-			m_Camera->Move(newPos - m_Pos);
-			SetPos(newPos);
-
-		}
-
-		if (moveX != 0 || moveZ != 0)
-		{
-			m_Model->ChangeAnim(PLAYER_RUNNING, 0.3f);
-		}
-		else
-		{
-			m_Model->ChangeAnim(PLAYER_IDLE, 0.3f);
-		}
-	}
-
-	m_Model->Move(m_Pos);
-	
-	// 当たり判定の移動
-	m_CapsuleCollision.Set(Point(m_Pos.x, m_Pos.y + 0.25f, m_Pos.z), Point(m_Pos.x, m_Pos.y + 1.0f, m_Pos.z), 0.25f);
-	D3DXVECTOR3 attackPos = m_Pos + m_Forward * 1.0f;
-	m_AttackingCollsion.Set(Point(attackPos.x, attackPos.y + 0.25f, attackPos.z), Point(attackPos.x, attackPos.y + 1.0f, attackPos.z), 0.5f);
-
-	// 攻撃
-	if (inputMouse->GetLeftTrigger() || inputKeyboard->GetKeyTrigger(DIK_SPACE))
-	{
-		Attack();
-	}
-
-	if (m_isPreAttack)
-	{
-		if (m_Model->GetWeightTime() >= 1.5f)
-		{
-			for (int i = 0; i < CHARACTER_MAX; i++)
+			else
 			{
-				CCharacter* obj = CCharacter::GetCharacter(i);
-				if (obj != NULL)
+				m_Model->ChangeAnim(PLAYER_IDLE, 0.3f);
+			}
+		}
+
+		m_Model->Move(m_Pos);
+
+		// 当たり判定の移動
+		m_CapsuleCollision.Set(Point(m_Pos.x, m_Pos.y + 0.25f, m_Pos.z), Point(m_Pos.x, m_Pos.y + 1.0f, m_Pos.z), 0.25f);
+		D3DXVECTOR3 attackPos = m_Pos + m_Forward * 1.0f;
+		m_AttackingCollsion.Set(Point(attackPos.x, attackPos.y + 0.25f, attackPos.z), Point(attackPos.x, attackPos.y + 1.0f, attackPos.z), 0.5f);
+
+		// 攻撃
+		if (inputMouse->GetLeftTrigger() || inputKeyboard->GetKeyTrigger(DIK_SPACE))
+		{
+			Attack();
+		}
+
+		if (m_isPreAttack)
+		{
+			if (m_Model->GetWeightTime() >= 1.5f)
+			{
+				for (int i = 0; i < CHARACTER_MAX; i++)
 				{
-					if (obj->GetType() == CHARACTER_ENEMY)
+					CCharacter* obj = CCharacter::GetCharacter(i);
+					if (obj != NULL)
 					{
-						CEnemy* enemy = (CEnemy*)obj;
-						if (isCollisionCapsule(m_AttackingCollsion, enemy->GetCapsule()))
+						if (obj->GetType() == CHARACTER_ENEMY)
 						{
-							//if (enemy->GetEnemyType() == ENEMY_TYPE_TARGET)
-							//{
-							//	CModeGame::TargetKilled();
-							//}
-							//enemy->Release();
+							CEnemy* enemy = (CEnemy*)obj;
+							if (isCollisionCapsule(m_AttackingCollsion, enemy->GetCapsule()))
+							{
+								//if (enemy->GetEnemyType() == ENEMY_TYPE_TARGET)
+								//{
+								//	CModeGame::TargetKilled();
+								//}
+								//enemy->Release();
 
-							D3DXVECTOR3 bloodPos = enemy->GetPos();
-							bloodPos.y += 1.2f;
-							m_BloodEffect->SetPosition(bloodPos);
-							m_BloodEffect->Play();
+								D3DXVECTOR3 bloodPos = enemy->GetPos();
+								bloodPos.y += 1.2f;
+								m_BloodEffect->SetPosition(bloodPos);
+								m_BloodEffect->Play();
 
-							enemy->Death();
+								enemy->Death();
+							}
 						}
 					}
 				}
+				m_isPreAttack = false;
 			}
-			m_isPreAttack = false;
-		}
-		else
-		{
-			for (int i = 0; i < CHARACTER_MAX; i++)
+			else
 			{
-				CCharacter* obj = CCharacter::GetCharacter(i);
-				if (obj != NULL)
+				for (int i = 0; i < CHARACTER_MAX; i++)
 				{
-					if (obj->GetType() == CHARACTER_ENEMY)
+					CCharacter* obj = CCharacter::GetCharacter(i);
+					if (obj != NULL)
 					{
-						CEnemy* enemy = (CEnemy*)obj;
-						if (isCollisionCapsule(m_AttackingCollsion, enemy->GetCapsule()))
+						if (obj->GetType() == CHARACTER_ENEMY)
 						{
-							D3DXVECTOR3 rotatePos = enemy->GetPos() - m_Pos;
+							CEnemy* enemy = (CEnemy*)obj;
+							if (isCollisionCapsule(m_AttackingCollsion, enemy->GetCapsule()))
+							{
+								D3DXVECTOR3 rotatePos = enemy->GetPos() - m_Pos;
 
-							Rotate(rotatePos);
+								Rotate(rotatePos);
+							}
 						}
 					}
 				}
 			}
 		}
-	}
-
-	// カメラの更新
-	m_Camera->SetAt(D3DXVECTOR3(m_Pos.x, m_Pos.y + 1.5f, m_Pos.z));
-	m_Camera->Rotation(PI * mouseX * VALUE_ROTATE_MOUSE, PI * mouseY * VALUE_ROTATE_MOUSE);
-	m_Camera->Update();
-
-	if (m_Shadow != NULL)
-	{
-		m_Shadow->Move(m_Pos);
+		// カメラの更新
+		m_Camera->SetAt(D3DXVECTOR3(m_Pos.x, m_Pos.y + 1.5f, m_Pos.z));
+		m_Camera->Rotation(PI * mouseX * VALUE_ROTATE_MOUSE, PI * mouseY * VALUE_ROTATE_MOUSE);
+		m_Camera->Update();
 	}
 }
 
@@ -255,4 +259,11 @@ void CPlayer::Attack()
 	m_Model->PlayMontage(PLAYER_STAB, 0.2f, 3.4f, PLAYER_IDLE, 2.0f);
 
 	m_isPreAttack = true;
+}
+
+void CPlayer::Death()
+{
+	m_Model->PlayMontage(PLAYER_DEATH, 0.3f, 8.0f, PLAYER_DEATH);
+
+	m_isPreDeath = true;
 }

@@ -21,6 +21,7 @@ public:
 		m_FindPlayer = false;
 		m_Action = NULL;
 		m_isPreDeath = false;
+		m_isPreAttack = false;
 	}
 	~CEnemy() {}
 
@@ -39,12 +40,15 @@ public:
 	ENEMY_TYPE GetEnemyType() { return m_EnemyType; }
 	void Search();
 	void Death();
+	void Attack();
 
 private:
 	CActionBase* m_Action;
 	ENEMY_TYPE m_EnemyType;
+	Capsule m_AttackingCollsion;
 	bool m_FindPlayer;
 	bool m_isPreDeath;
+	bool m_isPreAttack;
 };
 
 #endif // !_ENEMY_H_
