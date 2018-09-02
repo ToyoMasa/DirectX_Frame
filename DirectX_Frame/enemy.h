@@ -18,10 +18,12 @@ public:
 	CEnemy::CEnemy() : CCharacter() 
 	{
 		m_Type = CHARACTER_ENEMY;
+		m_Exclamation = NULL;
 		m_FindPlayer = false;
 		m_Action = NULL;
 		m_isPreDeath = false;
 		m_isPreAttack = false;
+		m_Count = 0;
 	}
 	~CEnemy() {}
 
@@ -44,11 +46,13 @@ public:
 
 private:
 	CActionBase* m_Action;
+	CBillBoard* m_Exclamation;
 	ENEMY_TYPE m_EnemyType;
 	Capsule m_AttackingCollsion;
 	bool m_FindPlayer;
 	bool m_isPreDeath;
 	bool m_isPreAttack;
+	int m_Count;
 };
 
 #endif // !_ENEMY_H_

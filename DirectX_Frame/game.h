@@ -21,7 +21,7 @@ public:
 	void Draw();
 
 	static CPlayer* GetPlayer() { return player; }
-	static void PlayerDied() { m_PlayerDied = true; }
+	static void PlayerDied();
 	static void TargetKilled();
 	static CCamera* GetCamera() { return player->GetCamera(); }
 	static void MakeMap();
@@ -42,8 +42,14 @@ private:
 	static CScene2D* Load;
 	static CScene2D* LoadFrame;
 	static CScene2D* LoadGage;
+	static CScene2D* GameClear;
+	static CScene2D* GameOver;
+	static CScene2D* Mission;
+	static CScene2D* Wanted;
+	static CScene2D* Tutorial;
 	static int m_NumKill;
 	static int m_NumSneak;
+	static int m_CountResult;
 };
 
 #endif // !_GAME_H_

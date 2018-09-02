@@ -43,8 +43,14 @@ bool CModeGame::m_TargetDied = false;
 CScene2D *CModeGame::Load = NULL;
 CScene2D *CModeGame::LoadFrame = NULL;
 CScene2D *CModeGame::LoadGage = NULL;
+CScene2D *CModeGame::GameClear = NULL;
+CScene2D *CModeGame::GameOver = NULL;
+CScene2D *CModeGame::Mission = NULL;
+CScene2D *CModeGame::Wanted = NULL;
+CScene2D *CModeGame::Tutorial = NULL;
 int CModeGame::m_NumKill = 0;
-int CModeGame::m_NumSneak = 0;
+int CModeGame::m_NumSneak = 0; 
+int CModeGame::m_CountResult = 0;
 
 float g_test = 0;
 
@@ -53,14 +59,33 @@ void CModeGame::Init()
 	// ƒeƒNƒXƒ`ƒƒ‚Ì‰Šú‰»
 	CTexture::Init();
 
-	Load = CScene2D::Create(TEX_ID_NOWLOADING, 1545 / 2.0f, 414 / 2.0f);
-	Load->Set(D3DXVECTOR3(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2, 0));
+	Wanted = CScene2D::Create(TEX_ID_WANTED, 280, 400);
+	Wanted->Set(D3DXVECTOR3(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2 - 50.0f, 0));
+
+	Tutorial = CScene2D::Create(TEX_ID_TUTORIAL, 760, 400);
+	Tutorial->Set(D3DXVECTOR3(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2 - 50.0f, 0));
+	Tutorial->SetVisible(false);
+
+	Load = CScene2D::Create(TEX_ID_NOWLOADING, 1545 / 6.0f, 414 / 6.0f);
+	Load->Set(D3DXVECTOR3(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2 + 230.0f, 0));
 
 	LoadFrame = CScene2D::Create(TEX_ID_LOADFRAME, 960, 64);
-	LoadFrame->Set(D3DXVECTOR3(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2 + 200.0f, 0));
+	LoadFrame->Set(D3DXVECTOR3(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2 + 300.0f, 0));
 
 	LoadGage = CScene2D::Create(TEX_ID_LOADGAGE, 950, 54);
-	LoadGage->Set(D3DXVECTOR3(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2 + 200.0f, 0));
+	LoadGage->Set(D3DXVECTOR3(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2 + 300.0f, 0));
+
+	GameClear = CScene2D::Create(TEX_ID_MISSION_COMPLETE, 1039, 128);
+	GameClear->Set(D3DXVECTOR3(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2, 0));
+	GameClear->SetVisible(false);
+
+	GameOver = CScene2D::Create(TEX_ID_MISSION_FAILED, 923, 128);
+	GameOver->Set(D3DXVECTOR3(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2, 0));
+	GameOver->SetVisible(false);
+
+	Mission = CScene2D::Create(TEX_ID_MISSION, 250, 65);
+	Mission->Set(D3DXVECTOR3(140, 40, 0));
+	Mission->SetVisible(false);
 
 	HRESULT hr;
 	hr = CRenderer::DrawBegin();
@@ -71,6 +96,7 @@ void CModeGame::Init()
 		//•`‰æ
 		Load->Draw();
 		LoadFrame->Draw();
+		Wanted->Draw();
 
 		CRenderer::DrawEnd();
 	}
@@ -82,12 +108,12 @@ void CModeGame::Init()
 	CFade::FadeIn();
 
 	// ƒtƒB[ƒ‹ƒh
-	CField* field = CField::Create(NULL, 20.0f, 20, 20, true);
+	CField* field = CField::Create(NULL, 10.0f, 20, 20, true);
 
 	{
 		hr = CRenderer::DrawBegin();
 		LoadGage->SetSize(D3DXVECTOR2(950 * 0.1f, 54));
-		LoadGage->Set(D3DXVECTOR3((SCREEN_WIDTH / 2 - 950 / 2.0f) + 950 * 0.1f / 2.0f, SCREEN_HEIGHT / 2 + 200.0f, 0));
+		LoadGage->Set(D3DXVECTOR3((SCREEN_WIDTH / 2 - 950 / 2.0f) + 950 * 0.1f / 2.0f, SCREEN_HEIGHT / 2 + 300.0f, 0));
 
 		// ƒ[ƒh‰æ–Ê‚ð•`‰æ
 		if (SUCCEEDED(hr))
@@ -96,6 +122,7 @@ void CModeGame::Init()
 			Load->Draw();
 			LoadFrame->Draw();
 			LoadGage->Draw();
+			Wanted->Draw();
 
 			CRenderer::DrawEnd();
 		}
@@ -108,7 +135,7 @@ void CModeGame::Init()
 	{
 		hr = CRenderer::DrawBegin();
 		LoadGage->SetSize(D3DXVECTOR2(950 * 0.2f, 54));
-		LoadGage->Set(D3DXVECTOR3((SCREEN_WIDTH / 2 - 950 / 2.0f) + 950 * 0.2f / 2.0f, SCREEN_HEIGHT / 2 + 200.0f, 0));
+		LoadGage->Set(D3DXVECTOR3((SCREEN_WIDTH / 2 - 950 / 2.0f) + 950 * 0.2f / 2.0f, SCREEN_HEIGHT / 2 + 300.0f, 0));
 
 		// ƒ[ƒh‰æ–Ê‚ð•`‰æ
 		if (SUCCEEDED(hr))
@@ -117,6 +144,7 @@ void CModeGame::Init()
 			Load->Draw();
 			LoadFrame->Draw();
 			LoadGage->Draw();
+			Wanted->Draw();
 
 			CRenderer::DrawEnd();
 		}
@@ -128,7 +156,7 @@ void CModeGame::Init()
 	{
 		hr = CRenderer::DrawBegin();
 		LoadGage->SetSize(D3DXVECTOR2(950 * 0.3f, 54));
-		LoadGage->Set(D3DXVECTOR3((SCREEN_WIDTH / 2 - 950 / 2.0f) + 950 * 0.3f / 2.0f, SCREEN_HEIGHT / 2 + 200.0f, 0));
+		LoadGage->Set(D3DXVECTOR3((SCREEN_WIDTH / 2 - 950 / 2.0f) + 950 * 0.3f / 2.0f, SCREEN_HEIGHT / 2 + 300.0f, 0));
 
 		// ƒ[ƒh‰æ–Ê‚ð•`‰æ
 		if (SUCCEEDED(hr))
@@ -137,130 +165,141 @@ void CModeGame::Init()
 			Load->Draw();
 			LoadFrame->Draw();
 			LoadGage->Draw();
+			Wanted->Draw();
 
 			CRenderer::DrawEnd();
 		}
 	}
 
-	//enemy[1] = CEnemy::Create(SM_ID_ENEMY01, D3DXVECTOR3(22.0f, 0.0f, 3.0f), 1, field);
-	//enemy[1]->SetRotation(D3DXVECTOR3(-1.0f, 0.0f, 0.0f));
-	//enemy[1]->SetAction(CActionWait::Create(enemy[1]));
+	enemy[1] = CEnemy::Create(SM_ID_ENEMY01, D3DXVECTOR3(22.0f, 0.0f, 3.0f), 1, field);
+	enemy[1]->SetRotation(D3DXVECTOR3(-1.0f, 0.0f, 0.0f));
+	enemy[1]->SetAction(CActionWait::Create(enemy[1]));
 
-	//{
-	//	hr = CRenderer::DrawBegin();
-	//	LoadGage->SetSize(D3DXVECTOR2(950 * 0.4f, 54));
-	//	LoadGage->Set(D3DXVECTOR3((SCREEN_WIDTH / 2 - 950 / 2.0f) + 950 * 0.4f / 2.0f, SCREEN_HEIGHT / 2 + 200.0f, 0));
+	{
+		hr = CRenderer::DrawBegin();
+		LoadGage->SetSize(D3DXVECTOR2(950 * 0.4f, 54));
+		LoadGage->Set(D3DXVECTOR3((SCREEN_WIDTH / 2 - 950 / 2.0f) + 950 * 0.4f / 2.0f, SCREEN_HEIGHT / 2 + 300.0f, 0));
 
-	//	// ƒ[ƒh‰æ–Ê‚ð•`‰æ
-	//	if (SUCCEEDED(hr))
-	//	{
-	//		//•`‰æ
-	//		Load->Draw();
-	//		LoadFrame->Draw();
-	//		LoadGage->Draw();
+		// ƒ[ƒh‰æ–Ê‚ð•`‰æ
+		if (SUCCEEDED(hr))
+		{
+			//•`‰æ
+			Load->Draw();
+			LoadFrame->Draw();
+			LoadGage->Draw();
+			Wanted->Draw();
 
-	//		CRenderer::DrawEnd();
-	//	}
-	//}
+			CRenderer::DrawEnd();
+		}
+	}
 
-	//enemy[2] = CEnemy::Create(SM_ID_ENEMY01, D3DXVECTOR3(-1.0f, 0.0f, 17.0f), 1, field);
-	//enemy[2]->SetRotation(D3DXVECTOR3(0.0f, 0.0f, -1.0f));
-	//enemy[2]->SetAction(CActionWait::Create(enemy[2]));
+	enemy[2] = CEnemy::Create(SM_ID_ENEMY01, D3DXVECTOR3(-1.0f, 0.0f, 17.0f), 1, field);
+	enemy[2]->SetRotation(D3DXVECTOR3(0.0f, 0.0f, -1.0f));
+	enemy[2]->SetAction(CActionWait::Create(enemy[2]));
 
-	//{
-	//	hr = CRenderer::DrawBegin();
-	//	LoadGage->SetSize(D3DXVECTOR2(950 * 0.5f, 54));
-	//	LoadGage->Set(D3DXVECTOR3((SCREEN_WIDTH / 2 - 950 / 2.0f) + 950 * 0.5f / 2.0f, SCREEN_HEIGHT / 2 + 200.0f, 0));
+	{
+		hr = CRenderer::DrawBegin();
+		LoadGage->SetSize(D3DXVECTOR2(950 * 0.5f, 54));
+		LoadGage->Set(D3DXVECTOR3((SCREEN_WIDTH / 2 - 950 / 2.0f) + 950 * 0.5f / 2.0f, SCREEN_HEIGHT / 2 + 300.0f, 0));
 
-	//	// ƒ[ƒh‰æ–Ê‚ð•`‰æ
-	//	if (SUCCEEDED(hr))
-	//	{
-	//		//•`‰æ
-	//		Load->Draw();
-	//		LoadFrame->Draw();
-	//		LoadGage->Draw();
+		// ƒ[ƒh‰æ–Ê‚ð•`‰æ
+		if (SUCCEEDED(hr))
+		{
+			//•`‰æ
+			Load->Draw();
+			LoadFrame->Draw();
+			LoadGage->Draw();
+			Wanted->Draw();
 
-	//		CRenderer::DrawEnd();
-	//	}
-	//}
+			CRenderer::DrawEnd();
+		}
+	}
 
-	//enemy[3] = CEnemy::Create(SM_ID_ENEMY01, D3DXVECTOR3(3.0f, 0.0f, -22.0f), 1, field);
-	//enemy[3]->SetRotation(D3DXVECTOR3(0.0f, 0.0f, 1.0f));
-	//enemy[3]->SetAction(CActionWait::Create(enemy[3]));
+	// ƒ[ƒh‰æ–Ê‚Ì”wŒi‚ð‘€ìà–¾‚Éƒ`ƒFƒ“ƒW
+	Wanted->SetVisible(false);
+	Tutorial->SetVisible(true);
 
-	//{
-	//	hr = CRenderer::DrawBegin();
-	//	LoadGage->SetSize(D3DXVECTOR2(950 * 0.6f, 54));
-	//	LoadGage->Set(D3DXVECTOR3((SCREEN_WIDTH / 2 - 950 / 2.0f) + 950 * 0.6f / 2.0f, SCREEN_HEIGHT / 2 + 200.0f, 0));
+	enemy[3] = CEnemy::Create(SM_ID_ENEMY01, D3DXVECTOR3(3.0f, 0.0f, -22.0f), 1, field);
+	enemy[3]->SetRotation(D3DXVECTOR3(0.0f, 0.0f, 1.0f));
+	enemy[3]->SetAction(CActionWait::Create(enemy[3]));
 
-	//	// ƒ[ƒh‰æ–Ê‚ð•`‰æ
-	//	if (SUCCEEDED(hr))
-	//	{
-	//		//•`‰æ
-	//		Load->Draw();
-	//		LoadFrame->Draw();
-	//		LoadGage->Draw();
+	{
+		hr = CRenderer::DrawBegin();
+		LoadGage->SetSize(D3DXVECTOR2(950 * 0.6f, 54));
+		LoadGage->Set(D3DXVECTOR3((SCREEN_WIDTH / 2 - 950 / 2.0f) + 950 * 0.6f / 2.0f, SCREEN_HEIGHT / 2 + 300.0f, 0));
 
-	//		CRenderer::DrawEnd();
-	//	}
-	//}
+		// ƒ[ƒh‰æ–Ê‚ð•`‰æ
+		if (SUCCEEDED(hr))
+		{
+			//•`‰æ
+			Load->Draw();
+			LoadFrame->Draw();
+			LoadGage->Draw();
+			Tutorial->Draw();
 
-	//enemy[4] = CEnemy::Create(SM_ID_ENEMY01, D3DXVECTOR3(-20.0f, 0.0f, 8.5f), 5, field);
+			CRenderer::DrawEnd();
+		}
+	}
 
-	//{
-	//	hr = CRenderer::DrawBegin();
-	//	LoadGage->SetSize(D3DXVECTOR2(950 * 0.7f, 54));
-	//	LoadGage->Set(D3DXVECTOR3((SCREEN_WIDTH / 2 - 950 / 2.0f) + 950 * 0.7f / 2.0f, SCREEN_HEIGHT / 2 + 200.0f, 0));
+	enemy[4] = CEnemy::Create(SM_ID_ENEMY01, D3DXVECTOR3(-20.0f, 0.0f, 8.5f), 5, field);
 
-	//	// ƒ[ƒh‰æ–Ê‚ð•`‰æ
-	//	if (SUCCEEDED(hr))
-	//	{
-	//		//•`‰æ
-	//		Load->Draw();
-	//		LoadFrame->Draw();
-	//		LoadGage->Draw();
+	{
+		hr = CRenderer::DrawBegin();
+		LoadGage->SetSize(D3DXVECTOR2(950 * 0.7f, 54));
+		LoadGage->Set(D3DXVECTOR3((SCREEN_WIDTH / 2 - 950 / 2.0f) + 950 * 0.7f / 2.0f, SCREEN_HEIGHT / 2 + 300.0f, 0));
 
-	//		CRenderer::DrawEnd();
-	//	}
-	//}
+		// ƒ[ƒh‰æ–Ê‚ð•`‰æ
+		if (SUCCEEDED(hr))
+		{
+			//•`‰æ
+			Load->Draw();
+			LoadFrame->Draw();
+			LoadGage->Draw();
+			Tutorial->Draw();
 
-	//enemy[5] = CEnemy::Create(SM_ID_ENEMY01, D3DXVECTOR3(-11.0f, 0.0f, -16.0f), 10, field);
+			CRenderer::DrawEnd();
+		}
+	}
 
-	//{
-	//	hr = CRenderer::DrawBegin();
-	//	LoadGage->SetSize(D3DXVECTOR2(950 * 0.8f, 54));
-	//	LoadGage->Set(D3DXVECTOR3((SCREEN_WIDTH / 2 - 950 / 2.0f) + 950 * 0.8f / 2.0f, SCREEN_HEIGHT / 2 + 200.0f, 0));
+	enemy[5] = CEnemy::Create(SM_ID_ENEMY01, D3DXVECTOR3(-11.0f, 0.0f, -16.0f), 10, field);
 
-	//	// ƒ[ƒh‰æ–Ê‚ð•`‰æ
-	//	if (SUCCEEDED(hr))
-	//	{
-	//		//•`‰æ
-	//		Load->Draw();
-	//		LoadFrame->Draw();
-	//		LoadGage->Draw();
+	{
+		hr = CRenderer::DrawBegin();
+		LoadGage->SetSize(D3DXVECTOR2(950 * 0.8f, 54));
+		LoadGage->Set(D3DXVECTOR3((SCREEN_WIDTH / 2 - 950 / 2.0f) + 950 * 0.8f / 2.0f, SCREEN_HEIGHT / 2 + 300.0f, 0));
 
-	//		CRenderer::DrawEnd();
-	//	}
-	//}
+		// ƒ[ƒh‰æ–Ê‚ð•`‰æ
+		if (SUCCEEDED(hr))
+		{
+			//•`‰æ
+			Load->Draw();
+			LoadFrame->Draw();
+			LoadGage->Draw();
+			Tutorial->Draw();
 
-	//enemy[6] = CEnemy::Create(SM_ID_ENEMY01, D3DXVECTOR3(15.0f, 0.0f, 20.0f), 13, field);
+			CRenderer::DrawEnd();
+		}
+	}
 
-	//{
-	//	hr = CRenderer::DrawBegin();
-	//	LoadGage->SetSize(D3DXVECTOR2(950 * 0.9f, 54));
-	//	LoadGage->Set(D3DXVECTOR3((SCREEN_WIDTH / 2 - 950 / 2.0f) + 950 * 0.9f / 2.0f, SCREEN_HEIGHT / 2 + 200.0f, 0));
+	enemy[6] = CEnemy::Create(SM_ID_ENEMY01, D3DXVECTOR3(15.0f, 0.0f, 20.0f), 13, field);
 
-	//	// ƒ[ƒh‰æ–Ê‚ð•`‰æ
-	//	if (SUCCEEDED(hr))
-	//	{
-	//		//•`‰æ
-	//		Load->Draw();
-	//		LoadFrame->Draw();
-	//		LoadGage->Draw();
+	{
+		hr = CRenderer::DrawBegin();
+		LoadGage->SetSize(D3DXVECTOR2(950 * 0.9f, 54));
+		LoadGage->Set(D3DXVECTOR3((SCREEN_WIDTH / 2 - 950 / 2.0f) + 950 * 0.9f / 2.0f, SCREEN_HEIGHT / 2 + 300.0f, 0));
 
-	//		CRenderer::DrawEnd();
-	//	}
-	//}
+		// ƒ[ƒh‰æ–Ê‚ð•`‰æ
+		if (SUCCEEDED(hr))
+		{
+			//•`‰æ
+			Load->Draw();
+			LoadFrame->Draw();
+			LoadGage->Draw();
+			Tutorial->Draw();
+
+			CRenderer::DrawEnd();
+		}
+	}
 
 	// ƒ^[ƒQƒbƒg
 	Target = CEnemy::Create(SM_ID_ENEMY02, D3DXVECTOR3(0.0f, 0.0f, 8.0f), 1, field, ENEMY_TYPE_TARGET);
@@ -269,7 +308,7 @@ void CModeGame::Init()
 	{
 		hr = CRenderer::DrawBegin();
 		LoadGage->SetSize(D3DXVECTOR2(950, 54));
-		LoadGage->Set(D3DXVECTOR3(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2 + 200.0f, 0));
+		LoadGage->Set(D3DXVECTOR3(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2 + 300.0f, 0));
 
 		// ƒ[ƒh‰æ–Ê‚ð•`‰æ
 		if (SUCCEEDED(hr))
@@ -278,6 +317,7 @@ void CModeGame::Init()
 			Load->Draw();
 			LoadFrame->Draw();
 			LoadGage->Draw();
+			Tutorial->Draw();
 
 			CRenderer::DrawEnd();
 		}
@@ -298,11 +338,16 @@ void CModeGame::Init()
 	m_TargetDied = false;
 	m_NumKill = 0;
 	m_NumSneak = 0;
+	m_CountResult = 0;
 
 	// ƒ[ƒh‰æ–Ê‚ð‰ð•ú
 	Load->Release();
 	LoadFrame->Release();
 	LoadGage->Release();
+	Wanted->Release();
+	Tutorial->Release();
+
+	Mission->SetVisible(true);
 }
 
 void CModeGame::Uninit()
@@ -332,27 +377,36 @@ void CModeGame::Update()
 		CParticle::UpdateAll();
 		CBillBoard::UpdateAll();
 
-		CInputKeyboard *inputKeyboard;
-		CInputMouse *inputMouse;
-		float mouseX, mouseY, mouseZ;
-
-		// ƒL[ƒ{[ƒhŽæ“¾
-		inputKeyboard = CManager::GetInputKeyboard();
-
-		// ƒ}ƒEƒXŽæ“¾
-		inputMouse = CManager::GetInputMouse();
-		mouseX = (float)inputMouse->GetAxisX();
-		mouseY = (float)inputMouse->GetAxisY();
-		mouseZ = (float)inputMouse->GetAxisZ();
-
 		if (m_TargetDied)
 		{
-			CFade::FadeOut(new CModeResult(m_NumKill, m_NumSneak, true));
-		}
+			m_CountResult++;
 
-		if (m_PlayerDied)
+			if (m_CountResult > 255)
+			{
+				if (m_CountResult > 300)
+				{
+					CFade::FadeOut(new CModeResult(m_NumKill, m_NumSneak, true));
+				}
+			}
+			else
+			{
+				GameClear->SetColor(D3DCOLOR_RGBA(255, 255, 255, m_CountResult));
+			}
+		}
+		else if (m_PlayerDied)
 		{
-			CFade::FadeOut(new CModeResult(m_NumKill, m_NumSneak, false));
+			m_CountResult++;
+			if (m_CountResult > 255)
+			{
+				if (m_CountResult > 300)
+				{
+					CFade::FadeOut(new CModeResult(m_NumKill, m_NumSneak, false));
+				}
+			}
+			else
+			{
+				GameClear->SetColor(D3DCOLOR_RGBA(255, 255, 255, m_CountResult));
+			}
 		}
 	}
 }
@@ -376,9 +430,16 @@ void CModeGame::Draw()
 #endif
 }
 
+void CModeGame::PlayerDied()
+{
+	m_PlayerDied = true;
+	GameOver->SetVisible(true);
+}
+
 void CModeGame::TargetKilled()
 {
 	m_TargetDied = true;
+	GameClear->SetVisible(true);
 }
 
 void CModeGame::test(float test)

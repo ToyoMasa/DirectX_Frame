@@ -34,9 +34,6 @@ void CBillBoard::Init()
 		return;
 	}
 
-	CTexture::Load(TEX_ID_TREE);
-	CTexture::Load(TEX_ID_STAR);
-
 	HRESULT hr;
 
 	// 頂点バッファ							↓大きい分には問題ない
@@ -341,6 +338,9 @@ CBillBoard* CBillBoard::Create(int texId)
 {
 	CBillBoard* billboard = new CBillBoard();
 	billboard->Set(texId, D3DXVECTOR3(0.0f, 0.0f, 0.0f), 1.0f, 0);
+
+	CTexture::Load(texId);
+
 
 	return billboard;
 }

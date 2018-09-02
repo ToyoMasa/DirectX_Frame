@@ -7,9 +7,11 @@
 #include "manager.h"
 #include "camera.h"
 #include "scene.h"
+#include "scene2D.h"
 #include "scene3D.h"
 #include "sceneModel.h"
 #include "sceneSkinMesh.h"
+#include "sceneShadow.h"
 #include "texture.h"
 #include "billboard.h"
 #include "player.h"
@@ -32,6 +34,8 @@ void CEnemy::Init(int modelId, D3DXVECTOR3 spawnPos, int rootId, CField* field)
 	m_Field = field;
 	m_EnemyType = ENEMY_TYPE_PATROL;
 	m_Action = CActionMoveToPos::Create(this, rootId, 0.02f);
+
+	m_Count = 0;
 
 	m_Forward = D3DXVECTOR3(0.0f, 0.0f, -1.0f);
 }
@@ -67,6 +71,11 @@ void CEnemy::Uninit()
 	if (m_Model)
 	{
 		m_Model->Release();
+		m_Model = NULL;
+	}
+	if (m_Exclamation != NULL)
+	{
+		m_Exclamation->Release();
 	}
 }
 
@@ -83,6 +92,7 @@ void CEnemy::Update()
 				CModeGame::TargetKilled();
 			}
 			Release();
+			return;
 		}
 	}
 	else
@@ -131,10 +141,29 @@ void CEnemy::Update()
 				}
 			}
 			m_Model->Move(m_Pos);
+			m_Shadow->Move(m_Pos);
+
 			// “–‚½‚è”»’è‚ÌˆÚ“®
 			m_CapsuleCollision.Set(Point(m_Pos.x, m_Pos.y + 0.25f, m_Pos.z), Point(m_Pos.x, m_Pos.y + 1.0f, m_Pos.z), 0.25f);
 			D3DXVECTOR3 attackPos = m_Pos + m_Forward * 1.0f;
 			m_AttackingCollsion.Set(Point(attackPos.x, attackPos.y + 0.25f, attackPos.z), Point(attackPos.x, attackPos.y + 1.0f, attackPos.z), 0.5f);
+		}
+	}
+
+	if (m_FindPlayer)
+	{
+		m_Count++;
+		if (m_Count < 120)
+		{
+			D3DXVECTOR3 markPos = m_Pos;
+			markPos.y += 2.5f;
+			
+			m_Exclamation->Set(TEX_ID_EXCLAMATION, markPos, 1.0f, NORMAL);
+		}
+		else if (m_Count = 120)
+		{
+			m_Exclamation->Release();
+			m_Exclamation = NULL;
 		}
 	}
 }
@@ -179,9 +208,15 @@ void CEnemy::Search()
 
 		float degree = D3DXToDegree(rad);
 
-		if (degree < 45.0f && len < 5.0f)
+		if (degree < 60.0f && len < 12.0f)
 		{
 			m_FindPlayer = true;
+
+			m_Exclamation = CBillBoard::Create(TEX_ID_EXCLAMATION);
+			D3DXVECTOR3 markPos = m_Pos;
+			markPos.y += 2.5f;
+			m_Exclamation->Set(TEX_ID_EXCLAMATION, markPos, 1.0f, NORMAL);
+
 			SetAction(CActionMoveToPlayer::Create(this, CModeGame::GetPlayer(), 0.025f));
 		}
 	}

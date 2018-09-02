@@ -31,13 +31,19 @@ typedef enum
 	TEX_ID_RANK_A,					// A
 	TEX_ID_RANK_B,					// B
 	TEX_ID_RANK_C,					// C
+	TEX_ID_MISSION_COMPLETE,		// ゲームクリア
+	TEX_ID_MISSION_FAILED,			// ゲームオーバー
+	TEX_ID_MISSION,					// ミッション
+	TEX_ID_WANTED,					// 指名手配
+	TEX_ID_TUTORIAL,				// 操作説明
+	TEX_ID_EXCLAMATION,				// ビックリマーク
 	TEX_ID_MAX,
 } TEXTURE_ID;
 
 // テクスチャ読み込み用のソース
 static const std::string TEXTURE_SOURCE[] =
 {
-	"data/textures/field001.jpg",
+	"data/textures/field000.png",
 	"data/textures/yajirusi.png",
 	"data/textures/tree.png",
 	"data/textures/sky001.jpg",
@@ -57,6 +63,12 @@ static const std::string TEXTURE_SOURCE[] =
 	"data/textures/rank_a.png",
 	"data/textures/rank_b.png",
 	"data/textures/rank_c.png",
+	"data/textures/mission_complete.png",
+	"data/textures/mission_failed.png",
+	"data/textures/mission.png",
+	"data/textures/wanted.png",
+	"data/textures/tutorial.png",
+	"data/textures/exclamation.png",
 };
 
 // テクスチャがロードされているか検索するためのマップ

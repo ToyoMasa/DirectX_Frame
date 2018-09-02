@@ -170,6 +170,7 @@ void CPlayer::Update()
 		}
 
 		m_Model->Move(m_Pos);
+		m_Shadow->Move(m_Pos);
 
 		// “–‚½‚è”»’è‚ÌˆÚ“®
 		m_CapsuleCollision.Set(Point(m_Pos.x, m_Pos.y + 0.25f, m_Pos.z), Point(m_Pos.x, m_Pos.y + 1.0f, m_Pos.z), 0.25f);
@@ -263,7 +264,7 @@ void CPlayer::Attack()
 
 void CPlayer::Death()
 {
-	m_Model->PlayMontage(PLAYER_DEATH, 0.3f, 8.0f, PLAYER_DEATH);
+	m_Model->PlayMontage(PLAYER_DEATH, 0.3f, 8.0f, PLAYER_DEATH, 0.5f);
 
 	m_isPreDeath = true;
 }
