@@ -99,6 +99,12 @@ void CEnemy::Update()
 	{
 		if (m_isPreAttack)
 		{
+			if (m_Model->GetWeightTime() >= 1.0f && !m_isPlaySE)
+			{
+				m_isPlaySE = true;
+				m_AttackSE->Play();
+			}
+
 			if (m_Model->GetWeightTime() >= 2.0f)
 			{
 				CPlayer* player = CModeGame::GetPlayer();
@@ -109,6 +115,7 @@ void CEnemy::Update()
 				}
 
 				m_isPreAttack = false;
+				m_isPlaySE = false;
 			}
 		}
 		else
@@ -211,6 +218,7 @@ void CEnemy::Search()
 		if (degree < 60.0f && len < 12.0f)
 		{
 			m_FindPlayer = true;
+			m_FindSE->Play();
 
 			m_Exclamation = CBillBoard::Create(TEX_ID_EXCLAMATION);
 			D3DXVECTOR3 markPos = m_Pos;
@@ -228,7 +236,7 @@ void CEnemy::Search()
 		float len = D3DXVec3Length(&vec);
 
 		bool playerdeath = CModeGame::GetPlayer()->GetPlayerDeath();
-		if (len < 1.25f && !playerdeath)
+		if (len < 1.25f && !playerdeath && !m_isPreAttack)
 		{
 			Attack();
 		}
@@ -248,6 +256,7 @@ void CEnemy::Death()
 {
 	m_Model->PlayMontage(ENEMY_DEATH, 0.3f, 8.0f, ENEMY_DEATH);
 	m_Model->SetAnimPlaySpeed(1.5f);
+	m_StabSE->Play();
 
 	CModeGame::IncrementNumKill();
 	if (!m_FindPlayer)

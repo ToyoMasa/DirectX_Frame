@@ -25,6 +25,7 @@ private:
 	static CSceneSkinMesh* m_Mesh;
 	static CCamera* m_Camera;
 	static CSound* m_BGM;
+	static CSound* m_SE;
 	static int m_Count;
 
 	static CScene2D* Load;

@@ -6,6 +6,7 @@
 #define _RESULT_H_
 
 #include "mode.h"
+#include "sound.h"
 
 class CModeResult : public CMode
 {
@@ -28,6 +29,8 @@ private:
 	static CScene2D* m_RankText;
 	static CScene2D* m_Text_PressSpace;
 	static D3DCOLOR m_RankColor;
+	static CSound* m_BGM;
+	static CSound* m_SE;
 	static int m_NumKillEnemy;
 	static int m_NumSneakKill;
 	static int m_Rank;

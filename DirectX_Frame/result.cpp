@@ -32,6 +32,8 @@ CScene2D* CModeResult::m_ResultText = NULL;
 CScene2D* CModeResult::m_RankText = NULL;
 CScene2D *CModeResult::m_Text_PressSpace = NULL;
 D3DCOLOR CModeResult::m_RankColor = D3DCOLOR_RGBA(255, 255, 255, 255);
+CSound *CModeResult::m_BGM = NULL;
+CSound *CModeResult::m_SE = NULL;
 int CModeResult::m_NumKillEnemy = 0;
 int CModeResult::m_NumSneakKill = 0;
 int CModeResult::m_Rank = 0;
@@ -56,12 +58,12 @@ void CModeResult::Init()
 		result += 50;
 	}
 
-	if (result > 120)
+	if (result > 100)
 	{
 		m_Rank = 0;
 		m_RankColor = D3DCOLOR_RGBA(255, 0, 0, 255);
 	}
-	else if (result > 70)
+	else if (result > 60)
 	{
 		m_Rank = 1;
 		m_RankColor = D3DCOLOR_RGBA(0, 0, 255, 255);
@@ -76,6 +78,10 @@ void CModeResult::Init()
 	m_RankText->SetColor(m_RankColor);
 	m_RankText->Set(D3DXVECTOR3(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2, 0));
 
+	m_BGM = CSound::Create(SOUND_LABEL_BGM_RESULT);
+	m_BGM->Play();
+	m_SE = CSound::Create(SOUND_LABEL_SE_TITLE);
+
 	CFade::FadeIn();
 }
 
@@ -85,6 +91,8 @@ void CModeResult::Uninit()
 	CTexture::ReleaseAll();
 
 	CScene::ReleaseAll();
+
+	CSound::ReleaseAll();
 }
 
 void CModeResult::Update()
@@ -115,9 +123,13 @@ void CModeResult::Update()
 		m_Text_PressSpace->SetColor(D3DCOLOR_RGBA(255, 255, 255, 255 - (m_Count % 256)));
 	}
 
-	if (inputMouse->GetLeftTrigger() || inputKeyboard->GetKeyTrigger(DIK_SPACE))
+	if (!CFade::GetFadeOut())
 	{
-		CFade::FadeOut(new CModeTitle());
+		if (inputMouse->GetLeftTrigger() || inputKeyboard->GetKeyTrigger(DIK_SPACE))
+		{
+			m_SE->Play();
+			CFade::FadeOut(new CModeTitle());
+		}
 	}
 }
 

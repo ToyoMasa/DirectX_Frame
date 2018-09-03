@@ -40,6 +40,8 @@ CEnemy *CModeGame::Target = NULL;
 CLight *CModeGame::m_Light;
 bool CModeGame::m_PlayerDied = false;
 bool CModeGame::m_TargetDied = false;
+bool CModeGame::m_PlayBGM = false;
+bool CModeGame::m_Pause = false;
 CScene2D *CModeGame::Load = NULL;
 CScene2D *CModeGame::LoadFrame = NULL;
 CScene2D *CModeGame::LoadGage = NULL;
@@ -48,9 +50,15 @@ CScene2D *CModeGame::GameOver = NULL;
 CScene2D *CModeGame::Mission = NULL;
 CScene2D *CModeGame::Wanted = NULL;
 CScene2D *CModeGame::Tutorial = NULL;
+CScene2D *CModeGame::Tutorial2 = NULL;
+CScene2D *CModeGame::Black = NULL;
+CScene2D *CModeGame::Pause = NULL;
+CSound *CModeGame::BGM = NULL;
+CSound *CModeGame::GameEnd_SE = NULL;
 int CModeGame::m_NumKill = 0;
 int CModeGame::m_NumSneak = 0; 
 int CModeGame::m_CountResult = 0;
+int CModeGame::m_Count = 0;
 
 float g_test = 0;
 
@@ -59,12 +67,22 @@ void CModeGame::Init()
 	// テクスチャの初期化
 	CTexture::Init();
 
+	BGM = CSound::Create(SOUND_LABEL_BGM_LOAD);
+	BGM->Play();
+
+	Black = CScene2D::Create(TEX_ID_BLACK, SCREEN_WIDTH, SCREEN_HEIGHT);
+	Black->Set(D3DXVECTOR3(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2, 0));
+	Black->SetColor(D3DCOLOR_RGBA(0, 0, 0, 128));
+	Black->SetVisible(false);
+
 	Wanted = CScene2D::Create(TEX_ID_WANTED, 280, 400);
 	Wanted->Set(D3DXVECTOR3(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2 - 50.0f, 0));
 
 	Tutorial = CScene2D::Create(TEX_ID_TUTORIAL, 760, 400);
 	Tutorial->Set(D3DXVECTOR3(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2 - 50.0f, 0));
-	Tutorial->SetVisible(false);
+
+	Tutorial2 = CScene2D::Create(TEX_ID_TURORIAL_PAUSE, 920, 130);
+	Tutorial2->Set(D3DXVECTOR3(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2, 0));
 
 	Load = CScene2D::Create(TEX_ID_NOWLOADING, 1545 / 6.0f, 414 / 6.0f);
 	Load->Set(D3DXVECTOR3(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2 + 230.0f, 0));
@@ -86,6 +104,10 @@ void CModeGame::Init()
 	Mission = CScene2D::Create(TEX_ID_MISSION, 250, 65);
 	Mission->Set(D3DXVECTOR3(140, 40, 0));
 	Mission->SetVisible(false);
+
+	Pause = CScene2D::Create(TEX_ID_PAUSE, 172, 97);
+	Pause->Set(D3DXVECTOR3(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2 - 200.0f, 0));
+	Pause->SetVisible(false);
 
 	HRESULT hr;
 	hr = CRenderer::DrawBegin();
@@ -187,7 +209,7 @@ void CModeGame::Init()
 			Load->Draw();
 			LoadFrame->Draw();
 			LoadGage->Draw();
-			Wanted->Draw();
+			Tutorial->Draw();
 
 			CRenderer::DrawEnd();
 		}
@@ -209,15 +231,11 @@ void CModeGame::Init()
 			Load->Draw();
 			LoadFrame->Draw();
 			LoadGage->Draw();
-			Wanted->Draw();
+			Tutorial->Draw();
 
 			CRenderer::DrawEnd();
 		}
 	}
-
-	// ロード画面の背景を操作説明にチェンジ
-	Wanted->SetVisible(false);
-	Tutorial->SetVisible(true);
 
 	enemy[3] = CEnemy::Create(SM_ID_ENEMY01, D3DXVECTOR3(3.0f, 0.0f, -22.0f), 1, field);
 	enemy[3]->SetRotation(D3DXVECTOR3(0.0f, 0.0f, 1.0f));
@@ -255,7 +273,7 @@ void CModeGame::Init()
 			Load->Draw();
 			LoadFrame->Draw();
 			LoadGage->Draw();
-			Tutorial->Draw();
+			Tutorial2->Draw();
 
 			CRenderer::DrawEnd();
 		}
@@ -275,7 +293,7 @@ void CModeGame::Init()
 			Load->Draw();
 			LoadFrame->Draw();
 			LoadGage->Draw();
-			Tutorial->Draw();
+			Tutorial2->Draw();
 
 			CRenderer::DrawEnd();
 		}
@@ -295,7 +313,7 @@ void CModeGame::Init()
 			Load->Draw();
 			LoadFrame->Draw();
 			LoadGage->Draw();
-			Tutorial->Draw();
+			Tutorial2->Draw();
 
 			CRenderer::DrawEnd();
 		}
@@ -317,7 +335,7 @@ void CModeGame::Init()
 			Load->Draw();
 			LoadFrame->Draw();
 			LoadGage->Draw();
-			Tutorial->Draw();
+			Tutorial2->Draw();
 
 			CRenderer::DrawEnd();
 		}
@@ -336,18 +354,25 @@ void CModeGame::Init()
 	// スコア等のリセット
 	m_PlayerDied = false;
 	m_TargetDied = false;
+	m_PlayBGM = false;
 	m_NumKill = 0;
 	m_NumSneak = 0;
 	m_CountResult = 0;
+	GameEnd_SE = NULL;
 
 	// ロード画面を解放
 	Load->Release();
 	LoadFrame->Release();
 	LoadGage->Release();
 	Wanted->Release();
-	Tutorial->Release();
+	Tutorial2->Release();
 
+	Tutorial->SetVisible(false);
+	Tutorial->Set(D3DXVECTOR3(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2 + 100.0f, 0));
 	Mission->SetVisible(true);
+
+	// 曲を変更
+	BGM->Release();
 }
 
 void CModeGame::Uninit()
@@ -355,6 +380,8 @@ void CModeGame::Uninit()
 	CCharacter::ReleaseAll();
 
 	CScene::ReleaseAll();
+
+	CSound::ReleaseAll();
 
 	CActionBase::ReleaseAll();
 
@@ -370,42 +397,104 @@ void CModeGame::Uninit()
 
 void CModeGame::Update()
 {
+	CInputKeyboard *inputKeyboard;
+	CInputMouse *inputMouse;
+	float mouseX, mouseY, mouseZ;
+
+	// キーボード取得
+	inputKeyboard = CManager::GetInputKeyboard();
+
+	// マウス取得
+	inputMouse = CManager::GetInputMouse();
+	mouseX = (float)inputMouse->GetAxisX();
+	mouseY = (float)inputMouse->GetAxisY();
+	mouseZ = (float)inputMouse->GetAxisZ();
+
+	if (!CFade::GetFade())
+	{
+		if (!m_PlayBGM)
+		{
+			BGM = CSound::Create(SOUND_LABEL_BGM_GAME);
+			BGM->Play();
+			m_PlayBGM = true;
+		}
+	}
+
 	if (!CFade::GetFadeOut())
 	{
-		CCharacter::UpdateAll();
-		CScene::UpdateAll();
-		CParticle::UpdateAll();
-		CBillBoard::UpdateAll();
-
-		if (m_TargetDied)
+		if (m_Pause)
 		{
-			m_CountResult++;
+			m_Count++;
 
-			if (m_CountResult > 255)
+			if (m_Count / 256 % 2 == 0.0f)
 			{
-				if (m_CountResult > 300)
-				{
-					CFade::FadeOut(new CModeResult(m_NumKill, m_NumSneak, true));
-				}
+				Pause->SetColor(D3DCOLOR_RGBA(255, 255, 255, m_Count % 256));
 			}
 			else
 			{
-				GameClear->SetColor(D3DCOLOR_RGBA(255, 255, 255, m_CountResult));
+				Pause->SetColor(D3DCOLOR_RGBA(255, 255, 255, 255 - (m_Count % 256)));
+			}
+
+			if (inputKeyboard->GetKeyTrigger(DIK_P) || inputKeyboard->GetKeyTrigger(DIK_TAB))
+			{
+				CallPause();
 			}
 		}
-		else if (m_PlayerDied)
+		else
 		{
-			m_CountResult++;
-			if (m_CountResult > 255)
+			CCharacter::UpdateAll();
+			CScene::UpdateAll();
+			CParticle::UpdateAll();
+			CBillBoard::UpdateAll();
+
+			if (m_TargetDied)
 			{
-				if (m_CountResult > 300)
+				m_CountResult++;
+
+				if (GameEnd_SE == NULL)
 				{
-					CFade::FadeOut(new CModeResult(m_NumKill, m_NumSneak, false));
+					GameEnd_SE = CSound::Create(SOUND_LABEL_SE_GAMECLEAR);
+					GameEnd_SE->Play();
+				}
+
+				if (m_CountResult > 255)
+				{
+					if (m_CountResult > 300)
+					{
+						CFade::FadeOut(new CModeResult(m_NumKill, m_NumSneak, true));
+					}
+				}
+				else
+				{
+					GameClear->SetColor(D3DCOLOR_RGBA(255, 255, 255, m_CountResult));
 				}
 			}
-			else
+			else if (m_PlayerDied)
 			{
-				GameClear->SetColor(D3DCOLOR_RGBA(255, 255, 255, m_CountResult));
+				if (GameEnd_SE == NULL)
+				{
+					GameEnd_SE = CSound::Create(SOUND_LABEL_SE_GAMEOVER);
+					GameEnd_SE->Play();
+					GameOver->SetVisible(true);
+				}
+
+				m_CountResult++;
+				if (m_CountResult > 255)
+				{
+					if (m_CountResult > 300)
+					{
+						CFade::FadeOut(new CModeResult(m_NumKill, m_NumSneak, false));
+					}
+				}
+				else
+				{
+					GameClear->SetColor(D3DCOLOR_RGBA(255, 255, 255, m_CountResult));
+				}
+			}
+
+			if (inputKeyboard->GetKeyTrigger(DIK_P) || inputKeyboard->GetKeyTrigger(DIK_TAB))
+			{
+				CallPause();
 			}
 		}
 	}
@@ -433,7 +522,6 @@ void CModeGame::Draw()
 void CModeGame::PlayerDied()
 {
 	m_PlayerDied = true;
-	GameOver->SetVisible(true);
 }
 
 void CModeGame::TargetKilled()
@@ -477,4 +565,22 @@ void CModeGame::MakeMap()
 	CWall::Create(D3DXVECTOR3(21.0f, 0.0f, -12.5f), 6.0f, 4.0f, 1.0f, TEX_ID_WALL01);
 	CWall::Create(D3DXVECTOR3(-14.5f, 0.0f, 11.0f), 1.0f, 4.0f, 2.0f, TEX_ID_WALL01);
 	CWall::Create(D3DXVECTOR3(-14.5f, 0.0f, -6.0f), 1.0f, 4.0f, 2.0f, TEX_ID_WALL01);
+}
+
+void CModeGame::CallPause()
+{
+	if (m_Pause)
+	{
+		m_Pause = false;
+		Black->SetVisible(false);
+		Pause->SetVisible(false);
+		Tutorial->SetVisible(false);
+	}
+	else
+	{
+		m_Pause = true;
+		Black->SetVisible(true);
+		Pause->SetVisible(true);
+		Tutorial->SetVisible(true);
+	}
 }

@@ -3,6 +3,7 @@
 
 #include "character.h"
 #include "actionBase.h"
+#include "sound.h"
 
 static const float ENEMY_MOVE_SPEED = 0.03f;
 
@@ -23,6 +24,11 @@ public:
 		m_Action = NULL;
 		m_isPreDeath = false;
 		m_isPreAttack = false;
+		m_isPlaySE = false;
+		m_StabSE = CSound::Create(SOUND_LABEL_SE_STAB);
+		m_AttackSE = CSound::Create(SOUND_LABEL_SE_ENEMY_ATTACK);
+		m_FindSE = CSound::Create(SOUND_LABEL_SE_FIND);
+
 		m_Count = 0;
 	}
 	~CEnemy() {}
@@ -49,9 +55,13 @@ private:
 	CBillBoard* m_Exclamation;
 	ENEMY_TYPE m_EnemyType;
 	Capsule m_AttackingCollsion;
+	CSound* m_AttackSE;
+	CSound* m_FindSE;
+	CSound* m_StabSE;
 	bool m_FindPlayer;
 	bool m_isPreDeath;
 	bool m_isPreAttack;
+	bool m_isPlaySE;
 	int m_Count;
 };
 

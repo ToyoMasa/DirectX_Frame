@@ -36,11 +36,18 @@ void CPlayer::Init(int modelId, D3DXVECTOR3 spawnPos)
 
 	m_Text_Attack = CScene2D::Create(TEX_ID_ATTACK, 128, 64);
 	m_Text_Attack->Set(D3DXVECTOR3(SCREEN_WIDTH / 2, SCREEN_HEIGHT - 200.0f, 0.0f));
+	m_Caution = CScene2D::Create(TEX_ID_CAUTION, 440, 80);
+	m_Caution->Set(D3DXVECTOR3(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2, 0.0f));
+	m_Caution->SetColor(D3DCOLOR_RGBA(255, 0, 0, 255));
+	m_Caution->SetVisible(false);
 
 	m_BloodEffect = CEffekseer::Create(CEffekseer::Effect_BloodLoss, m_Camera);
 	m_BloodEffect->RepeatEffect(false);
 	m_BloodEffect->SetScale(0.1f, 0.1f, 0.1f);
 	m_BloodEffect->SetVisible(true);
+
+	m_Knife = CSound::Create(SOUND_LABEL_SE_KNIFE);
+	m_Hit = CSound::Create(SOUND_LABEL_SE_HIT);
 }
 
 void CPlayer::Uninit()
@@ -53,6 +60,10 @@ void CPlayer::Uninit()
 	{
 		m_Model->Release();
 	}
+	if (m_Knife)
+	{
+		m_Knife->Release();
+	}
 }
 
 void CPlayer::Update()
@@ -63,7 +74,7 @@ void CPlayer::Update()
 
 	if (m_isPreDeath)
 	{
-		if (m_Model->GetWeightTime() >= 8.0f)
+		if (m_Model->GetWeightTime() >= 5.0f)
 		{
 			CModeGame::PlayerDied();
 		}
@@ -180,7 +191,10 @@ void CPlayer::Update()
 		// UŒ‚
 		if (inputMouse->GetLeftTrigger() || inputKeyboard->GetKeyTrigger(DIK_SPACE))
 		{
-			Attack();
+			if (!m_isPreAttack)
+			{
+				Attack();
+			}
 		}
 
 		if (m_isPreAttack)
@@ -236,6 +250,24 @@ void CPlayer::Update()
 				}
 			}
 		}
+
+		D3DXVECTOR3 len = D3DXVECTOR3(0, 0, 0) - m_Pos;
+		if (D3DXVec3Length(&len) > 40 && !m_isGameOver)
+		{
+			m_Caution->SetVisible(true);
+
+			if (D3DXVec3Length(&len) > 50)
+			{
+				CModeGame::PlayerDied();
+				m_Caution->SetVisible(false);
+				m_isGameOver = true;
+			}
+		}
+		else
+		{
+			m_Caution->SetVisible(false);
+		}
+
 		// ƒJƒƒ‰‚ÌXV
 		m_Camera->SetAt(D3DXVECTOR3(m_Pos.x, m_Pos.y + 1.5f, m_Pos.z));
 		m_Camera->Rotation(PI * mouseX * VALUE_ROTATE_MOUSE, PI * mouseY * VALUE_ROTATE_MOUSE);
@@ -258,13 +290,15 @@ CPlayer* CPlayer::Create(int modelId, D3DXVECTOR3 spawnPos)
 void CPlayer::Attack()
 {
 	m_Model->PlayMontage(PLAYER_STAB, 0.2f, 3.4f, PLAYER_IDLE, 2.0f);
+	m_Knife->Play();
 
 	m_isPreAttack = true;
 }
 
 void CPlayer::Death()
 {
-	m_Model->PlayMontage(PLAYER_DEATH, 0.3f, 8.0f, PLAYER_DEATH, 0.5f);
+	m_Model->PlayMontage(PLAYER_DEATH, 0.3f, 8.0f, PLAYER_DEATH, 0.75f);
+	m_Hit->Play();
 
 	m_isPreDeath = true;
 }

@@ -22,7 +22,7 @@ typedef enum
 	TEX_ID_CIRCLE,					// 丸いパーティクル
 	TEX_ID_STAR,					// 星
 	TEX_ID_ATTACK,					// 攻撃可能テキスト
-	TEX_ID_BLACK,					// フェード
+	TEX_ID_BLACK,					// 真っ黒
 	TEX_ID_WALL01,					// 壁
 	TEX_ID_NOWLOADING,				// ロード画面文字
 	TEX_ID_LOADFRAME,				// ロード画面ゲージフレーム
@@ -37,6 +37,9 @@ typedef enum
 	TEX_ID_WANTED,					// 指名手配
 	TEX_ID_TUTORIAL,				// 操作説明
 	TEX_ID_EXCLAMATION,				// ビックリマーク
+	TEX_ID_CAUTION,					// 警告文
+	TEX_ID_PAUSE,					// pause
+	TEX_ID_TURORIAL_PAUSE,			// pauseのチュートリアル
 	TEX_ID_MAX,
 } TEXTURE_ID;
 
@@ -55,7 +58,7 @@ static const std::string TEXTURE_SOURCE[] =
 	"data/textures/star.png",
 	"data/textures/attack.png",
 	"data/textures/black.png",
-	"data/textures/shikkui02.jpg",
+	"data/textures/wall001.png",
 	"data/textures/NowLoading.png",
 	"data/textures/LoadFrame.png",
 	"data/textures/LoadGage.png",
@@ -69,6 +72,9 @@ static const std::string TEXTURE_SOURCE[] =
 	"data/textures/wanted.png",
 	"data/textures/tutorial.png",
 	"data/textures/exclamation.png",
+	"data/textures/caution.png",
+	"data/textures/pause.png",
+	"data/textures/tutorial_pause.png",
 };
 
 // テクスチャがロードされているか検索するためのマップ

@@ -76,8 +76,6 @@ void CManager::Uninit()
 	CManager::m_Mode->Uninit();
 	delete CManager::m_Mode;
 
-	CSound::ReleaseAll();
-
 	// キーボードの開放処理
 	if (m_InputKeyboard)
 	{
@@ -93,6 +91,8 @@ void CManager::Uninit()
 		delete m_InputMouse;
 		m_InputMouse = NULL;
 	}
+
+	CSound::Uninit();
 
 	// imguiの終了処理
 #if defined(_DEBUG) || defined(DEBUG)

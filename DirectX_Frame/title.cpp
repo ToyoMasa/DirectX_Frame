@@ -31,6 +31,7 @@ CScene2D *CModeTitle::m_Text_PressSpace = NULL;
 CSceneSkinMesh *CModeTitle::m_Mesh = NULL;
 CCamera *CModeTitle::m_Camera = NULL;
 CSound *CModeTitle::m_BGM = NULL;
+CSound *CModeTitle::m_SE = NULL;
 int CModeTitle::m_Count = 0;
 CScene2D *CModeTitle::Load = NULL;
 CScene2D *CModeTitle::LoadFrame = NULL;
@@ -133,7 +134,7 @@ void CModeTitle::Uninit()
 
 	m_Camera->Release();
 
-	m_BGM->Release();
+	CSound::ReleaseAll();
 }
 
 void CModeTitle::Update()
@@ -166,11 +167,15 @@ void CModeTitle::Update()
 
 	CScene::UpdateAll();
 
-	if (inputMouse->GetLeftTrigger() || inputKeyboard->GetKeyTrigger(DIK_SPACE)) 
+	if (!CFade::GetFadeOut())
 	{
-		CFade::FadeOut(new CModeGame());
+		if (inputMouse->GetLeftTrigger() || inputKeyboard->GetKeyTrigger(DIK_SPACE))
+		{
+			m_SE = CSound::Create(SOUND_LABEL_SE_TITLE);
+			m_SE->Play();
+			CFade::FadeOut(new CModeGame());
+		}
 	}
-
 }
 
 void CModeTitle::Draw()
@@ -190,14 +195,6 @@ void CModeTitle::Draw()
 	// デバッグ用imguiウィンドウの描画
 #if defined(_DEBUG) || defined(DEBUG)
 	CImGui::BeginDraw();
-
-	ImGui::Begin("Debug Window");
-	ImGui::Text("test1");
-	ImGui::End();
-
-	ImGui::Begin("Debug Window2");
-	ImGui::Text("test2");
-	ImGui::End();
 
 	CImGui::EndDraw();
 #endif

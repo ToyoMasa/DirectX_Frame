@@ -212,7 +212,7 @@ D3DXVECTOR3 CCharacter::PushOut(D3DXVECTOR3 newPos, D3DXVECTOR3 oldPos, D3DXVECT
 	D3DXVec3Cross(&newVec, &moveVec, &normal);
 	D3DXVec3Cross(&newVec, &normal, &newVec);
 
-	newVec += normal * 0.001f;
+	newVec += normal * 0.002f;
 
 	return oldPos + newVec;
 }
@@ -224,9 +224,9 @@ D3DXVECTOR3 CCharacter::HitWall(D3DXVECTOR3 newPos)
 	// •Ç‚Æ‚Ì“–‚½‚è”»’è
 	for (int i = 0; i < OBJECT_MAX; i++)
 	{
-		if (CScene::GetScene(LAYER_OBJECT3D, i) != NULL)
+		if (CScene::GetScene(LAYER_BACKGROUND, i) != NULL)
 		{
-			CScene* obj = CScene::GetScene(LAYER_OBJECT3D, i);
+			CScene* obj = CScene::GetScene(LAYER_BACKGROUND, i);
 
 			if (obj->GetType() == SCENE_TYPE_WALL)
 			{

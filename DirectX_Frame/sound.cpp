@@ -7,37 +7,19 @@
 #include "main.h"
 #include "sound.h"
 
-
-//*****************************************************************************
-// プロトタイプ宣言
-//*****************************************************************************
-//HRESULT CheckChunk(HANDLE hFile, DWORD format, DWORD *pChunkSize, DWORD *pChunkDataPosition);
-//HRESULT ReadChunkData(HANDLE hFile, void *pBuffer, DWORD dwBuffersize, DWORD dwBufferoffset);
-
-//*****************************************************************************
-// グローバル変数
-//*****************************************************************************
-//IXAudio2 *g_pXAudio2 = NULL;								// XAudio2オブジェクトへのインターフェイス
-//IXAudio2MasteringVoice *g_pMasteringVoice = NULL;			// マスターボイス
-//IXAudio2SourceVoice *g_apSourceVoice[SOUND_LABEL_MAX] = {};	// ソースボイス
-//BYTE *g_apDataAudio[SOUND_LABEL_MAX] = {};					// オーディオデータ
-//DWORD g_aSizeAudio[SOUND_LABEL_MAX] = {};					// オーディオデータサイズ
 IXAudio2 *CSound::m_XAudio2 = NULL;
 IXAudio2MasteringVoice *CSound::m_MasteringVoice = NULL;
-CSound *CSound::m_Sounds[SOUND_LABEL_MAX] = { NULL };
+CSound *CSound::m_Sounds[SOUND_MAX] = { NULL };
 
 //=============================================================================
 // 初期化処理
 //=============================================================================
 void CSound::Init()
 {
+	HRESULT hr;
+
 	// COMライブラリの初期化
 	CoInitializeEx(NULL, COINIT_MULTITHREADED);
-}
-
-HRESULT CSound::InitSound(SOUND_LABEL label)
-{
-	HRESULT hr;
 
 	// XAudio2オブジェクトの作成
 	if (CSound::m_XAudio2 == NULL)
@@ -50,7 +32,7 @@ HRESULT CSound::InitSound(SOUND_LABEL label)
 			// COMライブラリの終了処理
 			CoUninitialize();
 
-			return E_FAIL;
+			return;
 		}
 	}
 
@@ -72,9 +54,34 @@ HRESULT CSound::InitSound(SOUND_LABEL label)
 			// COMライブラリの終了処理
 			CoUninitialize();
 
-			return E_FAIL;
+			return;
 		}
 	}
+
+}
+void CSound::Uninit(void)
+{
+	// マスターボイスの破棄
+	if (m_MasteringVoice != NULL)
+	{
+		m_MasteringVoice->DestroyVoice();
+		m_MasteringVoice = NULL;
+	}
+
+	if (m_XAudio2)
+	{
+		// XAudio2オブジェクトの開放
+		m_XAudio2->Release();
+		m_XAudio2 = NULL;
+	}
+
+	// COMライブラリの終了処理
+	CoUninitialize();
+}
+
+HRESULT CSound::InitSound(SOUND_LABEL label)
+{
+	HRESULT hr;
 
 	// サウンドデータの初期化
 	HANDLE hFile;
@@ -195,7 +202,7 @@ void CSound::UninitSound(void)
 
 void CSound::Release(void)
 {
-	for (int i = 0; i < SOUND_LABEL_MAX; i++)
+	for (int i = 0; i < SOUND_MAX; i++)
 	{
 		if (m_Sounds[i] == this)
 		{
@@ -211,30 +218,13 @@ void CSound::Release(void)
 
 void CSound::ReleaseAll(void)
 {
-	for (int i = 0; i < SOUND_LABEL_MAX; i++)
+	for (int i = 0; i < SOUND_MAX; i++)
 	{
 		if (m_Sounds[i] != NULL)
 		{
 			m_Sounds[i]->Release();
 		}
 	}
-
-	// マスターボイスの破棄
-	if (m_MasteringVoice != NULL)
-	{
-		m_MasteringVoice->DestroyVoice();
-		m_MasteringVoice = NULL;
-	}
-
-	if (m_XAudio2)
-	{
-		// XAudio2オブジェクトの開放
-		m_XAudio2->Release();
-		m_XAudio2 = NULL;
-	}
-
-	// COMライブラリの終了処理
-	CoUninitialize();
 }
 
 //=============================================================================
@@ -433,13 +423,8 @@ HRESULT CSound::ReadChunkData(HANDLE hFile, void *pBuffer, DWORD dwBuffersize, D
 
 CSound* CSound::Create(SOUND_LABEL label)
 {
-	if (m_Sounds[label] == NULL)
-	{
-		CSound* sound = new CSound();
+	CSound* sound = new CSound();
+	sound->InitSound(label);
 
-		sound->InitSound(label);
-		m_Sounds[label] = sound;
-	}
-
-	return m_Sounds[label];
+	return sound;
 }

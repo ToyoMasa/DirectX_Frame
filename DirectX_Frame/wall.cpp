@@ -74,7 +74,7 @@ int CWall::FindHitPlane(Sphere sphere)
 
 CWall* CWall::Create(D3DXVECTOR3 pos, float X, float Y, float Z, int texID)
 {
-	CWall* wall = new CWall(LAYER_OBJECT3D);
+	CWall* wall = new CWall(LAYER_BACKGROUND);
 	wall->Init(pos, X, Y, Z, texID);
 
 	return wall;

@@ -6,6 +6,7 @@
 #define _GAME_H_
 
 #include "mode.h"
+#include "sound.h"
 
 static const int ENEMY_NUM = 8;
 
@@ -27,6 +28,7 @@ public:
 	static void MakeMap();
 	static void IncrementNumKill() { m_NumKill++; }
 	static void IncrementNumSneak() { m_NumSneak++; }
+	static void CallPause();
 
 	static void test(float test);
 
@@ -39,6 +41,8 @@ private:
 	static CLight *m_Light;
 	static bool m_PlayerDied;
 	static bool m_TargetDied;
+	static bool m_PlayBGM;
+	static bool m_Pause;
 	static CScene2D* Load;
 	static CScene2D* LoadFrame;
 	static CScene2D* LoadGage;
@@ -47,9 +51,15 @@ private:
 	static CScene2D* Mission;
 	static CScene2D* Wanted;
 	static CScene2D* Tutorial;
+	static CScene2D* Tutorial2;
+	static CScene2D* Pause;
+	static CScene2D* Black;
 	static int m_NumKill;
 	static int m_NumSneak;
 	static int m_CountResult;
+	static int m_Count;
+	static CSound* BGM;
+	static CSound* GameEnd_SE;
 };
 
 #endif // !_GAME_H_
