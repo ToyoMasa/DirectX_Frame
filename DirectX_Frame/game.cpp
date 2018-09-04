@@ -53,6 +53,7 @@ CScene2D *CModeGame::Tutorial = NULL;
 CScene2D *CModeGame::Tutorial2 = NULL;
 CScene2D *CModeGame::Black = NULL;
 CScene2D *CModeGame::Pause = NULL;
+CScene2D *CModeGame::HowToUse = NULL;
 CSound *CModeGame::BGM = NULL;
 CSound *CModeGame::GameEnd_SE = NULL;
 int CModeGame::m_NumKill = 0;
@@ -79,10 +80,10 @@ void CModeGame::Init()
 	Wanted->Set(D3DXVECTOR3(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2 - 50.0f, 0));
 
 	Tutorial = CScene2D::Create(TEX_ID_TUTORIAL, 760, 400);
-	Tutorial->Set(D3DXVECTOR3(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2 - 50.0f, 0));
+	Tutorial->Set(D3DXVECTOR3(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2 - 100.0f, 0));
 
 	Tutorial2 = CScene2D::Create(TEX_ID_TURORIAL_PAUSE, 920, 130);
-	Tutorial2->Set(D3DXVECTOR3(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2, 0));
+	Tutorial2->Set(D3DXVECTOR3(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2 + 100.0f, 0));
 
 	Load = CScene2D::Create(TEX_ID_NOWLOADING, 1545 / 6.0f, 414 / 6.0f);
 	Load->Set(D3DXVECTOR3(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2 + 230.0f, 0));
@@ -108,6 +109,9 @@ void CModeGame::Init()
 	Pause = CScene2D::Create(TEX_ID_PAUSE, 172, 97);
 	Pause->Set(D3DXVECTOR3(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2 - 200.0f, 0));
 	Pause->SetVisible(false);
+
+	HowToUse = CScene2D::Create(TEX_ID_HOWTOUSE, 360, 90);
+	HowToUse->Set(D3DXVECTOR3(200, SCREEN_HEIGHT - 60.0f, 0));
 
 	HRESULT hr;
 	hr = CRenderer::DrawBegin();
@@ -209,7 +213,7 @@ void CModeGame::Init()
 			Load->Draw();
 			LoadFrame->Draw();
 			LoadGage->Draw();
-			Tutorial->Draw();
+			Wanted->Draw();
 
 			CRenderer::DrawEnd();
 		}
@@ -231,7 +235,7 @@ void CModeGame::Init()
 			Load->Draw();
 			LoadFrame->Draw();
 			LoadGage->Draw();
-			Tutorial->Draw();
+			Wanted->Draw();
 
 			CRenderer::DrawEnd();
 		}
@@ -254,6 +258,7 @@ void CModeGame::Init()
 			LoadFrame->Draw();
 			LoadGage->Draw();
 			Tutorial->Draw();
+			Tutorial2->Draw();
 
 			CRenderer::DrawEnd();
 		}
@@ -273,6 +278,7 @@ void CModeGame::Init()
 			Load->Draw();
 			LoadFrame->Draw();
 			LoadGage->Draw();
+			Tutorial->Draw();
 			Tutorial2->Draw();
 
 			CRenderer::DrawEnd();
@@ -293,6 +299,7 @@ void CModeGame::Init()
 			Load->Draw();
 			LoadFrame->Draw();
 			LoadGage->Draw();
+			Tutorial->Draw();
 			Tutorial2->Draw();
 
 			CRenderer::DrawEnd();
@@ -313,6 +320,7 @@ void CModeGame::Init()
 			Load->Draw();
 			LoadFrame->Draw();
 			LoadGage->Draw();
+			Tutorial->Draw();
 			Tutorial2->Draw();
 
 			CRenderer::DrawEnd();
@@ -335,6 +343,7 @@ void CModeGame::Init()
 			Load->Draw();
 			LoadFrame->Draw();
 			LoadGage->Draw();
+			Tutorial->Draw();
 			Tutorial2->Draw();
 
 			CRenderer::DrawEnd();
@@ -505,8 +514,6 @@ void CModeGame::Draw()
 	CScene::DrawAll();
 	CBillBoard::DrawAll(player->GetCamera());
 
-	// デバッグ用imguiウィンドウの描画
-#if defined(_DEBUG) || defined(DEBUG)
 	CImGui::BeginDraw();
 
 	D3DXVECTOR3 pos = player->GetPos();
@@ -516,7 +523,6 @@ void CModeGame::Draw()
 	ImGui::End();
 
 	CImGui::EndDraw();
-#endif
 }
 
 void CModeGame::PlayerDied()

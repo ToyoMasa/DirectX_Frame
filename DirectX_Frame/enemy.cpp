@@ -225,7 +225,7 @@ void CEnemy::Search()
 			markPos.y += 2.5f;
 			m_Exclamation->Set(TEX_ID_EXCLAMATION, markPos, 1.0f, NORMAL);
 
-			SetAction(CActionMoveToPlayer::Create(this, CModeGame::GetPlayer(), 0.025f));
+			SetAction(CActionMoveToPlayer::Create(this, CModeGame::GetPlayer(), 0.05f));
 		}
 	}
 	else

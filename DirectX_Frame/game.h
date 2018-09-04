@@ -54,6 +54,7 @@ private:
 	static CScene2D* Tutorial2;
 	static CScene2D* Pause;
 	static CScene2D* Black;
+	static CScene2D* HowToUse;
 	static int m_NumKill;
 	static int m_NumSneak;
 	static int m_CountResult;

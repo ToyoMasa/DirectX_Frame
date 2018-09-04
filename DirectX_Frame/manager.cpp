@@ -43,10 +43,8 @@ bool CManager::Init(HINSTANCE hInstance, HWND hWnd, BOOL bWindow)
 	CSound::Init();
 
 	// imguiの初期化と設定
-#if defined(_DEBUG) || defined(DEBUG)
 	CImGui::Init(hWnd, CRenderer::GetDevice());
 	ImGui::StyleColorsClassic();
-#endif
 
 	// キーボード処理初期化
 	m_InputKeyboard = new CInputKeyboard;
@@ -95,9 +93,7 @@ void CManager::Uninit()
 	CSound::Uninit();
 
 	// imguiの終了処理
-#if defined(_DEBUG) || defined(DEBUG)
 	CImGui::Uninit();
-#endif
 
 	// レンダラークラスの終了処理
 	CRenderer::Uninit();

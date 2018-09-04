@@ -1,6 +1,6 @@
 //======================================================================
-//	タイトル画面管理
-//
+//	タイトル[title.cpp]　（2018/8/25）
+//	Author : 豊村 昌俊
 //======================================================================
 #include "common.h"
 #include "main.h"
@@ -192,10 +192,7 @@ void CModeTitle::Draw()
 
 	pDevice->SetRenderState(D3DRS_LIGHTING, TRUE);
 
-	// デバッグ用imguiウィンドウの描画
-#if defined(_DEBUG) || defined(DEBUG)
 	CImGui::BeginDraw();
 
 	CImGui::EndDraw();
-#endif
 }

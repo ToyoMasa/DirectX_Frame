@@ -1,58 +1,9 @@
-﻿  action.cpp
+﻿  enemy.cpp
 d:\old ファイル\school\school\3年\gm31\frameworkrepo\trunk\directx_frame\billboard.h(18): warning C4091: 'typedef ': 変数が何も宣言されていないときは、'DRAW_TYPE' の左辺を無視します。
-  actionBase.cpp
-d:\old ファイル\school\school\3年\gm31\frameworkrepo\trunk\directx_frame\billboard.h(18): warning C4091: 'typedef ': 変数が何も宣言されていないときは、'DRAW_TYPE' の左辺を無視します。
-  billboard.cpp
-d:\old ファイル\school\school\3年\gm31\frameworkrepo\trunk\directx_frame\billboard.h(18): warning C4091: 'typedef ': 変数が何も宣言されていないときは、'DRAW_TYPE' の左辺を無視します。
-  box.cpp
-  bullet.cpp
-d:\old ファイル\school\school\3年\gm31\frameworkrepo\trunk\directx_frame\billboard.h(18): warning C4091: 'typedef ': 変数が何も宣言されていないときは、'DRAW_TYPE' の左辺を無視します。
-  character.cpp
-d:\old ファイル\school\school\3年\gm31\frameworkrepo\trunk\directx_frame\billboard.h(18): warning C4091: 'typedef ': 変数が何も宣言されていないときは、'DRAW_TYPE' の左辺を無視します。
-  emitter.cpp
-d:\old ファイル\school\school\3年\gm31\frameworkrepo\trunk\directx_frame\billboard.h(18): warning C4091: 'typedef ': 変数が何も宣言されていないときは、'DRAW_TYPE' の左辺を無視します。
-  enemy.cpp
-d:\old ファイル\school\school\3年\gm31\frameworkrepo\trunk\directx_frame\billboard.h(18): warning C4091: 'typedef ': 変数が何も宣言されていないときは、'DRAW_TYPE' の左辺を無視します。
-  fade.cpp
-d:\old ファイル\school\school\3年\gm31\frameworkrepo\trunk\directx_frame\billboard.h(18): warning C4091: 'typedef ': 変数が何も宣言されていないときは、'DRAW_TYPE' の左辺を無視します。
-  field.cpp
-d:\old ファイル\school\school\3年\gm31\frameworkrepo\trunk\directx_frame\billboard.h(18): warning C4091: 'typedef ': 変数が何も宣言されていないときは、'DRAW_TYPE' の左辺を無視します。
-  game.cpp
-d:\old ファイル\school\school\3年\gm31\frameworkrepo\trunk\directx_frame\billboard.h(18): warning C4091: 'typedef ': 変数が何も宣言されていないときは、'DRAW_TYPE' の左辺を無視します。
-  main.cpp
-  manager.cpp
-d:\old ファイル\school\school\3年\gm31\frameworkrepo\trunk\directx_frame\billboard.h(18): warning C4091: 'typedef ': 変数が何も宣言されていないときは、'DRAW_TYPE' の左辺を無視します。
-  moveToPlayer.cpp
-d:\old ファイル\school\school\3年\gm31\frameworkrepo\trunk\directx_frame\billboard.h(18): warning C4091: 'typedef ': 変数が何も宣言されていないときは、'DRAW_TYPE' の左辺を無視します。
-  moveToPos.cpp
-d:\old ファイル\school\school\3年\gm31\frameworkrepo\trunk\directx_frame\billboard.h(18): warning C4091: 'typedef ': 変数が何も宣言されていないときは、'DRAW_TYPE' の左辺を無視します。
-  moveToRandom.cpp
-d:\old ファイル\school\school\3年\gm31\frameworkrepo\trunk\directx_frame\billboard.h(18): warning C4091: 'typedef ': 変数が何も宣言されていないときは、'DRAW_TYPE' の左辺を無視します。
-  number.cpp
-  particle.cpp
-d:\old ファイル\school\school\3年\gm31\frameworkrepo\trunk\directx_frame\billboard.h(18): warning C4091: 'typedef ': 変数が何も宣言されていないときは、'DRAW_TYPE' の左辺を無視します。
-  player.cpp
-d:\old ファイル\school\school\3年\gm31\frameworkrepo\trunk\directx_frame\billboard.h(18): warning C4091: 'typedef ': 変数が何も宣言されていないときは、'DRAW_TYPE' の左辺を無視します。
-  result.cpp
-d:\old ファイル\school\school\3年\gm31\frameworkrepo\trunk\directx_frame\billboard.h(18): warning C4091: 'typedef ': 変数が何も宣言されていないときは、'DRAW_TYPE' の左辺を無視します。
-  コンパイル中...
-  scene2D.cpp
-  scene3D.cpp
-  sceneShadow.cpp
-  skybox.cpp
-  sound.cpp
-  texture.cpp
-  title.cpp
-d:\old ファイル\school\school\3年\gm31\frameworkrepo\trunk\directx_frame\billboard.h(18): warning C4091: 'typedef ': 変数が何も宣言されていないときは、'DRAW_TYPE' の左辺を無視します。
-  wait.cpp
-d:\old ファイル\school\school\3年\gm31\frameworkrepo\trunk\directx_frame\billboard.h(18): warning C4091: 'typedef ': 変数が何も宣言されていないときは、'DRAW_TYPE' の左辺を無視します。
-  waitTime.cpp
-d:\old ファイル\school\school\3年\gm31\frameworkrepo\trunk\directx_frame\billboard.h(18): warning C4091: 'typedef ': 変数が何も宣言されていないときは、'DRAW_TYPE' の左辺を無視します。
-  wall.cpp
   コード生成しています。
-  545 of 5067 functions (10.8%) were compiled, the rest were copied from previous compilation.
-    9 functions were new in current compilation
-    40 functions had inline decision re-evaluated but remain unchanged
+  1 of 5710 functions ( 0.0%) were compiled, the rest were copied from previous compilation.
+    0 functions were new in current compilation
+    1 functions had inline decision re-evaluated but remain unchanged
   コード生成が終了しました。
   FrameWork.vcxproj -> D:\Old ファイル\school\school\3年\GM31\FrameWorkRepo\trunk\DirectX_Frame\Release\FrameWork.exe
   FrameWork.vcxproj -> D:\Old ファイル\school\school\3年\GM31\FrameWorkRepo\trunk\DirectX_Frame\Release\FrameWork.pdb (Full PDB)

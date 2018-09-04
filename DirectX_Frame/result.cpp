@@ -1,6 +1,6 @@
 //======================================================================
-//	リザルト画面管理
-//
+//	リザルト[result.cpp]　（2018/8/25）
+//	Author : 豊村 昌俊
 //======================================================================
 #include "common.h"
 #include "main.h"
@@ -137,8 +137,6 @@ void CModeResult::Draw()
 {
 	CScene::DrawAll();
 
-	// デバッグ用imguiウィンドウの描画
-#if defined(_DEBUG) || defined(DEBUG)
 	CImGui::BeginDraw();
 
 	ImGui::Begin("Debug Window", 0);
@@ -146,5 +144,4 @@ void CModeResult::Draw()
 	ImGui::End();
 
 	CImGui::EndDraw();
-#endif
 }
