@@ -157,6 +157,7 @@ void CModeGame::Init()
 	// ƒvƒŒƒCƒ„[
 	player = CPlayer::Create(MODEL_ID_PLAYER, D3DXVECTOR3(0.0f, 0.0f, -30.0f));
 	player->SetField(field);
+	CManager::SetCamera(player->GetCamera());
 
 	{
 		hr = CRenderer::DrawBegin();

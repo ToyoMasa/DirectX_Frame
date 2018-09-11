@@ -26,12 +26,15 @@ public:
 	static CInputMouse *GetInputMouse(void) { return m_InputMouse; }
 	static void SetMode(CMode* mode);
 	static CMode* GetMode() { return m_Mode; }
+	static void SetCamera(CCamera* camera) { m_UsingCamera = camera; }
+	static CCamera* GetCamera() { return m_UsingCamera; }
 
 private:
 	static CInputKeyboard	*m_InputKeyboard;	// キーボードへのポインタ
 	static CInputMouse		*m_InputMouse;		// マウスへのポインタ
 	static CLight			*m_Light;
 	static CMode			*m_Mode;
+	static CCamera			*m_UsingCamera;
 };
 
 #endif // !_MANAGER_H_

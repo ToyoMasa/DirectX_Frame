@@ -25,6 +25,8 @@
 #include "game.h"
 #include "fade.h"
 #include "PlayerAnim.h"
+#include "box.h"
+#include "shader.h"
 
 CScene2D* CModeTitle::m_TitleLogo = NULL;
 CScene2D *CModeTitle::m_Text_PressSpace = NULL;
@@ -36,6 +38,7 @@ int CModeTitle::m_Count = 0;
 CScene2D *CModeTitle::Load = NULL;
 CScene2D *CModeTitle::LoadFrame = NULL;
 CScene2D *CModeTitle::LoadGage = NULL;
+CShader shader;
 
 void CModeTitle::Init()
 {
@@ -73,6 +76,7 @@ void CModeTitle::Init()
 	m_Camera = CCamera::Create();
 	m_Camera->SetPos(D3DXVECTOR3(-0.2f, 1.7f, -1.0f));
 	m_Camera->SetAt(D3DXVECTOR3(0.0f, 1.5f, 0.0f));
+	CManager::SetCamera(m_Camera);
 
 	{
 		hr = CRenderer::DrawBegin();
@@ -90,9 +94,12 @@ void CModeTitle::Init()
 			CRenderer::DrawEnd();
 		}
 	}
-
+/*
 	m_Mesh = CSceneSkinMesh::Create(SKINMESH_SOURCE[SM_ID_PLAYER]);
 	m_Mesh->ChangeAnim(PLAYER_IDLE, 0.0f);
+*/
+	shader.Init(m_Camera);
+	shader.Load();
 
 	{
 		hr = CRenderer::DrawBegin();
@@ -135,6 +142,8 @@ void CModeTitle::Uninit()
 	m_Camera->Release();
 
 	CSound::ReleaseAll();
+
+	shader.Uninit();
 }
 
 void CModeTitle::Update()
@@ -186,11 +195,13 @@ void CModeTitle::Draw()
 		return;
 	}
 
-	pDevice->SetRenderState(D3DRS_LIGHTING, FALSE);
+	//pDevice->SetRenderState(D3DRS_LIGHTING, FALSE);
+
+	shader.Draw();
 
 	CScene::DrawAll();
 
-	pDevice->SetRenderState(D3DRS_LIGHTING, TRUE);
+	//pDevice->SetRenderState(D3DRS_LIGHTING, TRUE);
 
 	CImGui::BeginDraw();
 

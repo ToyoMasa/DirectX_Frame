@@ -6,7 +6,7 @@ float4x4 Proj;		// 変換行列
 // 頂点シェーダの関数
 void VertexShader_Main(
 	in float4 inPos		: POSITION,			// [入力] 座標（モデル空間）
-	in float4 inDiff	: COLOR0,				// [入力] 色
+	in float4 inDiff	: COLOR0,			// [入力] 色
 
 	out float4 outPos	: POSITION,			// [出力] 座標（射影空間）
 	out float4 outDiff	: COLOR0)			// [出力] 色

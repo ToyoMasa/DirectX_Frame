@@ -15,6 +15,7 @@ CScene::CScene(int priority)
 			m_Scene[priority][i] = this;
 			m_Type = SCENE_TYPE_NONE;
 			m_Visible = true;
+			m_Shader = NULL;
 			break;
 		}
 	}

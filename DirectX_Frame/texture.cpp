@@ -26,14 +26,17 @@ void CTexture::Init()
 
 void CTexture::Load(int id)
 {
-	if (!MAP_LOADING_TEXTURES[MAP_TEXTURES[id]])
+	if (id >= 0)
 	{
-		TEXTURES[id].LoadTexture(id);
-		MAP_LOADING_TEXTURES[MAP_TEXTURES[id]] = true;
-	}
+		if (!MAP_LOADING_TEXTURES[MAP_TEXTURES[id]])
+		{
+			TEXTURES[id].LoadTexture(id);
+			MAP_LOADING_TEXTURES[MAP_TEXTURES[id]] = true;
+		}
 
-	// このテクスチャの使用者をインクリメント
-	MAP_TEXTURE_USE_NUM[id]++;
+		// このテクスチャの使用者をインクリメント
+		MAP_TEXTURE_USE_NUM[id]++;
+	}
 }
 
 void CTexture::Release(int id)

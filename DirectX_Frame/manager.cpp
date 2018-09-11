@@ -32,6 +32,7 @@ CInputKeyboard *CManager::m_InputKeyboard = NULL;		// キーボードへのポインタ
 CInputMouse *CManager::m_InputMouse = NULL;			// マウスへのポインタ
 CLight		*CManager::m_Light;
 CMode		*CManager::m_Mode = NULL;
+CCamera		*CManager::m_UsingCamera = NULL;
 
 bool CManager::Init(HINSTANCE hInstance, HWND hWnd, BOOL bWindow)
 {

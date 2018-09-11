@@ -2,6 +2,7 @@
 #define _SCENE_H_
 
 static const int OBJECT_MAX = 50;
+#include "shader.h"
 
 enum SCENE_TYPE
 {
@@ -30,6 +31,7 @@ protected:
 	D3DXVECTOR3 m_Pos;
 	SCENE_TYPE m_Type;
 	bool m_Visible;
+	CShader *m_Shader;
 public:
 	CScene(int priority);
 	virtual ~CScene() {}

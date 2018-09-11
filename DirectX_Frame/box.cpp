@@ -185,7 +185,14 @@ void CBox::Draw(D3DXMATRIX mtxWorld)
 	// ライティング使うときに外す
 	//pDevice->SetRenderState(D3DRS_LIGHTING, FALSE);
 
-	pDevice->SetTexture(0, CTexture::GetTexture(m_TexID));
+	if (m_TexID != -1)
+	{
+		pDevice->SetTexture(0, CTexture::GetTexture(m_TexID));
+	}
+	else
+	{
+		pDevice->SetTexture(0, NULL);
+	}
 
 	// FVF(今から使用する頂点情報)の設定
 	pDevice->SetFVF(FVF_VERTEX_3D);

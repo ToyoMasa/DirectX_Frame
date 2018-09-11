@@ -1,16 +1,20 @@
 #ifndef _SHADER_H_
 #define _SHADER_H_
 
+class CCamera;
+
 class CShader
 {
 public:
 	CShader()
 	{
 		m_hTech = NULL;
+		D3DXMatrixIdentity(&m_World);
 	}
 	~CShader(){}
 
 	void Init(CCamera* camera);
+	void Uninit();
 	bool Load();
 	void Draw();
 
