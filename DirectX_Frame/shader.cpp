@@ -17,7 +17,6 @@ bool CShader::Load()
 		if (FAILED(hr))
 		{
 			return false;	// ƒGƒ‰[
-
 		}
 
 		if (m_hTechNext)

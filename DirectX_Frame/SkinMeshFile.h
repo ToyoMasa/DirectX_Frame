@@ -4,6 +4,7 @@
 #include <string>
 #include <d3d9.h>
 #include <d3dx9.h>
+#include <map>
 
 #include "SkinMeshData.h"
 
@@ -15,6 +16,7 @@ typedef enum
 	SM_ID_PLAYER,
 	SM_ID_ENEMY01,
 	SM_ID_ENEMY02,
+	SM_ID_MAX
 } SKINMESH_MODEL_ID;
 
 static const std::string SKINMESH_SOURCE[] =
@@ -23,6 +25,7 @@ static const std::string SKINMESH_SOURCE[] =
 	"data/models/enemy_01.x",
 	"data/models/enemy_02.x"
 };
+
 // ŠK‘w•t‚«XFile
 class SkinMeshFile
 {
@@ -210,5 +213,7 @@ private:
 	bool m_bPlayMontage;
 	float m_MontageTime;
 };
+
+static std::map<std::string, SkinMeshFile*> MAP_SKINMESH_FILE;
 
 #endif
