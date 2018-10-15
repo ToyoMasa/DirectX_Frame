@@ -46,6 +46,7 @@ public:
 	void Set(D3DXVECTOR3& pos);
 	void SetVisible(bool visible) { m_Visible = visible; }
 	bool GetVisible() { return m_Visible; }
+	void SetShader(CShader* shader) { m_Shader = shader; }
 	D3DXVECTOR3 GetPos() { return m_Pos; }
 	void Release();
 	static void UpdateAll();

@@ -1,23 +1,20 @@
 #include "common.h"
 #include "renderer.h"
+#include "manager.h"
 #include "camera.h"
 #include "texture.h"
 #include "shader.h"
 #include "box.h"
 
-CBox box;
-
-void CShader::Init(CCamera* camera)
+void CShader::Init()
 {
 	LPDIRECT3DDEVICE9 pDevice = CRenderer::GetDevice();
 
-	m_pCamera = camera;
-
-	box.Init(1, 1, 1, TEX_ID_FIELD001);
+	m_pCamera = CManager::GetCamera();
 
 	D3DXCreateEffectFromFile(
 		pDevice,
-		"shader.fx",
+		SHADER_FILE[0].c_str(),
 		NULL,
 		NULL,
 		D3DXSHADER_DEBUG,
@@ -25,28 +22,14 @@ void CShader::Init(CCamera* camera)
 		&m_pEffect,
 		NULL
 	);
-}
 
-void CShader::Uninit()
-{
-	box.Uninit();
-
-	if (m_pEffect)
-	{
-		m_pEffect->Release();
-	}
-
-}
-
-bool CShader::Load()
-{
 	HRESULT hr;
 
 	do {
 		hr = m_pEffect->FindNextValidTechnique(m_hTech, &m_hTechNext);
 		if (FAILED(hr))
 		{
-			return false;	// エラー
+			return;	// エラー
 		}
 
 		if (m_hTechNext)
@@ -60,8 +43,21 @@ bool CShader::Load()
 	} while (m_hTech != NULL);
 }
 
-void CShader::Draw()
+void CShader::Uninit()
 {
+	if (m_pEffect)
+	{
+		m_pEffect->Release();
+	}
+
+}
+
+void CShader::Draw(CScene* scene)
+{
+	D3DXMATRIX world;
+	D3DXMatrixTranslation(&world, scene->GetPos().x, scene->GetPos().y, scene->GetPos().z);
+	m_World = world;
+
 	if (m_pCamera != NULL)
 	{
 		m_pEffect->SetMatrix("World", &m_World);
@@ -100,9 +96,10 @@ void CShader::Draw()
 
 			// ↓BeginPassの後でID3DXEffect::Set～メソッドを使った場合必要になる
 			// m_pEffect->CommitChanges(); // (このコード例ではない)
-			box.Draw(m_World);
 
 			// ここで実際にメッシュを描画する
+			scene->Draw();
+
 			m_pEffect->EndPass();
 		}
 

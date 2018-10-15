@@ -31,6 +31,7 @@
 #include "fade.h"
 #include "Effekseer.h"
 #include "wall.h"
+#include "shader.h"
 
 CBillBoard *CModeGame::tree1 = NULL;
 CBillBoard *CModeGame::tree2 = NULL;

@@ -1,7 +1,23 @@
 #ifndef _SHADER_H_
 #define _SHADER_H_
 
+#include <string>
+
 class CCamera;
+class CScene;
+
+static const DWORD FVF_SHADER = (D3DFVF_XYZ | D3DFVF_DIFFUSE);
+
+typedef enum
+{
+	SHADER_FILE_001,
+} SHADERFILE_LIST;
+
+// シェーダーファイルリスト
+static const std::string SHADER_FILE[] =
+{
+	"shader.fx",
+};
 
 class CShader
 {
@@ -13,10 +29,9 @@ public:
 	}
 	~CShader(){}
 
-	void Init(CCamera* camera);
+	void Init();
 	void Uninit();
-	bool Load();
-	void Draw();
+	void Draw(CScene* scene);
 
 private:
 	D3DXMATRIX m_World;	// 描画に使う変換行列

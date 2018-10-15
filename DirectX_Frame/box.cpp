@@ -182,9 +182,6 @@ void CBox::Draw(D3DXMATRIX mtxWorld)
 		return;
 	}
 
-	// ライティング使うときに外す
-	//pDevice->SetRenderState(D3DRS_LIGHTING, FALSE);
-
 	if (m_TexID != -1)
 	{
 		pDevice->SetTexture(0, CTexture::GetTexture(m_TexID));
@@ -193,9 +190,6 @@ void CBox::Draw(D3DXMATRIX mtxWorld)
 	{
 		pDevice->SetTexture(0, NULL);
 	}
-
-	// FVF(今から使用する頂点情報)の設定
-	pDevice->SetFVF(FVF_VERTEX_3D);
 
 	// 頂点バッファとインデックスバッファの設定
 	pDevice->SetStreamSource(0, m_pVertexBuffer, 0, sizeof(VERTEX3D_BOX));

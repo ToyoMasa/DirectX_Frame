@@ -12,15 +12,6 @@ void CSceneSkinMesh::Init(const std::string& modelName)
 {
 	m_SkinMeshFile = new SkinMeshFile();
 	m_SkinMeshFile->Load(modelName);
-
-	//if (MAP_SKINMESH_FILE[modelName] == NULL)
-	//{
-	//	m_SkinMeshFile->Load(modelName);
-	//}
-	//else
-	//{
-	//	memcpy(m_SkinMeshFile, MAP_SKINMESH_FILE[modelName], sizeof(MAP_SKINMESH_FILE[modelName]));
-	//}
 }
 
 void CSceneSkinMesh::Uninit()

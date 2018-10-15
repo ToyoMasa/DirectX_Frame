@@ -77,8 +77,15 @@ void CScene::DrawAll()
 			if (m_Scene[j][i] != NULL)
 			{
 				if (m_Scene[j][i]->m_Visible)
-				{
-					m_Scene[j][i]->Draw();
+				{  
+					if (m_Scene[j][i]->m_Shader != NULL)
+					{
+						m_Scene[j][i]->m_Shader->Draw(m_Scene[j][i]);
+					}
+					else
+					{
+						m_Scene[j][i]->Draw();
+					}
 				}
 			}
 		}

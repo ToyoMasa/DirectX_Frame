@@ -1,7 +1,23 @@
-﻿  Effekseer.cpp
-  main.cpp
-  shader.cpp
+﻿  action.cpp
+  actionBase.cpp
+  billboard.cpp
+  bullet.cpp
+  character.cpp
+  emitter.cpp
+  enemy.cpp
+  fade.cpp
+  field.cpp
+  game.cpp
+  manager.cpp
+  moveToPlayer.cpp
+  moveToPos.cpp
+  moveToRandom.cpp
+  particle.cpp
+  player.cpp
+  result.cpp
+  title.cpp
+  wait.cpp
+  waitTime.cpp
   コードを生成中...
-d:\old ファイル\school\school\3年\gm31\frameworkrepo\trunk\directx_frame\shader.cpp(61): warning C4715: 'CShader::Load': 値を返さないコントロール パスがあります。
   FrameWork.vcxproj -> D:\Old ファイル\school\school\3年\GM31\FrameWorkRepo\trunk\DirectX_Frame\Debug\FrameWork.exe
   FrameWork.vcxproj -> D:\Old ファイル\school\school\3年\GM31\FrameWorkRepo\trunk\DirectX_Frame\Debug\FrameWork.pdb (Full PDB)

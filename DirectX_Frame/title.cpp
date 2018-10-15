@@ -25,7 +25,7 @@
 #include "game.h"
 #include "fade.h"
 #include "PlayerAnim.h"
-#include "box.h"
+#include "wall.h"
 #include "shader.h"
 
 CScene2D* CModeTitle::m_TitleLogo = NULL;
@@ -38,7 +38,6 @@ int CModeTitle::m_Count = 0;
 CScene2D *CModeTitle::Load = NULL;
 CScene2D *CModeTitle::LoadFrame = NULL;
 CScene2D *CModeTitle::LoadGage = NULL;
-CShader shader;
 
 void CModeTitle::Init()
 {
@@ -94,12 +93,9 @@ void CModeTitle::Init()
 			CRenderer::DrawEnd();
 		}
 	}
-/*
+
 	m_Mesh = CSceneSkinMesh::Create(SKINMESH_SOURCE[SM_ID_PLAYER]);
 	m_Mesh->ChangeAnim(PLAYER_IDLE, 0.0f);
-*/
-	shader.Init(m_Camera);
-	shader.Load();
 
 	{
 		hr = CRenderer::DrawBegin();
@@ -130,6 +126,7 @@ void CModeTitle::Init()
 	Load->Release();
 	LoadFrame->Release();
 	LoadGage->Release();
+
 }
 
 void CModeTitle::Uninit()
@@ -143,7 +140,6 @@ void CModeTitle::Uninit()
 
 	CSound::ReleaseAll();
 
-	shader.Uninit();
 }
 
 void CModeTitle::Update()
@@ -195,13 +191,11 @@ void CModeTitle::Draw()
 		return;
 	}
 
-	//pDevice->SetRenderState(D3DRS_LIGHTING, FALSE);
-
-	shader.Draw();
+	pDevice->SetRenderState(D3DRS_LIGHTING, FALSE);
 
 	CScene::DrawAll();
 
-	//pDevice->SetRenderState(D3DRS_LIGHTING, TRUE);
+	pDevice->SetRenderState(D3DRS_LIGHTING, TRUE);
 
 	CImGui::BeginDraw();
 
